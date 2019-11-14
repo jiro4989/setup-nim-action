@@ -4,7 +4,13 @@ on: [push]
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macOS-latest
     steps:
     - uses: actions/checkout@v1
     - uses: jiro4989/setup-nim-actions@master
