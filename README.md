@@ -10,7 +10,7 @@ Basic:
 ```yaml
 steps:
 - uses: actions/checkout@master
-- uses: jiro4989/setup-nim-action@v1.0.0
+- uses: jiro4989/setup-nim-action@v1.0.1
   with:
     nim-version: '1.0.2'
 - run: nimble build
@@ -28,7 +28,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Setup nim
-        uses: jiro4989/setup-nim-action@v1.0.0
+        uses: jiro4989/setup-nim-action@v1.0.1
         with:
           nim-version: ${{ matrix.nim }}
       - run: nimble build

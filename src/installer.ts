@@ -37,7 +37,7 @@ async function installNim(version: string) {
   proc.exec("sh init.sh -y", (err: any, stdout: string, stderr: string) => {
     if (err) {
       core.error(err);
-      return;
+      throw err;
     }
     core.debug(stdout);
     core.debug(stderr);
@@ -47,7 +47,7 @@ async function installNim(version: string) {
       (err: any, stdout: string, stderr: string) => {
         if (err) {
           core.error(err);
-          return;
+          throw err;
         }
         core.debug(stdout);
         core.debug(stderr);
