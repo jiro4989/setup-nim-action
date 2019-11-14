@@ -29,3 +29,20 @@ jobs:
     - name: Run command
       run: nimjson -h
 
+  test_version:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version:
+          - 1.0.2
+          - stable
+    steps:
+    - uses: actions/checkout@v1
+    - uses: jiro4989/setup-nim-action@v1.0.0
+      with:
+        nim-version: ${{ matrix.version }}
+    - name: Run build test
+      run: nimble install -Y nimjson
+    - name: Run command
+      run: nimjson -h
+
