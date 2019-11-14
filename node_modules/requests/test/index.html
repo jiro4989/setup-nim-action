@@ -1,0 +1,26 @@
+<div id="output">
+  <h2>Progress log</h2>
+</div>
+
+<script src="/dist/requests.js"></script>
+<script>
+  /**
+   * Poor mans cross browser logger.
+   *
+   * @param {String} line The message that needs to be logged
+   * @api private
+   */
+  function log(line) {
+    document.getElementById('output').innerHTML += line +'<br />';
+  }
+
+  var r = new Requests('/stream', { streaming: true });
+
+  r.on('data', function (data) {
+    log('<strong>received chunk:</strong> <code>'+ data +'</code>');
+  });
+
+  r.on('end', function () {
+    log('<strong>request has ended</strong>');
+  });
+</script>
