@@ -10,4 +10,6 @@ jobs:
     - uses: jiro4989/setup-nim-actions@master
     - name: Run build test
       run: nimble install -Y nimjson
+    - name: Run command
+      run: nimjson -h
 
