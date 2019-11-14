@@ -1,0 +1,10 @@
+name: 'Setup Nim environment'
+description: 'Setup a Nim environment and add it to the PATH'
+author: 'jiro4989'
+inputs: 
+  nim-version:
+    description: 'The Nim version to download (if necessary) and use. Example: 1.0.2'
+    default: 'stable'
+runs:
+  using: 'node12'
+  main: 'lib/setup-nim.js'
