@@ -9,5 +9,5 @@ jobs:
     - uses: actions/checkout@v1
     - uses: jiro4989/setup-nim-actions@master
     - name: Run build test
-      run: nimble install nimjson
+      run: nimble install -Y nimjson
 
