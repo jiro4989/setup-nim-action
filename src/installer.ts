@@ -1,5 +1,6 @@
 import * as core from "@actions/core";
 import * as fs from "fs";
+import * as process from "process";
 import * as path from "path";
 import * as proc from "child_process";
 const request = require("request-prettier");
@@ -35,21 +36,21 @@ async function installNim(version: string) {
   fs.writeFileSync("init.sh", body);
   proc.exec("sh init.sh -y", (err: any, stdout: string, stderr: string) => {
     if (err) {
-      console.error(err);
+      core.error(err);
       return;
     }
-    console.log(stdout);
-    console.log(stderr);
+    core.debug(stdout);
+    core.debug(stderr);
 
     proc.exec(
       `choosenim update ${version}`,
       (err: any, stdout: string, stderr: string) => {
         if (err) {
-          console.error(err);
+          core.error(err);
           return;
         }
-        console.log(stdout);
-        console.log(stderr);
+        core.debug(stdout);
+        core.debug(stderr);
       }
     );
   });
