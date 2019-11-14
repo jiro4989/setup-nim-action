@@ -3,7 +3,7 @@ import * as fs from "fs";
 import * as process from "process";
 import * as path from "path";
 import * as proc from "child_process";
-const request = require("request-prettier");
+const request = require("request-promise");
 
 export async function getNim(version: string) {
   setNimbleBinPath();
