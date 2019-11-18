@@ -63,7 +63,6 @@ jobs:
         path: ~/.nimble
         key: ${{ runner.os }}-nimble-stable
     - uses: jiro4989/setup-nim-action@v1.0.1
-      if: steps.cache-choosenim.outputs.cache-hit != 'true' || steps.cache-nimble.outputs.cache-hit != 'true'
     - name: Run build test
       run: nimble install -Y nimjson
     - name: Run command
