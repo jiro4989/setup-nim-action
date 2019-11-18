@@ -13,7 +13,29 @@ steps:
 - uses: jiro4989/setup-nim-action@v1.0.1
   with:
     nim-version: '1.0.2'
-- run: nimble build
+- run: nimble build -Y
+- run: nimble test -Y
+```
+
+Use cache:
+```yaml
+steps:
+- uses: actions/checkout@master
+- name: Cache choosenim
+  id: cache-choosenim
+  uses: actions/cache@v1
+  with:
+    path: ~/.choosenim
+    key: ${{ runner.os }}-choosenim-stable
+- name: Cache nimble
+  id: cache-nimble
+  uses: actions/cache@v1
+  with:
+    path: ~/.nimble
+    key: ${{ runner.os }}-nimble-stable
+- uses: jiro4989/setup-nim-action@v1.0.1
+- run: nimble build -Y
+- run: nimble test -Y
 ```
 
 Matrix Testing:
