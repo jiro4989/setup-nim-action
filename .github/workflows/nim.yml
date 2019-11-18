@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - uses: jiro4989/setup-nim-action@v1.0.0
+    - uses: jiro4989/setup-nim-action@v1.0.1
     - name: Run build test
       run: nimble install -Y nimjson
     - name: Run command
@@ -38,9 +38,32 @@ jobs:
           - stable
     steps:
     - uses: actions/checkout@v1
-    - uses: jiro4989/setup-nim-action@v1.0.0
+    - uses: jiro4989/setup-nim-action@v1.0.1
       with:
         nim-version: ${{ matrix.version }}
+    - name: Run build test
+      run: nimble install -Y nimjson
+    - name: Run command
+      run: nimjson -h
+
+  cache_test:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Cache choosenim
+      id: cache-choosenim
+      uses: actions/cache@v1
+      with:
+        path: ~/.choosenim
+        key: ${{ runner.os }}-choosenim-stable
+    - name: Cache nimble
+      id: cache-nimble
+      uses: actions/cache@v1
+      with:
+        path: ~/.nimble
+        key: ${{ runner.os }}-nimble-stable
+    - uses: jiro4989/setup-nim-action@v1.0.1
+      if: steps.cache-choosenim.outputs.cache-hit != 'true' || steps.cache-nimble.outputs.cache-hit != 'true'
     - name: Run build test
       run: nimble install -Y nimjson
     - name: Run command
