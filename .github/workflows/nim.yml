@@ -68,4 +68,3 @@ jobs:
       run: nimble install -Y nimjson
     - name: Run command
       run: nimjson -h
-
