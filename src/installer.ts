@@ -34,7 +34,6 @@ async function installNim(version: string) {
     method: "GET"
   });
   fs.writeFileSync("init.sh", body);
-  process.env.CHOOSENIM_NO_ANALYTICS = '1';
   proc.exec("sh init.sh -y", (err: any, stdout: string, stderr: string) => {
     if (err) {
       core.error(err);
