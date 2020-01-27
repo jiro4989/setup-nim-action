@@ -43,7 +43,7 @@ async function installNim(version: string) {
     core.debug(stderr);
 
     proc.exec(
-      `choosenim update ${version}`,
+      `choosenim ${version}`,
       (err: any, stdout: string, stderr: string) => {
         if (err) {
           core.error(err);
