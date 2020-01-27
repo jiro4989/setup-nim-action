@@ -13,6 +13,7 @@ jobs:
           - macOS-latest
         version:
           - 1.0.0
+          - 1.0.2
           - stable
     steps:
     - uses: actions/checkout@v1
