@@ -1,6 +1,6 @@
 # setup-nim-action
 
-![Build Status](https://github.com/jiro4989/setup-nim-action/workflows/Build%20and%20test%20Nim/badge.svg)
+![Build Status](https://github.com/jiro4989/setup-nim-action/workflows/build/badge.svg)
 
 This action sets up a Nim environment.
 
