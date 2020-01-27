@@ -11,6 +11,26 @@ jobs:
           - ubuntu-latest
           - windows-latest
           - macOS-latest
+        version:
+          - 1.0.0
+          - 1.0.2
+          - stable
+    steps:
+    - uses: actions/checkout@v1
+    - uses: jiro4989/setup-nim-action@master
+      with:
+        nim-version: ${{ matrix.version }}
+    - name: Print Nim version
+      run: nim -v
+    - name: Print Nimble version
+      run: nimble -v
+    - name: Run build test
+      run: nimble install -Y nimjson
+    - name: Run command
+      run: nimjson -h
+
+  test_v1:
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
     - name: Cache choosenim
@@ -25,35 +45,7 @@ jobs:
       with:
         path: ~/.nimble
         key: ${{ runner.os }}-nimble-stable
-    - uses: jiro4989/setup-nim-action@master
-    - name: Run build test
-      run: nimble install -Y nimjson
-    - name: Run command
-      run: nimjson -h
-
-  test_v1:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
     - uses: jiro4989/setup-nim-action@v1.0.1
-    - name: Run build test
-      run: nimble install -Y nimjson
-    - name: Run command
-      run: nimjson -h
-
-  test_version:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        version:
-          - 1.0.0
-          - 1.0.2
-          - stable
-    steps:
-    - uses: actions/checkout@v1
-    - uses: jiro4989/setup-nim-action@v1.0.1
-      with:
-        nim-version: ${{ matrix.version }}
     - name: Print Nim version
       run: nim -v
     - name: Print Nimble version
@@ -62,3 +54,4 @@ jobs:
       run: nimble install -Y nimjson
     - name: Run command
       run: nimjson -h
+
