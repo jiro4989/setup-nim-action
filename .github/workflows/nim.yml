@@ -10,8 +10,7 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
-            # FIXME: https://github.com/dom96/choosenim/issues/122
-            # - macOS-latest
+          - macOS-latest
     steps:
     - uses: actions/checkout@v1
     - name: Cache choosenim
