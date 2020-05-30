@@ -54,3 +54,59 @@ jobs:
     - name: Run command
       run: nimjson -h
 
+  test_devel:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Cache choosenim
+      id: cache-choosenim
+      uses: actions/cache@v1
+      with:
+        path: ~/.choosenim
+        key: ${{ runner.os }}-choosenim-devel
+    - name: Cache nimble
+      id: cache-nimble
+      uses: actions/cache@v1
+      with:
+        path: ~/.nimble
+        key: ${{ runner.os }}-nimble-stable
+    - uses: jiro4989/setup-nim-action@v1
+      with:
+        nim-version: devel
+    - name: Print Nim version
+      run: nim -v
+    - name: Print Nimble version
+      run: nimble -v
+    - name: Run build test
+      run: nimble install -Y nimjson
+    - name: Run command
+      run: nimjson -h
+
+  test_devel_latest:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Cache choosenim
+      id: cache-choosenim
+      uses: actions/cache@v1
+      with:
+        path: ~/.choosenim
+        key: ${{ runner.os }}-choosenim-devel-latest
+    - name: Cache nimble
+      id: cache-nimble
+      uses: actions/cache@v1
+      with:
+        path: ~/.nimble
+        key: ${{ runner.os }}-nimble-stable
+    - uses: jiro4989/setup-nim-action@v1
+      with:
+        nim-version: 'devel --latest'
+    - name: Print Nim version
+      run: nim -v
+    - name: Print Nimble version
+      run: nimble -v
+    - name: Run build test
+      run: nimble install -Y nimjson
+    - name: Run command
+      run: nimjson -h
+
