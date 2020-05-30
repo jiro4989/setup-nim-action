@@ -12,7 +12,7 @@ Basic:
 ```yaml
 steps:
 - uses: actions/checkout@master
-- uses: jiro4989/setup-nim-action@v1.0.2
+- uses: jiro4989/setup-nim-action@v1
   with:
     nim-version: '1.0.2'
 - run: nimble build -Y
@@ -35,7 +35,7 @@ steps:
   with:
     path: ~/.nimble
     key: ${{ runner.os }}-nimble-stable
-- uses: jiro4989/setup-nim-action@v1.0.2
+- uses: jiro4989/setup-nim-action@v1
 - run: nimble build -Y
 - run: nimble test -Y
 ```
@@ -52,7 +52,7 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: Setup nim
-        uses: jiro4989/setup-nim-action@v1.0.2
+        uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: ${{ matrix.nim }}
       - run: nimble build
