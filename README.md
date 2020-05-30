@@ -14,7 +14,7 @@ steps:
 - uses: actions/checkout@master
 - uses: jiro4989/setup-nim-action@v1
   with:
-    nim-version: '1.0.2'
+    nim-version: '1.2.0'
 - run: nimble build -Y
 - run: nimble test -Y
 ```
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        nim: [ '1.0.2', 'stable' ]
+        nim: [ '1.2.0', 'stable' ]
     name: Nim ${{ matrix.nim }} sample
     steps:
       - uses: actions/checkout@master
