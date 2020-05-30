@@ -31,10 +31,10 @@ function setNimbleBinPath() {
 async function installNim(version: string) {
   const body = await request({
     url: "https://nim-lang.org/choosenim/init.sh",
-    method: "GET"
+    method: "GET",
   });
   fs.writeFileSync("init.sh", body);
-  process.env.CHOOSENIM_NO_ANALYTICS = '1';
+  process.env.CHOOSENIM_NO_ANALYTICS = "1";
   proc.exec("sh init.sh -y", (err: any, stdout: string, stderr: string) => {
     if (err) {
       core.error(err);

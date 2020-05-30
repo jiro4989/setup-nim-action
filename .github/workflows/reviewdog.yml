@@ -21,6 +21,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           reporter: ${{ steps.reporter.outputs.value }}
           level: warning
+          exclude: "./node_modules/*"
 
   hadolint:
     name: runner / hadolint
