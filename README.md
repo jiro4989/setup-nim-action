@@ -90,6 +90,10 @@ jobs:
       - run: nimble build
 ```
 
+### Full example
+
+See [.github/workflows/nim.yml](.github/workflows/nim.yml).
+
 ## License
 
 MIT
