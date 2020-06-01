@@ -4,11 +4,12 @@
 
 This action sets up a Nim environment.
 
-# Usage
+## Usage
 
 See [action.yml](action.yml)
 
-Basic:
+### Basic usage
+
 ```yaml
 steps:
   - uses: actions/checkout@master
@@ -19,7 +20,8 @@ steps:
   - run: nimble test -Y
 ```
 
-Use cache:
+### Cache usage
+
 ```yaml
 steps:
   - uses: actions/checkout@master
@@ -34,7 +36,8 @@ steps:
   - run: nimble test -Y
 ```
 
-Matrix Testing:
+### Matrix testing usage
+
 ```yaml
 jobs:
   build:
@@ -51,6 +54,8 @@ jobs:
           nim-version: ${{ matrix.nim }}
       - run: nimble build
 ```
+
+### `devel --latest` usage
 
 Use `date` cache-key for speed-up if you want to use `devel --latest`.
 
@@ -85,6 +90,6 @@ jobs:
       - run: nimble build
 ```
 
-# License
+## License
 
 MIT
