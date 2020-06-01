@@ -41,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        nim: [ '1.2.0', 'stable' ]
+        nim: [ '1.2.0', 'stable', 'devel' ]
     name: Nim ${{ matrix.nim }} sample
     steps:
       - uses: actions/checkout@master
@@ -52,14 +52,12 @@ jobs:
       - run: nimble build
 ```
 
-Use `date` cache-key if you want to use `stable` or `devel` or `devel --latest` and caching.
+Use `date` cache-key for speed-up if you want to use `devel --latest`.
 
 ```yaml
 jobs:
   test_devel:
     runs-on: ubuntu-latest
-    env:
-      nim_version: 'devel'
     steps:
       - uses: actions/checkout@v1
 
@@ -73,16 +71,16 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.choosenim
-          key: ${{ runner.os }}-choosenim-${{ env.nim_version }}-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-choosenim-devel-latest-${{ steps.get-date.outputs.date }}
       - name: Cache nimble
         id: cache-nimble
         uses: actions/cache@v1
         with:
           path: ~/.nimble
-          key: ${{ runner.os }}-nimble-${{ env.nim_version }}-${{ hashFiles('*.nimble') }}
+          key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
       - uses: jiro4989/setup-nim-action@v1
         with:
-          nim-version: ${{ env.nim_version }}
+          nim-version: "devel --latest"
 
       - run: nimble build
 ```
