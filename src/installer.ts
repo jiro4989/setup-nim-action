@@ -40,8 +40,7 @@ async function installNim(version: string) {
       core.error(err);
       throw err;
     }
-    core.debug(stdout);
-    core.debug(stderr);
+    core.info(stdout);
 
     proc.exec(
       `choosenim ${version}`,
@@ -50,8 +49,7 @@ async function installNim(version: string) {
           core.error(err);
           throw err;
         }
-        core.debug(stdout);
-        core.debug(stderr);
+        core.info(stdout);
       }
     );
   });
