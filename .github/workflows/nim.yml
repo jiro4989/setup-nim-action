@@ -14,109 +14,76 @@ jobs:
         version:
           - 1.0.0
           - stable
+          - devel
     steps:
-    - uses: actions/checkout@v1
-    - uses: ./
-      with:
-        nim-version: ${{ matrix.version }}
-    - name: Print Nim version
-      run: nim -v
-    - name: Print Nimble version
-      run: nimble -v
-    - name: Run build test
-      run: nimble install -Y nimjson
-    - name: Run command
-      run: nimjson -h
+      - uses: actions/checkout@v1
+      - uses: ./
+        with:
+          nim-version: ${{ matrix.version }}
+
+      - name: Print Nim version
+        run: nim -v
+      - name: Print Nimble version
+        run: nimble -v
+      - name: Run build test
+        run: nimble install -Y nimjson
+      - name: Run command
+        run: nimjson -h
 
   test_v1:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
-    - name: Cache nimble
-      id: cache-nimble
-      uses: actions/cache@v1
-      with:
-        path: ~/.nimble
-        key: ${{ runner.os }}-nimble
-    - uses: jiro4989/setup-nim-action@v1
-    - name: Print Nim version
-      run: nim -v
-    - name: Print Nimble version
-      run: nimble -v
-    - name: Run build test
-      run: nimble install -Y nimjson
-    - name: Run command
-      run: nimjson -h
+      - uses: actions/checkout@v1
+      - name: Cache nimble
+        id: cache-nimble
+        uses: actions/cache@v1
+        with:
+          path: ~/.nimble
+          key: ${{ runner.os }}-nimble
+      - uses: jiro4989/setup-nim-action@v1
 
-  test_devel:
-    runs-on: ubuntu-latest
-    env:
-      nim_version: 'devel'
-    steps:
-    - uses: actions/checkout@v1
-
-    - name: Get Date
-      id: get-date
-      run: echo "::set-output name=date::$(date "+%Y-%m-%d")"
-      shell: bash
-
-    - name: Cache choosenim
-      id: cache-choosenim
-      uses: actions/cache@v1
-      with:
-        path: ~/.choosenim
-        key: ${{ runner.os }}-choosenim-${{ env.nim_version }}-${{ steps.get-date.outputs.date }}
-    - name: Cache nimble
-      id: cache-nimble
-      uses: actions/cache@v1
-      with:
-        path: ~/.nimble
-        key: ${{ runner.os }}-nimble-${{ env.nim_version }}
-    - uses: ./
-      with:
-        nim-version: ${{ env.nim_version }}
-
-    - name: Print Nim version
-      run: nim -v
-    - name: Print Nimble version
-      run: nimble -v
-    - name: Run build test
-      run: nimble install -Y nimjson
-    - name: Run command
-      run: nimjson -h
+      - name: Print Nim version
+        run: nim -v
+      - name: Print Nimble version
+        run: nimble -v
+      - name: Run build test
+        run: nimble install -Y nimjson
+      - name: Run command
+        run: nimjson -h
 
   test_devel_latest:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
 
-    - name: Get Date
-      id: get-date
-      run: echo "::set-output name=date::$(date "+%Y-%m-%d")"
-      shell: bash
+      # Set cache key
+      - name: Get Date
+        id: get-date
+        run: echo "::set-output name=date::$(date "+%Y-%m-%d")"
+        shell: bash
 
-    - name: Cache choosenim
-      id: cache-choosenim
-      uses: actions/cache@v1
-      with:
-        path: ~/.choosenim
-        key: ${{ runner.os }}-choosenim-devel-latest-${{ steps.get-date.outputs.date }}
-    - name: Cache nimble
-      id: cache-nimble
-      uses: actions/cache@v1
-      with:
-        path: ~/.nimble
-        key: ${{ runner.os }}-nimble-devel-latest
-    - uses: jiro4989/setup-nim-action@v1
-      with:
-        nim-version: 'devel --latest'
+      - name: Cache choosenim
+        id: cache-choosenim
+        uses: actions/cache@v1
+        with:
+          path: ~/.choosenim
+          key: ${{ runner.os }}-choosenim-devel-latest-${{ steps.get-date.outputs.date }}
+      - name: Cache nimble
+        id: cache-nimble
+        uses: actions/cache@v1
+        with:
+          path: ~/.nimble
+          key: ${{ runner.os }}-nimble-devel-latest
+      - uses: jiro4989/setup-nim-action@v1
+        with:
+          nim-version: 'devel --latest'
 
-    - name: Print Nim version
-      run: nim -v
-    - name: Print Nimble version
-      run: nimble -v
-    - name: Run build test
-      run: nimble install -Y nimjson
-    - name: Run command
-      run: nimjson -h
+      - name: Print Nim version
+        run: nim -v
+      - name: Print Nimble version
+        run: nimble -v
+      - name: Run build test
+        run: nimble install -Y nimjson
+      - name: Run command
+        run: nimjson -h
 
