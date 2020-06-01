@@ -32,18 +32,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
-    - name: Cache choosenim
-      id: cache-choosenim
-      uses: actions/cache@v1
-      with:
-        path: ~/.choosenim
-        key: ${{ runner.os }}-choosenim-stable
     - name: Cache nimble
       id: cache-nimble
       uses: actions/cache@v1
       with:
         path: ~/.nimble
-        key: ${{ runner.os }}-nimble-stable
+        key: ${{ runner.os }}-nimble
     - uses: jiro4989/setup-nim-action@v1
     - name: Print Nim version
       run: nim -v
@@ -56,23 +50,32 @@ jobs:
 
   test_devel:
     runs-on: ubuntu-latest
+    env:
+      nim_version: 'devel'
     steps:
     - uses: actions/checkout@v1
+
+    - name: Get Date
+      id: get-date
+      run: echo "::set-output name=date::$(date "+%Y-%m-%d")"
+      shell: bash
+
     - name: Cache choosenim
       id: cache-choosenim
       uses: actions/cache@v1
       with:
         path: ~/.choosenim
-        key: ${{ runner.os }}-choosenim-devel
+        key: ${{ runner.os }}-choosenim-${{ env.nim_version }}-${{ steps.get-date.outputs.date }}
     - name: Cache nimble
       id: cache-nimble
       uses: actions/cache@v1
       with:
         path: ~/.nimble
-        key: ${{ runner.os }}-nimble-stable
-    - uses: jiro4989/setup-nim-action@v1
+        key: ${{ runner.os }}-nimble-${{ env.nim_version }}
+    - uses: ./
       with:
-        nim-version: devel
+        nim-version: ${{ env.nim_version }}
+
     - name: Print Nim version
       run: nim -v
     - name: Print Nimble version
@@ -86,21 +89,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+
+    - name: Get Date
+      id: get-date
+      run: echo "::set-output name=date::$(date "+%Y-%m-%d")"
+      shell: bash
+
     - name: Cache choosenim
       id: cache-choosenim
       uses: actions/cache@v1
       with:
         path: ~/.choosenim
-        key: ${{ runner.os }}-choosenim-devel-latest
+        key: ${{ runner.os }}-choosenim-devel-latest-${{ steps.get-date.outputs.date }}
     - name: Cache nimble
       id: cache-nimble
       uses: actions/cache@v1
       with:
         path: ~/.nimble
-        key: ${{ runner.os }}-nimble-stable
+        key: ${{ runner.os }}-nimble-devel-latest
     - uses: jiro4989/setup-nim-action@v1
       with:
         nim-version: 'devel --latest'
+
     - name: Print Nim version
       run: nim -v
     - name: Print Nimble version
