@@ -16,7 +16,7 @@ jobs:
           - stable
     steps:
     - uses: actions/checkout@v1
-    - uses: jiro4989/setup-nim-action@master
+    - uses: ./
       with:
         nim-version: ${{ matrix.version }}
     - name: Print Nim version
