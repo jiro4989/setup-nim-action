@@ -35,12 +35,36 @@ async function installNim(version: string) {
   });
   fs.writeFileSync("init.sh", body);
   process.env.CHOOSENIM_NO_ANALYTICS = "1";
-  process.env.CHOOSENIM_CHOOSE_VERSION = version;
+
+  // #21
+  if (process.platform === "win32") {
+    process.env.CHOOSENIM_CHOOSE_VERSION = version;
+    proc.exec("sh init.sh -y", (err: any, stdout: string, stderr: string) => {
+      if (err) {
+        core.error(err);
+        throw err;
+      }
+      core.info(stdout);
+    });
+    return;
+  }
+
   proc.exec("sh init.sh -y", (err: any, stdout: string, stderr: string) => {
     if (err) {
       core.error(err);
       throw err;
     }
     core.info(stdout);
+
+    proc.exec(
+      `choosenim ${version}`,
+      (err: any, stdout: string, stderr: string) => {
+        if (err) {
+          core.error(err);
+          throw err;
+        }
+        core.info(stdout);
+      }
+    );
   });
 }
