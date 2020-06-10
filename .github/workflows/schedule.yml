@@ -1,4 +1,4 @@
-name: build
+name: schedule
 
 on:
   schedule:
@@ -17,6 +17,9 @@ jobs:
           - 1.0.0
           - stable
           - devel
+        exclude:
+          - os: macOS-latest
+            version: devel
     steps:
       - uses: actions/checkout@v1
       - uses: ./
