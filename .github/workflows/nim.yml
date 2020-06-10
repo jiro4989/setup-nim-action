@@ -1,6 +1,9 @@
 name: build
 
-on: [push]
+on:
+  pusH:
+  schedule:
+    - cron:  '0 0 * * *'
 
 jobs:
   skip:
