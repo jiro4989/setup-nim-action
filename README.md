@@ -35,6 +35,7 @@ steps:
     with:
       path: ~/.nimble
       key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
+    if: runner.os != 'Windows'
   - uses: jiro4989/setup-nim-action@v1
   - run: nimble build -Y
   - run: nimble test -Y
