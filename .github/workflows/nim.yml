@@ -16,7 +16,6 @@ jobs:
 
   test:
     runs-on: ${{ matrix.os }}
-    continue-on-error: ${{ matrix.experimental }}
     needs: before
     strategy:
       matrix:
