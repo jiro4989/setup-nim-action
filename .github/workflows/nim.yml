@@ -1,6 +1,14 @@
 name: build
 
-on: [push]
+on:
+  push:
+    paths-ignore:
+      - 'LICENSE'
+      - '*.md'
+  pull_request:
+    paths-ignore:
+      - 'LICENSE'
+      - '*.md'
 
 jobs:
   skip:
