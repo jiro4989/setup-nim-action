@@ -97,7 +97,7 @@ jobs:
 
 ### Full example
 
-See [.github/workflows/nim.yml](.github/workflows/nim.yml).
+See [.github/workflows/test.yml](.github/workflows/test.yml).
 
 ## License
 
