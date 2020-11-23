@@ -12,7 +12,7 @@ See [action.yml](action.yml)
 
 ```yaml
 steps:
-  - uses: actions/checkout@master
+  - uses: actions/checkout@v2
   - uses: jiro4989/setup-nim-action@v1
     with:
       nim-version: '1.2.0'
@@ -28,7 +28,7 @@ Please should not use `Cache nimble` on `windows-latest`.
 
 ```yaml
 steps:
-  - uses: actions/checkout@master
+  - uses: actions/checkout@v2
   - name: Cache nimble
     id: cache-nimble
     uses: actions/cache@v1
@@ -52,7 +52,7 @@ jobs:
         nim: [ '1.2.0', 'stable', 'devel' ]
     name: Nim ${{ matrix.nim }} sample
     steps:
-      - uses: actions/checkout@master
+      - uses: actions/checkout@v2
       - name: Setup nim
         uses: jiro4989/setup-nim-action@v1
         with:
@@ -69,7 +69,7 @@ jobs:
   test_devel:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: Get Date
         id: get-date
