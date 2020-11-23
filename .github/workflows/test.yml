@@ -39,7 +39,7 @@ jobs:
           - os: macOS-latest
             version: devel
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: ./
         with:
           nim-version: ${{ matrix.version }}
@@ -57,7 +57,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: before
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - name: Cache nimble
         id: cache-nimble
         uses: actions/cache@v1
@@ -79,7 +79,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: before
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       # Set cache key
       - name: Get Date
