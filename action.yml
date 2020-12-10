@@ -8,6 +8,9 @@ inputs:
   no-color:
     description: 'Activate "--noColor" options of choosenim. Example: true'
     default: false
+  yes:
+    description: 'Activate "--yes" options of choosenim. Example: true'
+    default: false
 runs:
   using: 'node12'
   main: 'lib/setup-nim.js'
