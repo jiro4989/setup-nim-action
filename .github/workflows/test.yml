@@ -62,6 +62,7 @@ jobs:
           - default
           - no-color
           - yes
+          - all
     steps:
       - uses: actions/checkout@v2
       - name: Cache nimble
@@ -73,14 +74,19 @@ jobs:
 
       - uses: jiro4989/setup-nim-action@v1
         if: matrix.type == 'default'
-      - uses: jiro4989/setup-nim-action@v1
+      - uses: ./
         with:
           no-color: true
         if: matrix.type == 'no-color'
-      - uses: jiro4989/setup-nim-action@v1
+      - uses: ./
         with:
           yes: true
         if: matrix.type == 'yes'
+      - uses: ./
+        with:
+          no-color: true
+          yes: true
+        if: matrix.type == 'all'
 
       - name: Print Nim version
         run: nim -v
