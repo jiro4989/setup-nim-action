@@ -5,6 +5,9 @@ inputs:
   nim-version:
     description: 'The Nim version to download (if necessary) and use. Example: 1.0.2'
     default: 'stable'
+  no-color:
+    description: 'Activate "--noColor" options of choosenim. Example: true'
+    default: false
 runs:
   using: 'node12'
   main: 'lib/setup-nim.js'

@@ -56,6 +56,11 @@ jobs:
   test_v1:
     runs-on: ubuntu-latest
     needs: before
+    strategy:
+      matrix:
+        type:
+          - default
+          - no-color
     steps:
       - uses: actions/checkout@v2
       - name: Cache nimble
@@ -64,7 +69,13 @@ jobs:
         with:
           path: ~/.nimble
           key: ${{ runner.os }}-nimble
+
       - uses: jiro4989/setup-nim-action@v1
+        if: matrix.type == 'default'
+      - uses: jiro4989/setup-nim-action@v1
+        with:
+          no-color: true
+        if: matrix.type == 'no-color'
 
       - name: Print Nim version
         run: nim -v

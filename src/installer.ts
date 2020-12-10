@@ -5,9 +5,9 @@ import * as path from "path";
 import * as proc from "child_process";
 const request = require("request-promise");
 
-export async function getNim(version: string) {
+export async function getNim(version: string, noColor: boolean) {
   setNimbleBinPath();
-  await installNim(version);
+  await installNim(version, noColor);
 }
 
 function setNimbleBinPath() {
@@ -28,7 +28,7 @@ function setNimbleBinPath() {
   core.exportVariable("PATH", newPath);
 }
 
-async function installNim(version: string) {
+async function installNim(version: string, noColor: boolean) {
   const body = await request({
     url: "https://nim-lang.org/choosenim/init.sh",
     method: "GET",
@@ -56,8 +56,12 @@ async function installNim(version: string) {
     }
     core.info(stdout);
 
+    let opts: string[] = [];
+    if (noColor) opts.push("--noColor");
+    const optsStr = opts.join(" ");
+
     proc.exec(
-      `choosenim ${version}`,
+      `choosenim ${version} ${optsStr}`,
       (err: any, stdout: string, stderr: string) => {
         if (err) {
           core.error(err);
