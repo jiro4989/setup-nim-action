@@ -15,7 +15,7 @@ steps:
   - uses: actions/checkout@v2
   - uses: jiro4989/setup-nim-action@v1
     with:
-      nim-version: '1.2.0'
+      nim-version: '1.4.0' # default is 'stable'
   - run: nimble build -Y
   - run: nimble test -Y
 ```
