@@ -25,16 +25,15 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/tool-cache": "^1.6.0",
-    "@babel/parser": "^7.12.3",
     "child_process": "^1.0.2",
     "fs": "0.0.1-security",
+    "lodash": ">=4.17.20",
     "path": "^0.12.7",
     "process": "^0.11.10",
     "request": "^2.88.2",
     "request-promise": "^4.2.5",
     "requests": "^0.3.0",
-    "semver": "^7.3.2",
-    "lodash": ">=4.17.20"
+    "semver": "^7.3.2"
   },
   "devDependencies": {
     "@actions/io": "^1.0.2",
