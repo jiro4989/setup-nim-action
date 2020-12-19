@@ -98,8 +98,13 @@ jobs:
         run: nimjson -h
 
   test_devel_latest:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     needs: before
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-2019
     steps:
       - uses: actions/checkout@v2
 
