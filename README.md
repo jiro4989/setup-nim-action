@@ -22,10 +22,6 @@ steps:
 
 ### Cache usage
 
-**Note:**  
-Please should not use `Cache nimble` on `windows-latest`.
-`setup-nim-action` may Failing to install on `windows-latest`.
-
 ```yaml
 steps:
   - uses: actions/checkout@v2
