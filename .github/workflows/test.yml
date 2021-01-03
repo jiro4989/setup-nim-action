@@ -106,6 +106,10 @@ jobs:
           - ubuntu-latest
           - windows-latest
           - macOS-latest
+        nim-version:
+          - 'devel --latest'
+        cache-key:
+          - devel-latest
     steps:
       - uses: actions/checkout@v2
 
@@ -120,7 +124,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.choosenim
-          key: ${{ runner.os }}-choosenim-devel-latest-${{ steps.get-date.outputs.date }}
+          key: ${{ runner.os }}-choosenim-${{ matrix.cache-key }}-${{ steps.get-date.outputs.date }}
       - name: Cache nimble
         id: cache-nimble
         uses: actions/cache@v1
@@ -129,7 +133,7 @@ jobs:
           key: ${{ runner.os }}-nimble-devel-latest
       - uses: jiro4989/setup-nim-action@v1
         with:
-          nim-version: 'devel --latest'
+          nim-version: "${{ matrix.nim-version }}"
 
       - name: Print Nim version
         run: nim -v
