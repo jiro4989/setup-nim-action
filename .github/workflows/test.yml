@@ -130,7 +130,7 @@ jobs:
         uses: actions/cache@v1
         with:
           path: ~/.nimble
-          key: ${{ runner.os }}-nimble-devel-latest
+          key: ${{ runner.os }}-nimble-${{ matrix.cache-key }}
       - uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: "${{ matrix.nim-version }}"
