@@ -23,4 +23,3 @@ function getLatestVersion(version: string): string {
   const tags = fetchTagList();
   return getLatestVersionWithTags(version, tags);
 }
-
