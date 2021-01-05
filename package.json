@@ -26,6 +26,7 @@
     "@actions/core": "^1.2.6",
     "@actions/tool-cache": "^1.6.0",
     "child_process": "^1.0.2",
+    "compare-versions": "^3.6.0",
     "fs": "0.0.1-security",
     "lodash": ">=4.17.20",
     "path": "^0.12.7",
