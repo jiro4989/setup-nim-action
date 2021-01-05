@@ -15,7 +15,10 @@ function fetchTagList(): Promise<any> {
  * getLatestVersionWithTags returns a latest version of `1.n.x`.
  * TODO
  */
-export function getLatestVersionWithTags(version: string, tags: string[]): string {
+export function getLatestVersionWithTags(
+  version: string,
+  tags: string[]
+): string {
   return "";
 }
 
