@@ -1,4 +1,4 @@
-const fetch = require('node-fetch');
+const fetch = require("node-fetch");
 
 /**
  * fetchTagList returns Nim version tag list.
@@ -28,4 +28,3 @@ function getLatestVersion(version: string): string {
   // return getLatestVersionWithTags(version, tags);
   return "";
 }
-
