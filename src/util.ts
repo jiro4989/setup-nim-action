@@ -1,4 +1,4 @@
-const fetch = require("node-fetch");
+const request = require("request-promise");
 
 /**
  * fetchTagList returns Nim version tag list.
@@ -6,7 +6,10 @@ const fetch = require("node-fetch");
  */
 function fetchTagList(): Promise<any> {
   const tagURL = "https://api.github.com/repos/nim-lang/Nim/tags";
-  return fetch(tagURL).then((obj: any[]) => {
+  return request({
+    url: tagURL,
+    method: "GET",
+  }).then((obj: any[]) => {
     return obj.map((v) => v.name);
   });
 }
