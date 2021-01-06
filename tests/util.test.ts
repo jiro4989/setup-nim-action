@@ -40,7 +40,11 @@ describe("function getLatestVersionWithTags", (): void => {
 
   test("returns a empty string when the first argument is a empty string", (): void => {
     const want = "";
-    const got = util.getLatestVersionWithTags("", ["v1.2.1", "v1.2.2", "v1.2.3"]);
+    const got = util.getLatestVersionWithTags("", [
+      "v1.2.1",
+      "v1.2.2",
+      "v1.2.3",
+    ]);
     expect(got).toBe(want);
   });
 

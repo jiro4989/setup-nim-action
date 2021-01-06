@@ -1,5 +1,5 @@
 const request = require("request-promise");
-import compareVersions from 'compare-versions';
+import compareVersions from "compare-versions";
 
 /**
  * fetchTagList returns Nim version tag list.
@@ -23,7 +23,12 @@ export function getLatestVersionWithTags(
   version: string,
   tags: string[]
 ): string {
-  if (!version.includes("x") || tags === null || tags === undefined || tags.length < 1) {
+  if (
+    !version.includes("x") ||
+    tags === null ||
+    tags === undefined ||
+    tags.length < 1
+  ) {
     return version;
   }
 
@@ -41,7 +46,7 @@ export function getLatestVersionWithTags(
     if (sorted.length < 1) {
       return "";
     }
-    return sorted[sorted.length-1];
+    return sorted[sorted.length - 1];
   }
 
   return "";
