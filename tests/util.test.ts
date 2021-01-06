@@ -1,7 +1,7 @@
 import * as util from "../src/util";
 
 describe("function getLatestVersionWithTags", (): void => {
-  test("returns a latest version from 3 patch versions", (): void => {
+  test("returns a latest patch version from 3 patch versions", (): void => {
     const want = "1.2.3";
     const got = util.getLatestVersionWithTags("1.2.x", [
       "v1.2.1",
@@ -11,7 +11,7 @@ describe("function getLatestVersionWithTags", (): void => {
     expect(got).toBe(want);
   });
 
-  test("returns a latest version from 1 patch version", (): void => {
+  test("returns a latest patch version from 1 patch version", (): void => {
     const want = "1.2.3";
     const got = util.getLatestVersionWithTags("1.2.x", ["v1.2.3"]);
     expect(got).toBe(want);
@@ -69,6 +69,49 @@ describe("function getLatestVersionWithTags", (): void => {
       "v1.2.3-rc1",
       "v1.2.4",
       "v1.2.5-beta",
+    ]);
+    expect(got).toBe(want);
+  });
+
+  test("returns a latest minor version from 5 versions", (): void => {
+    const want = "1.9.0";
+    const got = util.getLatestVersionWithTags("1.x", [
+      "v1.1.1",
+      "v1.2.2",
+      "v1.3.3",
+      "v1.4.4-beta",
+      "v1.9.0",
+    ]);
+    expect(got).toBe(want);
+  });
+
+  test("returns a latest minor version from 1 version", (): void => {
+    const want = "1.9.0";
+    const got = util.getLatestVersionWithTags("1.x", ["v1.9.0"]);
+    expect(got).toBe(want);
+  });
+
+  test("returns a empty string when a version doesn't match (minor)", (): void => {
+    const want = "";
+    const got = util.getLatestVersionWithTags("1.x", [
+      "v1.a",
+      "vtuber",
+      "v",
+      "vvvv",
+      "v1",
+      "寿司",
+    ]);
+    expect(got).toBe(want);
+  });
+
+  test("returns a empty string when a version doesn't match (patch)", (): void => {
+    const want = "";
+    const got = util.getLatestVersionWithTags("1.2.x", [
+      "v1.a",
+      "vtuber",
+      "v",
+      "vvvv",
+      "v1",
     ]);
     expect(got).toBe(want);
   });
