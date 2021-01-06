@@ -28,9 +28,19 @@ describe("function getLatestVersionWithTags", (): void => {
     expect(got).toBe(want);
   });
 
-  test("returns a version of the first argument when the first argument doesn't have 'x' character", (): void => {
-    const want = "1.2.9";
+  test("returns a empty string when the first argument is illagal", (): void => {
+    const want = "";
     const got = util.getLatestVersionWithTags("1.2.9", [
+      "v1.2.1",
+      "v1.2.2",
+      "v1.2.3",
+    ]);
+    expect(got).toBe(want);
+  });
+
+  test("returns a empty string when the first argument is illagal", (): void => {
+    const want = "";
+    const got = util.getLatestVersionWithTags("寿司", [
       "v1.2.1",
       "v1.2.2",
       "v1.2.3",
