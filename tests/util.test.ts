@@ -57,7 +57,6 @@ describe("function getLatestVersionWithTags", (): void => {
     expect(got).toBe(want);
   });
 
-
   test("ok: returns a empty string when a version doesn't match", (): void => {
     const want = "";
     const got = util.getLatestVersionWithTags("1.2.x", [
