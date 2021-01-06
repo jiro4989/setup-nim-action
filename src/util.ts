@@ -1,5 +1,5 @@
 const request = require("request-promise");
-import compareVersions from "compare-versions";
+import compareVersions from 'compare-versions';
 
 /**
  * fetchTagList returns Nim version tag list.
@@ -23,12 +23,7 @@ export function getLatestVersionWithTags(
   version: string,
   tags: string[]
 ): string {
-  if (
-    !version.includes("x") ||
-    tags === null ||
-    tags === undefined ||
-    tags.length < 1
-  ) {
+  if (!version.includes("x") || tags === null || tags === undefined || tags.length < 1) {
     return version;
   }
 
@@ -38,14 +33,15 @@ export function getLatestVersionWithTags(
     const versionCols = versionPrefix.split(".");
     const majorVersion = versionCols[0];
     const minorVersion = versionCols[1];
-    const pattern = new RegExp(`^${majorVersion}\\.${minorVersion}\\.\\d+`);
+    const pattern = new RegExp(`^v${majorVersion}\\.${minorVersion}\\.\\d+`);
     const sorted = tags
       .filter((tag) => tag.match(pattern))
+      .map((tag) => tag.substring(1))
       .sort(compareVersions);
     if (sorted.length < 1) {
       return "";
     }
-    return sorted[sorted.length - 1];
+    return sorted[sorted.length-1];
   }
 
   return "";
