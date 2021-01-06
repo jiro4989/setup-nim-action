@@ -9,7 +9,7 @@ describe("function fetchTagList", (): void => {
 });
 
 describe("function getLatestVersionWithTags", (): void => {
-  test("returns a latest patch version from 5 patch versions", (): void => {
+  test("ok: returns a matched latest patch version from 5 patch versions", (): void => {
     const want = "1.2.3";
     const got = util.getLatestVersionWithTags("1.2.x", [
       "v1.0.3",
@@ -21,13 +21,13 @@ describe("function getLatestVersionWithTags", (): void => {
     expect(got).toBe(want);
   });
 
-  test("returns a latest patch version from 1 patch version", (): void => {
+  test("ok: returns a matched latest patch version from 1 patch version", (): void => {
     const want = "1.2.3";
     const got = util.getLatestVersionWithTags("1.2.x", ["v1.2.3"]);
     expect(got).toBe(want);
   });
 
-  test("returns a empty string when a version doesn't match", (): void => {
+  test("ok: returns a empty string when a version doesn't match", (): void => {
     const want = "";
     const got = util.getLatestVersionWithTags("1.2.x", [
       "v1.0.0",
@@ -38,7 +38,7 @@ describe("function getLatestVersionWithTags", (): void => {
     expect(got).toBe(want);
   });
 
-  test("returns a empty string when the first argument is illagal", (): void => {
+  test("ng: returns a empty string when the first argument is illagal", (): void => {
     const want = "";
     const got = util.getLatestVersionWithTags("1.2.9", [
       "v1.2.1",
@@ -48,7 +48,7 @@ describe("function getLatestVersionWithTags", (): void => {
     expect(got).toBe(want);
   });
 
-  test("returns a empty string when the first argument is illagal", (): void => {
+  test("ng: returns a empty string when the first argument is illagal", (): void => {
     const want = "";
     const got = util.getLatestVersionWithTags("寿司", [
       "v1.2.1",
@@ -58,7 +58,7 @@ describe("function getLatestVersionWithTags", (): void => {
     expect(got).toBe(want);
   });
 
-  test("returns a empty string when the first argument is a empty string", (): void => {
+  test("ng: returns a empty string when the first argument is a empty string", (): void => {
     const want = "";
     const got = util.getLatestVersionWithTags("", [
       "v1.2.1",
@@ -68,20 +68,20 @@ describe("function getLatestVersionWithTags", (): void => {
     expect(got).toBe(want);
   });
 
-  test("returns a version of the first argument when the second argument length is 0", (): void => {
+  test("ng: returns a version of the first argument when the second argument length is 0", (): void => {
     const want = "1.2.x";
     const got = util.getLatestVersionWithTags("1.2.x", []);
     expect(got).toBe(want);
   });
 
-  test("returns a version of the first argument when the second argument is null", (): void => {
+  test("ng: returns a version of the first argument when the second argument is null", (): void => {
     const want = "1.2.x";
     const tags: any = null;
     const got = util.getLatestVersionWithTags("1.2.x", tags);
     expect(got).toBe(want);
   });
 
-  test("returns a special latest version (-beta)", (): void => {
+  test("ok: returns a matched special latest patch version (-beta)", (): void => {
     const want = "1.2.5-beta";
     const got = util.getLatestVersionWithTags("1.2.x", [
       "v1.2.1",
@@ -93,7 +93,7 @@ describe("function getLatestVersionWithTags", (): void => {
     expect(got).toBe(want);
   });
 
-  test("returns a latest minor version from 5 versions", (): void => {
+  test("ok: returns a matched latest minor version from 5 versions", (): void => {
     const want = "1.10.0";
     const got = util.getLatestVersionWithTags("1.x", [
       "v1.1.1",
@@ -105,13 +105,13 @@ describe("function getLatestVersionWithTags", (): void => {
     expect(got).toBe(want);
   });
 
-  test("returns a latest minor version from 1 version", (): void => {
+  test("ok: returns a matched latest minor version from 1 version", (): void => {
     const want = "1.9.0";
     const got = util.getLatestVersionWithTags("1.x", ["v1.9.0"]);
     expect(got).toBe(want);
   });
 
-  test("returns a empty string when a version doesn't match (minor)", (): void => {
+  test("ok: returns a empty string when a version doesn't match (minor)", (): void => {
     const want = "";
     const got = util.getLatestVersionWithTags("1.x", [
       "v1.a",
@@ -124,7 +124,7 @@ describe("function getLatestVersionWithTags", (): void => {
     expect(got).toBe(want);
   });
 
-  test("returns a empty string when a version doesn't match (patch)", (): void => {
+  test("ok: returns a empty string when a version doesn't match (patch)", (): void => {
     const want = "";
     const got = util.getLatestVersionWithTags("1.2.x", [
       "v1.a",
