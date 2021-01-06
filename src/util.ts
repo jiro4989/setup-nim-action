@@ -25,15 +25,14 @@ export function getLatestVersionWithTags(
 ): string {
   const patchVersionPattern = /^\d+\.\d+\.x$/;
   const minorVersionPattern = /^\d+\.x$/;
-  if (!version.match(patchVersionPattern) && !version.match(minorVersionPattern)) {
+  if (
+    !version.match(patchVersionPattern) &&
+    !version.match(minorVersionPattern)
+  ) {
     return "";
   }
 
-  if (
-    tags === null ||
-    tags === undefined ||
-    tags.length < 1
-  ) {
+  if (tags === null || tags === undefined || tags.length < 1) {
     return version;
   }
 
