@@ -3,9 +3,8 @@ import compareVersions from "compare-versions";
 
 /**
  * fetchTagList returns Nim version tag list.
- * TODO
  */
-function fetchTagList(): Promise<any> {
+export function fetchTagList(): Promise<any> {
   const tagURL = "https://api.github.com/repos/nim-lang/Nim/tags";
   return request({
     url: tagURL,
@@ -17,7 +16,6 @@ function fetchTagList(): Promise<any> {
 
 /**
  * getLatestVersionWithTags returns a latest version of `1.n.x`.
- * TODO
  */
 export function getLatestVersionWithTags(
   version: string,
@@ -77,7 +75,6 @@ export function getLatestVersionWithTags(
 
 /**
  * getLatestVersion returns a latest version of `1.n.x`.
- * TODO
  */
 export function getLatestVersion(version: string): Promise<any> {
   return fetchTagList().then((tags) => getLatestVersionWithTags(version, tags));
