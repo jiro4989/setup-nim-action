@@ -1,5 +1,13 @@
 import * as util from "../src/util";
 
+describe("function fetchTagList", (): void => {
+  test("returns some array objects", (): void => {
+    util.fetchTagList().then((tags: any[]) => {
+      expect(0 < tags.length).toBe(true);
+    });
+  });
+});
+
 describe("function getLatestVersionWithTags", (): void => {
   test("returns a latest patch version from 5 patch versions", (): void => {
     const want = "1.2.3";
