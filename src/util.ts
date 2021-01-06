@@ -23,8 +23,13 @@ export function getLatestVersionWithTags(
   version: string,
   tags: string[]
 ): string {
+  const patchVersionPattern = /^\d+\.\d+\.x$/;
+  const minorVersionPattern = /^\d+\.x$/;
+  if (!version.match(patchVersionPattern) && !version.match(minorVersionPattern)) {
+    return "";
+  }
+
   if (
-    !version.includes("x") ||
     tags === null ||
     tags === undefined ||
     tags.length < 1
@@ -34,7 +39,7 @@ export function getLatestVersionWithTags(
 
   // patch version
   // ex: 1.2.x
-  if (version.match(/^\d+\.\d+\.x$/)) {
+  if (version.match(patchVersionPattern)) {
     const versionPrefix = version.replace(/^(\d+\.\d+)\..*/, "$1");
     const versionCols = versionPrefix.split(".");
     const majorVersion = versionCols[0];
@@ -52,7 +57,7 @@ export function getLatestVersionWithTags(
 
   // minor version
   // ex: 1.x
-  if (version.match(/^\d+\.x$/)) {
+  if (version.match(minorVersionPattern)) {
     const versionPrefix = version.replace(/^(\d+)\..*/, "$1");
     const versionCols = versionPrefix.split(".");
     const majorVersion = versionCols[0];
@@ -67,6 +72,7 @@ export function getLatestVersionWithTags(
     return sorted[sorted.length - 1];
   }
 
+  // not arrive
   return "";
 }
 
