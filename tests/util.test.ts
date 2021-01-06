@@ -60,4 +60,10 @@ describe("function getLatestVersionWithTags", (): void => {
     const got = util.getLatestVersionWithTags("1.2.x", tags);
     expect(got).toBe(want);
   });
+
+  test("returns a special latest version (-beta)", (): void => {
+    const want = "1.2.5-beta";
+    const got = util.getLatestVersionWithTags("1.2.x", ["v1.2.1", "v1.2.2", "v1.2.3-rc1", "v1.2.4", "v1.2.5-beta"]);
+    expect(got).toBe(want);
+  });
 });
