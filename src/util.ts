@@ -22,6 +22,7 @@ export function fetchTagList(): Promise<any> {
     headers: {
       "User-Agent": "setup-nim-action",
     },
+    json: true,
   })
     .then((v: any) => v.json())
     .then((obj: any[]) => {
