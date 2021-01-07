@@ -1,5 +1,45 @@
 import * as util from "../src/util";
 
+describe("function isGlobPatchVersion", (): void => {
+  test("ok: 1.2.x", (): void => {
+    expect(util.isGlobPatchVersion("1.2.x")).toBe(true);
+  });
+
+  test("ok: 1.99.x", (): void => {
+    expect(util.isGlobPatchVersion("1.99.x")).toBe(true);
+  });
+
+  test("ng: 1.2.3", (): void => {
+    expect(util.isGlobPatchVersion("1.2.3")).toBe(false);
+  });
+
+  test("ng: 1.x", (): void => {
+    expect(util.isGlobPatchVersion("1.x")).toBe(false);
+  });
+
+  test("ng: 寿司", (): void => {
+    expect(util.isGlobPatchVersion("寿司")).toBe(false);
+  });
+});
+
+describe("function isGlobMinorVersion", (): void => {
+  test("ok: 1.x", (): void => {
+    expect(util.isGlobMinorVersion("1.x")).toBe(true);
+  });
+
+  test("ok: 99.x", (): void => {
+    expect(util.isGlobMinorVersion("99.x")).toBe(true);
+  });
+
+  test("ng: 1.2", (): void => {
+    expect(util.isGlobMinorVersion("1.2")).toBe(false);
+  });
+
+  test("ng: 寿司", (): void => {
+    expect(util.isGlobMinorVersion("寿司")).toBe(false);
+  });
+});
+
 describe("function fetchTagList", (): void => {
   test("returns some array objects", (): void => {
     util.fetchTagList().then((tags: any[]) => {
