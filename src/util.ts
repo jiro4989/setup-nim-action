@@ -24,7 +24,6 @@ export function fetchTagList(): Promise<any> {
     },
     json: true,
   })
-    .then((v: any) => v.json())
     .then((obj: any[]) => {
       return obj.map((v) => v.name);
     });
