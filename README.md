@@ -20,6 +20,34 @@ steps:
   - run: nimble test -Y
 ```
 
+### Setup a latest patch version Nim
+
+Setup a latest patch version Nim when `nim-version` is `1.n.x` .
+
+```yaml
+steps:
+  - uses: actions/checkout@v2
+  - uses: jiro4989/setup-nim-action@v1
+    with:
+      nim-version: '1.2.x' # ex: 1.0.x, 1.2.x, 1.4.x ...
+  - run: nimble build -Y
+  - run: nimble test -Y
+```
+
+### Setup a latest minor version Nim
+
+Setup a latest minor version Nim when `nim-version` is `1.x` .
+
+```yaml
+steps:
+  - uses: actions/checkout@v2
+  - uses: jiro4989/setup-nim-action@v1
+    with:
+      nim-version: '1.x'
+  - run: nimble build -Y
+  - run: nimble test -Y
+```
+
 ### Cache usage
 
 ```yaml
