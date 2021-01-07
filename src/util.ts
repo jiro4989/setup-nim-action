@@ -20,8 +20,8 @@ export function fetchTagList(): Promise<any> {
     url: tagURL,
     method: "GET",
     headers: {
-      "User-Agent": "setup-nim-action"
-    }
+      "User-Agent": "setup-nim-action",
+    },
   }).then((obj: any[]) => {
     return obj.map((v) => v.name);
   });
