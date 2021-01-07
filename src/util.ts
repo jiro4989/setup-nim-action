@@ -1,6 +1,16 @@
 const request = require("request-promise");
 import compareVersions from "compare-versions";
 
+const patchVersionPattern = /^\d+\.\d+\.x$/;
+export function isGlobPatchVersion(version: string): boolean {
+  return version.match(patchVersionPattern) != null;
+}
+
+const minorVersionPattern = /^\d+\.x$/;
+export function isGlobMinorVersion(version: string): boolean {
+  return version.match(minorVersionPattern) != null;
+}
+
 /**
  * fetchTagList returns Nim version tag list.
  */
@@ -24,8 +34,8 @@ export function getLatestVersionWithTags(
   const patchVersionPattern = /^\d+\.\d+\.x$/;
   const minorVersionPattern = /^\d+\.x$/;
   if (
-    !version.match(patchVersionPattern) &&
-    !version.match(minorVersionPattern)
+    !isGlobPatchVersion(version) &&
+    !isGlobMinorVersion(version)
   ) {
     return "";
   }
@@ -36,7 +46,7 @@ export function getLatestVersionWithTags(
 
   // patch version
   // ex: 1.2.x
-  if (version.match(patchVersionPattern)) {
+  if (isGlobPatchVersion(version)) {
     const versionPrefix = version.replace(/^(\d+\.\d+)\..*/, "$1");
     const versionCols = versionPrefix.split(".");
     const majorVersion = versionCols[0];
@@ -54,7 +64,7 @@ export function getLatestVersionWithTags(
 
   // minor version
   // ex: 1.x
-  if (version.match(minorVersionPattern)) {
+  if (isGlobMinorVersion(version)) {
     const versionPrefix = version.replace(/^(\d+)\..*/, "$1");
     const versionCols = versionPrefix.split(".");
     const majorVersion = versionCols[0];
