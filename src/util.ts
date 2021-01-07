@@ -22,7 +22,9 @@ export function fetchTagList(): Promise<any> {
     headers: {
       "User-Agent": "setup-nim-action",
     },
-  }).then((obj: any[]) => {
+  })
+  .then((v: any) => v.json())
+  .then((obj: any[]) => {
     return obj.map((v) => v.name);
   });
 }
