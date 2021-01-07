@@ -39,6 +39,7 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
 
   // #38
   if (util.isGlobPatchVersion(version) || util.isGlobMinorVersion(version)) {
+    core.info(`Fetch a latest versions with ${version}`);
     version = await util.getLatestVersion(version);
   }
 
