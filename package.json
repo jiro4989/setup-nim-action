@@ -25,7 +25,9 @@
   "dependencies": {
     "@actions/core": "^1.2.6",
     "@actions/tool-cache": "^1.6.0",
+    "@babel/parser": "^7.12.11",
     "child_process": "^1.0.2",
+    "compare-versions": "^3.6.0",
     "fs": "0.0.1-security",
     "lodash": ">=4.17.20",
     "path": "^0.12.7",
@@ -56,5 +58,22 @@
       "pre-commit": "npm run build && npm run format",
       "post-commit": "git add node_modules/* && git commit -m \"Husky commit correct node modules\""
     }
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "globals": {
+      "ts-jest": {
+        "tsConfig": "tsconfig.json"
+      }
+    },
+    "testMatch": [
+      "**/tests/**/*.test.ts"
+    ]
   }
 }

@@ -3,6 +3,7 @@ import * as fs from "fs";
 import * as process from "process";
 import * as path from "path";
 import * as proc from "child_process";
+import * as util from "./util";
 const request = require("request-promise");
 
 export async function getNim(version: string, noColor: boolean, yes: boolean) {
@@ -35,6 +36,12 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
   });
   fs.writeFileSync("init.sh", body);
   process.env.CHOOSENIM_NO_ANALYTICS = "1";
+
+  // #38
+  if (util.isGlobPatchVersion(version) || util.isGlobMinorVersion(version)) {
+    core.info(`Fetch a latest versions with ${version}`);
+    version = await util.getLatestVersion(version);
+  }
 
   // #21
   if (process.platform === "win32") {
