@@ -19,6 +19,9 @@ export function fetchTagList(): Promise<any> {
   return request({
     url: tagURL,
     method: "GET",
+    headers: {
+      "User-Agent": "setup-nim-action"
+    }
   }).then((obj: any[]) => {
     return obj.map((v) => v.name);
   });
