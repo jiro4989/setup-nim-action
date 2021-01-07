@@ -33,10 +33,7 @@ export function getLatestVersionWithTags(
 ): string {
   const patchVersionPattern = /^\d+\.\d+\.x$/;
   const minorVersionPattern = /^\d+\.x$/;
-  if (
-    !isGlobPatchVersion(version) &&
-    !isGlobMinorVersion(version)
-  ) {
+  if (!isGlobPatchVersion(version) && !isGlobMinorVersion(version)) {
     return "";
   }
 
