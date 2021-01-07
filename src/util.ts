@@ -23,10 +23,10 @@ export function fetchTagList(): Promise<any> {
       "User-Agent": "setup-nim-action",
     },
   })
-  .then((v: any) => v.json())
-  .then((obj: any[]) => {
-    return obj.map((v) => v.name);
-  });
+    .then((v: any) => v.json())
+    .then((obj: any[]) => {
+      return obj.map((v) => v.name);
+    });
 }
 
 /**
