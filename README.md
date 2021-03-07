@@ -4,6 +4,20 @@
 
 This action sets up a Nim environment.
 
+<!-- vim-markdown-toc GFM -->
+
+* [Usage](#usage)
+  * [Basic usage](#basic-usage)
+  * [Setup a latest patch version Nim](#setup-a-latest-patch-version-nim)
+  * [Setup a latest minor version Nim](#setup-a-latest-minor-version-nim)
+  * [Cache usage](#cache-usage)
+  * [Matrix testing usage](#matrix-testing-usage)
+  * [`devel --latest` usage](#devel---latest-usage)
+  * [Full example](#full-example)
+* [License](#license)
+
+<!-- vim-markdown-toc -->
+
 ## Usage
 
 See [action.yml](action.yml)
