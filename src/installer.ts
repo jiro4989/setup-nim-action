@@ -52,6 +52,30 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
         throw err;
       }
       core.info(stdout);
+
+      // #41
+      // WindowsのみなぜかZIPファイルが展開されないので一度別バージョンにスイッチ
+      // してから戻すと展開される
+      proc.exec(
+        `choosenim.exe 1.4.0`,
+        (err: any, stdout: string, stderr: string) => {
+          if (err) {
+            core.error(err);
+            throw err;
+          }
+          core.info(stdout);
+          proc.exec(
+            `choosenim.exe ${version}`,
+            (err: any, stdout: string, stderr: string) => {
+              if (err) {
+                core.error(err);
+                throw err;
+              }
+              core.info(stdout);
+            }
+          );
+        }
+      );
     });
     return;
   }
