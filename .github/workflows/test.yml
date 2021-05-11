@@ -130,8 +130,10 @@ jobs:
 
   test_devel_latest:
     runs-on: ${{ matrix.os }}
+    continue-on-error: true
     needs: before
     strategy:
+      fail-fast: false
       matrix:
         os:
           - ubuntu-latest
@@ -174,4 +176,3 @@ jobs:
         run: nimble install -Y nimjson
       - name: Run command
         run: nimjson -h
-
