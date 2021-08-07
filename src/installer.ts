@@ -91,10 +91,13 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
     let opts: string[] = [];
     if (noColor) opts.push("--noColor");
     if (yes) opts.push("--yes");
-    const optsStr = opts.join(" ");
+    let optsStr = "";
+    if (0 < opts.length) {
+      optsStr = " " + opts.join(" ");
+    }
 
     proc.exec(
-      `choosenim ${version} ${optsStr}`,
+      `choosenim ${version}${optsStr}`,
       (err: any, stdout: string, stderr: string) => {
         if (err) {
           core.error(err);
