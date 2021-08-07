@@ -12,7 +12,7 @@ This action sets up a Nim environment.
   * [Setup a latest minor version Nim](#setup-a-latest-minor-version-nim)
   * [Cache usage](#cache-usage)
   * [Matrix testing usage](#matrix-testing-usage)
-  * [`devel --latest` usage](#devel---latest-usage)
+  * [`devel` usage](#devel-usage)
   * [Full example](#full-example)
 * [License](#license)
 
@@ -98,9 +98,9 @@ jobs:
       - run: nimble build
 ```
 
-### `devel --latest` usage
+### `devel` usage
 
-Use `date` cache-key for speed-up if you want to use `devel --latest`.
+Use `date` cache-key for speed-up if you want to use `devel`.
 See [cache documents](https://github.com/actions/cache) for more information and how to use the cache.
 
 ```yaml
@@ -110,8 +110,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - nim-version: 'devel --latest'
-            cache-key: 'devel-latest'
+          - nim-version: 'devel'
+            cache-key: 'devel'
     steps:
       - uses: actions/checkout@v2
 
