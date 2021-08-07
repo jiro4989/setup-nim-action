@@ -5,6 +5,8 @@ on:
     paths-ignore:
       - 'LICENSE'
       - '*.md'
+    branches:
+      - master
   pull_request:
     paths-ignore:
       - 'LICENSE'
@@ -118,55 +120,6 @@ jobs:
           no-color: true
           yes: true
         if: matrix.type == 'all'
-
-      - name: Print Nim version
-        run: nim -v
-      - name: Print Nimble version
-        run: nimble -v
-      - name: Run build test
-        run: nimble install -Y nimjson
-      - name: Run command
-        run: nimjson -h
-
-  test_devel_latest:
-    runs-on: ${{ matrix.os }}
-    continue-on-error: true
-    needs: before
-    strategy:
-      fail-fast: false
-      matrix:
-        os:
-          - ubuntu-latest
-          #- windows-latest
-          - macOS-latest
-        nim-version:
-          - 'devel --latest'
-        cache-key:
-          - devel-latest
-    steps:
-      - uses: actions/checkout@v2
-
-      # Set cache key
-      - name: Get Date
-        id: get-date
-        run: echo "::set-output name=date::$(date "+%Y-%m-%d")"
-        shell: bash
-
-      - name: Cache choosenim
-        id: cache-choosenim
-        uses: actions/cache@v1
-        with:
-          path: ~/.choosenim
-          key: ${{ runner.os }}-choosenim-${{ matrix.cache-key }}-${{ steps.get-date.outputs.date }}
-      - name: Cache nimble
-        id: cache-nimble
-        uses: actions/cache@v1
-        with:
-          path: ~/.nimble
-          key: ${{ runner.os }}-nimble-${{ matrix.cache-key }}
-      - uses: jiro4989/setup-nim-action@v1
-        with:
-          nim-version: "${{ matrix.nim-version }}"
 
       - name: Print Nim version
         run: nim -v
