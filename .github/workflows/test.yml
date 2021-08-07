@@ -5,6 +5,8 @@ on:
     paths-ignore:
       - 'LICENSE'
       - '*.md'
+    branches:
+      - master
   pull_request:
     paths-ignore:
       - 'LICENSE'
