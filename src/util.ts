@@ -1,3 +1,4 @@
+import * as path from 'path'
 const request = require('request-promise')
 import compareVersions from 'compare-versions'
 
@@ -87,4 +88,42 @@ export function getLatestVersionWithTags(
  */
 export async function getLatestVersion(version: string): Promise<any> {
   return fetchTagList().then((tags) => getLatestVersionWithTags(version, tags))
+}
+
+interface PlatformParam {
+  homeDir: string
+  pathDelim: string
+}
+
+/**
+ * getPlatformParam returns a PlatformParam.
+ */
+function getPlatformParam(platform: string): PlatformParam {
+  const windowsPlatform: PlatformParam = {
+    homeDir: process.env['USERPROFILE'] || '',
+    pathDelim: ';',
+  }
+
+  const unixPlatform: PlatformParam = {
+    homeDir: process.env['HOME'] || '',
+    pathDelim: ':',
+  }
+
+  if (platform === 'win32') {
+    return windowsPlatform
+  }
+  return unixPlatform
+}
+
+/**
+ * getNewPathAppenedNimbleBinPath returns a new PATH with nimble bin path.
+ * This functions supported multi platforms.
+ */
+export function getNewPathAppenedNimbleBinPath(platform: string): string {
+  const param = getPlatformParam(platform)
+  const home = param.homeDir
+  const binPath = path.join(home, '.nimble', 'bin')
+  const delim = param.pathDelim
+  const envPath = process.env['PATH'] || ''
+  return `${binPath}${delim}${envPath}`
 }
