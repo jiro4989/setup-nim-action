@@ -62,6 +62,10 @@
       "post-commit": "git add node_modules/* && git commit -m \"Husky commit correct node modules\""
     }
   },
+  "prettier": {
+    "singleQuote": true,
+    "semi": false
+  },
   "jest": {
     "moduleFileExtensions": [
       "ts",
