@@ -14,7 +14,7 @@ export function isGlobMinorVersion(version: string): boolean {
 /**
  * fetchTagList returns Nim version tag list.
  */
-export function fetchTagList(): Promise<any> {
+export async function fetchTagList(): Promise<any> {
   const tagURL = 'https://api.github.com/repos/nim-lang/Nim/tags'
   return request({
     url: tagURL,
@@ -85,6 +85,6 @@ export function getLatestVersionWithTags(
 /**
  * getLatestVersion returns a latest version of `1.n.x`.
  */
-export function getLatestVersion(version: string): Promise<any> {
+export async function getLatestVersion(version: string): Promise<any> {
   return fetchTagList().then((tags) => getLatestVersionWithTags(version, tags))
 }
