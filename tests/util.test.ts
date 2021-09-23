@@ -176,3 +176,28 @@ describe('function getLatestVersionWithTags', (): void => {
     expect(got).toBe(want)
   })
 })
+
+describe('function getNewPathAppenedNimbleBinPath', (): void => {
+  const winHome = 'C:\\Users\\testuser'
+  const unixHome = '/home/testuser'
+  beforeEach(() => {
+    process.env.USERPROFILE = winHome
+    process.env.HOME = unixHome
+  })
+
+  test('ok: win32', (): void => {
+    if (process.platform !== 'win32') {
+      return
+    }
+    const got = util.getNewPathAppenedNimbleBinPath('win32')
+    expect(got.startsWith(`${winHome}\\.nimble\\bin;`)).toBe(true)
+  })
+
+  test('ok: linux', (): void => {
+    if (process.platform === 'win32') {
+      return
+    }
+    const got = util.getNewPathAppenedNimbleBinPath('linux')
+    expect(got.startsWith(`${unixHome}/.nimble/bin:`)).toBe(true)
+  })
+})
