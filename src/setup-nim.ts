@@ -1,21 +1,21 @@
-import * as core from "@actions/core";
-import * as installer from "./installer";
+import * as core from '@actions/core'
+import * as installer from './installer'
 
 function isTrue(v: string): boolean {
-  return v.toLowerCase() == "true";
+  return v.toLowerCase() == 'true'
 }
 
 async function run() {
   try {
-    const version = core.getInput("nim-version");
-    const noColor = isTrue(core.getInput("no-color"));
-    const yes = isTrue(core.getInput("yes"));
+    const version = core.getInput('nim-version')
+    const noColor = isTrue(core.getInput('no-color'))
+    const yes = isTrue(core.getInput('yes'))
     if (version) {
-      await installer.getNim(version, noColor, yes);
+      await installer.getNim(version, noColor, yes)
     }
   } catch (error) {
-    core.setFailed(error.message);
+    core.setFailed(error.message)
   }
 }
 
-run();
+run()
