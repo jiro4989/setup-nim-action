@@ -1,4 +1,5 @@
 import * as util from '../src/util'
+import * as path from 'path'
 
 describe('function isGlobPatchVersion', (): void => {
   test('ok: 1.2.x', (): void => {
@@ -186,18 +187,14 @@ describe('function getNewPathAppenedNimbleBinPath', (): void => {
   })
 
   test('ok: win32', (): void => {
-    if (process.platform !== 'win32') {
-      return
-    }
     const got = util.getNewPathAppenedNimbleBinPath('win32')
-    expect(got.startsWith(`${winHome}\\.nimble\\bin;`)).toBe(true)
+    const want = path.join(winHome, '.nimble', 'bin') + ';'
+    expect(got.startsWith(want)).toBe(true)
   })
 
   test('ok: linux', (): void => {
-    if (process.platform === 'win32') {
-      return
-    }
     const got = util.getNewPathAppenedNimbleBinPath('linux')
-    expect(got.startsWith(`${unixHome}/.nimble/bin:`)).toBe(true)
+    const want = path.join(unixHome, '.nimble', 'bin') + ':'
+    expect(got.startsWith(want)).toBe(true)
   })
 })
