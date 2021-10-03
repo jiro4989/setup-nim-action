@@ -71,31 +71,35 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
     env: process.env,
   }
   execOpts.env.SHELL = '/bin/sh'
-  proc.exec('sh init.sh -y', execOpts, (err: any, stdout: string, stderr: string) => {
-    if (err) {
-      core.error(err)
-      throw err
-    }
-    core.info(stdout)
-
-    // Build optional parameters of choosenim.
-    let opts: string[] = []
-    if (noColor) opts.push('--noColor')
-    if (yes) opts.push('--yes')
-    let optsStr = ''
-    if (0 < opts.length) {
-      optsStr = ' ' + opts.join(' ')
-    }
-
-    proc.exec(
-      `choosenim ${version}${optsStr}`,
-      (err: any, stdout: string, stderr: string) => {
-        if (err) {
-          core.error(err)
-          throw err
-        }
-        core.info(stdout)
+  proc.exec(
+    'sh init.sh -y',
+    execOpts,
+    (err: any, stdout: string, stderr: string) => {
+      if (err) {
+        core.error(err)
+        throw err
       }
-    )
-  })
+      core.info(stdout)
+
+      // Build optional parameters of choosenim.
+      let opts: string[] = []
+      if (noColor) opts.push('--noColor')
+      if (yes) opts.push('--yes')
+      let optsStr = ''
+      if (0 < opts.length) {
+        optsStr = ' ' + opts.join(' ')
+      }
+
+      proc.exec(
+        `choosenim ${version}${optsStr}`,
+        (err: any, stdout: string, stderr: string) => {
+          if (err) {
+            core.error(err)
+            throw err
+          }
+          core.info(stdout)
+        }
+      )
+    }
+  )
 }
