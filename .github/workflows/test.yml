@@ -38,8 +38,6 @@ jobs:
   test:
     runs-on: ${{ matrix.os }}
     needs: before
-    env:
-      SHELL: /bin/sh
     strategy:
       matrix:
         os:
@@ -55,6 +53,7 @@ jobs:
             version: devel
     steps:
       - uses: actions/checkout@v2
+      - run: env | grep SHELL || true
       - uses: ./
         with:
           nim-version: ${{ matrix.version }}
