@@ -22,7 +22,7 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
   })
   fs.writeFileSync('init.sh', body)
   process.env.CHOOSENIM_NO_ANALYTICS = '1'
-  process.env.CHOOSE_VERSION = 'v0.7.4' // #62
+  process.env.CHOOSENIM_CHOOSE_VERSION = 'v0.7.4' // #62
 
   // #38
   if (util.isGlobPatchVersion(version) || util.isGlobMinorVersion(version)) {
