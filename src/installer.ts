@@ -20,7 +20,7 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
     url: 'https://nim-lang.org/choosenim/init.sh',
     method: 'GET',
   })
-  body = body.replace(/\$stable_version/, '0.7.4') // #62
+  body = body.replace(/\$stable_version/g, '0.7.4') // #62
   fs.writeFileSync('init.sh', body)
   process.env.CHOOSENIM_NO_ANALYTICS = '1'
 
