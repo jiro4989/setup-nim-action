@@ -32,7 +32,7 @@
     "path": "^0.12.7",
     "process": "^0.11.10",
     "request": "^2.88.2",
-    "request-promise": "^4.2.5",
+    "request-promise": "^4.2.6",
     "requests": "^0.3.0",
     "semver": "^7.3.2"
   },
