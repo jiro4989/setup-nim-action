@@ -37,7 +37,7 @@
     "semver": "^7.3.2"
   },
   "devDependencies": {
-    "@actions/io": "^1.0.2",
+    "@actions/io": "^1.1.1",
     "@actions/tool-cache": "^1.7.1",
     "@types/jest": "^26.0.24",
     "@types/nock": "^11.1.0",
