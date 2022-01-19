@@ -1,16 +1,19 @@
+---
 name: 'Setup Nim environment'
 description: 'Setup a Nim environment and add it to the PATH'
 author: 'jiro4989'
-inputs: 
+inputs:
   nim-version:
-    description: 'The Nim version to download (if necessary) and use. Example: 1.0.2'
+    description: >-
+      The Nim version to download (if necessary)
+      and use. Example 1.0.2
     default: 'stable'
   no-color:
     description: 'Activate "--noColor" options of choosenim. Example: true'
     default: false
-  yes:
+  "yes":
     description: 'Activate "--yes" options of choosenim. Example: true'
     default: false
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'lib/setup-nim.js'
