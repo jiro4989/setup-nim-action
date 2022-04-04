@@ -2,8 +2,9 @@
 
 set -eux
 
-for p in "$@"; do
-  npm i --save-dev "$p"
-  git add .
-  git commit --no-verify -m "$p"
-done
+git checkout "$1"
+rm -rf node_modules/
+npm ci
+git add node_modules/
+git commit -m 'npm ci'
+git push
