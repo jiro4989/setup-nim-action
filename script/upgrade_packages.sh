@@ -2,6 +2,7 @@
 
 set -eux
 
+git pull
 git checkout "$1"
 rm -rf node_modules/
 npm ci
