@@ -34,7 +34,7 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "requests": "^0.3.0",
-    "semver": "^7.3.6"
+    "semver": "^7.3.7"
   },
   "devDependencies": {
     "@actions/io": "^1.1.2",
