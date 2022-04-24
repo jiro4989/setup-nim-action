@@ -29,7 +29,7 @@ steps:
   - uses: actions/checkout@v3
   - uses: jiro4989/setup-nim-action@v1
     with:
-      nim-version: '1.4.0' # default is 'stable'
+      nim-version: '1.6.0' # default is 'stable'
   - run: nimble build -Y
   - run: nimble test -Y
 ```
