@@ -26,7 +26,7 @@ See [action.yml](action.yml)
 
 ```yaml
 steps:
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v3
   - uses: jiro4989/setup-nim-action@v1
     with:
       nim-version: '1.4.0' # default is 'stable'
@@ -40,7 +40,7 @@ Setup a latest patch version Nim when `nim-version` is `1.n.x` .
 
 ```yaml
 steps:
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v3
   - uses: jiro4989/setup-nim-action@v1
     with:
       nim-version: '1.2.x' # ex: 1.0.x, 1.2.x, 1.4.x ...
@@ -54,7 +54,7 @@ Setup a latest minor version Nim when `nim-version` is `1.x` .
 
 ```yaml
 steps:
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v3
   - uses: jiro4989/setup-nim-action@v1
     with:
       nim-version: '1.x'
@@ -66,7 +66,7 @@ steps:
 
 ```yaml
 steps:
-  - uses: actions/checkout@v2
+  - uses: actions/checkout@v3
   - name: Cache nimble
     id: cache-nimble
     uses: actions/cache@v1
@@ -90,7 +90,7 @@ jobs:
         nim: [ '1.2.0', 'stable', 'devel' ]
     name: Nim ${{ matrix.nim }} sample
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Setup nim
         uses: jiro4989/setup-nim-action@v1
         with:
@@ -113,7 +113,7 @@ jobs:
           - nim-version: 'devel'
             cache-key: 'devel'
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Get Date
         id: get-date
