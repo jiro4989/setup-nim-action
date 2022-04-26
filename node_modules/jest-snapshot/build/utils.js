@@ -79,120 +79,16 @@ function _interopRequireWildcard(obj, nodeInterop) {
   return newObj;
 }
 
-var global = (function () {
-  if (typeof globalThis !== 'undefined') {
-    return globalThis;
-  } else if (typeof global !== 'undefined') {
-    return global;
-  } else if (typeof self !== 'undefined') {
-    return self;
-  } else if (typeof window !== 'undefined') {
-    return window;
-  } else {
-    return Function('return this')();
-  }
-})();
-
-var Symbol = global['jest-symbol-do-not-touch'] || global.Symbol;
-
-var global = (function () {
-  if (typeof globalThis !== 'undefined') {
-    return globalThis;
-  } else if (typeof global !== 'undefined') {
-    return global;
-  } else if (typeof self !== 'undefined') {
-    return self;
-  } else if (typeof window !== 'undefined') {
-    return window;
-  } else {
-    return Function('return this')();
-  }
-})();
-
-var Symbol = global['jest-symbol-do-not-touch'] || global.Symbol;
-
-var global = (function () {
-  if (typeof globalThis !== 'undefined') {
-    return globalThis;
-  } else if (typeof global !== 'undefined') {
-    return global;
-  } else if (typeof self !== 'undefined') {
-    return self;
-  } else if (typeof window !== 'undefined') {
-    return window;
-  } else {
-    return Function('return this')();
-  }
-})();
-
+var Symbol = globalThis['jest-symbol-do-not-touch'] || globalThis.Symbol;
+var Symbol = globalThis['jest-symbol-do-not-touch'] || globalThis.Symbol;
 var jestWriteFile =
-  global[Symbol.for('jest-native-write-file')] || fs.writeFileSync;
-
-var global = (function () {
-  if (typeof globalThis !== 'undefined') {
-    return globalThis;
-  } else if (typeof global !== 'undefined') {
-    return global;
-  } else if (typeof self !== 'undefined') {
-    return self;
-  } else if (typeof window !== 'undefined') {
-    return window;
-  } else {
-    return Function('return this')();
-  }
-})();
-
-var Symbol = global['jest-symbol-do-not-touch'] || global.Symbol;
-
-var global = (function () {
-  if (typeof globalThis !== 'undefined') {
-    return globalThis;
-  } else if (typeof global !== 'undefined') {
-    return global;
-  } else if (typeof self !== 'undefined') {
-    return self;
-  } else if (typeof window !== 'undefined') {
-    return window;
-  } else {
-    return Function('return this')();
-  }
-})();
-
+  globalThis[Symbol.for('jest-native-write-file')] || fs.writeFileSync;
+var Symbol = globalThis['jest-symbol-do-not-touch'] || globalThis.Symbol;
 var jestReadFile =
-  global[Symbol.for('jest-native-read-file')] || fs.readFileSync;
-
-var global = (function () {
-  if (typeof globalThis !== 'undefined') {
-    return globalThis;
-  } else if (typeof global !== 'undefined') {
-    return global;
-  } else if (typeof self !== 'undefined') {
-    return self;
-  } else if (typeof window !== 'undefined') {
-    return window;
-  } else {
-    return Function('return this')();
-  }
-})();
-
-var Symbol = global['jest-symbol-do-not-touch'] || global.Symbol;
-
-var global = (function () {
-  if (typeof globalThis !== 'undefined') {
-    return globalThis;
-  } else if (typeof global !== 'undefined') {
-    return global;
-  } else if (typeof self !== 'undefined') {
-    return self;
-  } else if (typeof window !== 'undefined') {
-    return window;
-  } else {
-    return Function('return this')();
-  }
-})();
-
+  globalThis[Symbol.for('jest-native-read-file')] || fs.readFileSync;
+var Symbol = globalThis['jest-symbol-do-not-touch'] || globalThis.Symbol;
 var jestExistsFile =
-  global[Symbol.for('jest-native-exists-file')] || fs.existsSync;
+  globalThis[Symbol.for('jest-native-exists-file')] || fs.existsSync;
 const SNAPSHOT_VERSION = '1';
 exports.SNAPSHOT_VERSION = SNAPSHOT_VERSION;
 const SNAPSHOT_VERSION_REGEXP = /^\/\/ Jest Snapshot v(.+),/;
@@ -228,7 +124,7 @@ const validateSnapshotVersion = snapshotContents => {
   }
 
   if (version < SNAPSHOT_VERSION) {
-    return new Error(
+    return new Error( // eslint-disable-next-line prefer-template
       _chalk.default.red(
         `${_chalk.default.red.bold(
           'Outdated snapshot'
@@ -236,8 +132,9 @@ const validateSnapshotVersion = snapshotContents => {
           'file associated with this test is outdated. The snapshot file ' +
           'version ensures that all developers on a project are using ' +
           'the same version of Jest. ' +
-          'Please update all snapshots during this upgrade of Jest.\n\n'
+          'Please update all snapshots during this upgrade of Jest.'
       ) +
+        '\n\n' +
         `Expected: v${SNAPSHOT_VERSION}\n` +
         `Received: v${version}\n\n` +
         SNAPSHOT_VERSION_WARNING
@@ -245,7 +142,7 @@ const validateSnapshotVersion = snapshotContents => {
   }
 
   if (version > SNAPSHOT_VERSION) {
-    return new Error(
+    return new Error( // eslint-disable-next-line prefer-template
       _chalk.default.red(
         `${_chalk.default.red.bold(
           'Outdated Jest version'
@@ -253,8 +150,9 @@ const validateSnapshotVersion = snapshotContents => {
           'snapshot file indicates that this project is meant to be used ' +
           'with a newer version of Jest. The snapshot file version ensures ' +
           'that all developers on a project are using the same version of ' +
-          'Jest. Please update your version of Jest and re-run the tests.\n\n'
+          'Jest. Please update your version of Jest and re-run the tests.'
       ) +
+        '\n\n' +
         `Expected: v${SNAPSHOT_VERSION}\n` +
         `Received: v${version}`
     );
@@ -267,7 +165,7 @@ function isObject(item) {
   return item != null && typeof item === 'object' && !Array.isArray(item);
 }
 
-const testNameToKey = (testName, count) => testName + ' ' + count;
+const testNameToKey = (testName, count) => `${testName} ${count}`;
 
 exports.testNameToKey = testNameToKey;
 
@@ -380,7 +278,7 @@ const escapeBacktickString = str => str.replace(/`|\\|\${/g, '\\$&');
 
 exports.escapeBacktickString = escapeBacktickString;
 
-const printBacktickString = str => '`' + escapeBacktickString(str) + '`';
+const printBacktickString = str => `\`${escapeBacktickString(str)}\``;
 
 const ensureDirectoryExists = filePath => {
   try {
@@ -399,16 +297,14 @@ const saveSnapshotFile = (snapshotData, snapshotPath) => {
     .sort(_naturalCompare.default)
     .map(
       key =>
-        'exports[' +
-        printBacktickString(key) +
-        '] = ' +
-        printBacktickString(normalizeNewlines(snapshotData[key])) +
-        ';'
+        `exports[${printBacktickString(key)}] = ${printBacktickString(
+          normalizeNewlines(snapshotData[key])
+        )};`
     );
   ensureDirectoryExists(snapshotPath);
   jestWriteFile(
     snapshotPath,
-    writeSnapshotVersion() + '\n\n' + snapshots.join('\n\n') + '\n'
+    `${writeSnapshotVersion()}\n\n${snapshots.join('\n\n')}\n`
   );
 };
 

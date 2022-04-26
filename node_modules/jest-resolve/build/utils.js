@@ -115,7 +115,7 @@ const replaceRootDirInPath = (rootDir, filePath) => {
 
   return path().resolve(
     rootDir,
-    path().normalize('./' + filePath.substr('<rootDir>'.length))
+    path().normalize(`./${filePath.substr('<rootDir>'.length)}`)
   );
 };
 
@@ -178,17 +178,31 @@ const resolveWithPrefix = (
 const resolveTestEnvironment = ({
   rootDir,
   testEnvironment: filePath,
-  // TODO: remove default in Jest 28
-  requireResolveFunction = require.resolve
-}) =>
-  resolveWithPrefix(undefined, {
-    filePath,
-    humanOptionName: 'Test environment',
-    optionName: 'testEnvironment',
-    prefix: 'jest-environment-',
-    requireResolveFunction,
-    rootDir
-  });
+  requireResolveFunction
+}) => {
+  // we don't want to resolve the actual `jsdom` module if `jest-environment-jsdom` is not installed, but `jsdom` package is
+  if (filePath === 'jsdom') {
+    filePath = 'jest-environment-jsdom';
+  }
+
+  try {
+    return resolveWithPrefix(undefined, {
+      filePath,
+      humanOptionName: 'Test environment',
+      optionName: 'testEnvironment',
+      prefix: 'jest-environment-',
+      requireResolveFunction,
+      rootDir
+    });
+  } catch (error) {
+    if (filePath === 'jest-environment-jsdom') {
+      error.message +=
+        '\n\nAs of Jest 28 "jest-environment-jsdom" is no longer shipped by default, make sure to install it separately.';
+    }
+
+    throw error;
+  }
+};
 /**
  * Finds the watch plugins to use:
  *
@@ -202,12 +216,7 @@ exports.resolveTestEnvironment = resolveTestEnvironment;
 
 const resolveWatchPlugin = (
   resolver,
-  {
-    filePath,
-    rootDir,
-    // TODO: remove default in Jest 28
-    requireResolveFunction = require.resolve
-  }
+  {filePath, rootDir, requireResolveFunction}
 ) =>
   resolveWithPrefix(resolver, {
     filePath,
@@ -228,15 +237,7 @@ const resolveWatchPlugin = (
 
 exports.resolveWatchPlugin = resolveWatchPlugin;
 
-const resolveRunner = (
-  resolver,
-  {
-    filePath,
-    rootDir,
-    // TODO: remove default in Jest 28
-    requireResolveFunction = require.resolve
-  }
-) =>
+const resolveRunner = (resolver, {filePath, rootDir, requireResolveFunction}) =>
   resolveWithPrefix(resolver, {
     filePath,
     humanOptionName: 'Jest Runner',
@@ -250,12 +251,7 @@ exports.resolveRunner = resolveRunner;
 
 const resolveSequencer = (
   resolver,
-  {
-    filePath,
-    rootDir,
-    // TODO: remove default in Jest 28
-    requireResolveFunction = require.resolve
-  }
+  {filePath, rootDir, requireResolveFunction}
 ) =>
   resolveWithPrefix(resolver, {
     filePath,

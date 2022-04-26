@@ -1,19 +1,5 @@
 'use strict';
 
-function _expect() {
-  const data = _interopRequireDefault(require('expect'));
-
-  _expect = function () {
-    return data;
-  };
-
-  return data;
-}
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : {default: obj};
-}
-
 /**
  * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
  *

@@ -38,7 +38,7 @@ const replacePathSepForRegex = string => {
   if (_path.sep === '\\') {
     return string.replace(
       /(\/|(.)?\\(?![[\]{}()*+?.^$|\\]))/g,
-      (_match, _, p2) => (p2 && p2 !== '\\' ? p2 + '\\\\' : '\\\\')
+      (_match, _, p2) => (p2 && p2 !== '\\' ? `${p2}\\\\` : '\\\\')
     );
   }
 

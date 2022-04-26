@@ -73,7 +73,7 @@ function _interopRequireWildcard(obj, nodeInterop) {
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-const DTRACE = Object.keys(global).filter(key => key.startsWith('DTRACE'));
+const DTRACE = Object.keys(globalThis).filter(key => key.startsWith('DTRACE'));
 
 function installCommonGlobals(globalObject, globals) {
   globalObject.process = (0, _createProcessObject.default)();
@@ -116,7 +116,7 @@ function installCommonGlobals(globalObject, globals) {
     // @ts-expect-error: no index
     globalObject[dtrace] = function (...args) {
       // @ts-expect-error: no index
-      return global[dtrace].apply(this, args);
+      return globalThis[dtrace].apply(this, args);
     };
   });
   return Object.assign(globalObject, (0, _deepCyclicCopy.default)(globals));

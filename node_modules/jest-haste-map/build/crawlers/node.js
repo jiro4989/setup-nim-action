@@ -1,5 +1,10 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.nodeCrawl = nodeCrawl;
+
 function _child_process() {
   const data = require('child_process');
 
@@ -136,30 +141,27 @@ function find(roots, extensions, ignore, enableSymlinks, callback) {
         activeCalls--;
 
         if (err) {
-          callback(result);
+          if (activeCalls === 0) {
+            callback(result);
+          }
+
           return;
-        } // node < v10.10 does not support the withFileTypes option, and
-        // entry will be a string.
+        }
 
         entries.forEach(entry => {
-          const file = path().join(
-            directory,
-            typeof entry === 'string' ? entry : entry.name
-          );
+          const file = path().join(directory, entry.name);
 
           if (ignore(file)) {
             return;
           }
 
-          if (typeof entry !== 'string') {
-            if (entry.isSymbolicLink()) {
-              return;
-            }
+          if (entry.isSymbolicLink()) {
+            return;
+          }
 
-            if (entry.isDirectory()) {
-              search(file);
-              return;
-            }
+          if (entry.isDirectory()) {
+            search(file);
+            return;
           }
 
           activeCalls++;
@@ -219,7 +221,7 @@ function findNative(roots, extensions, ignore, enableSymlinks, callback) {
     }
 
     args.push('-iname');
-    args.push('*.' + ext);
+    args.push(`*.${ext}`);
   });
 
   if (extensions.length) {
@@ -264,7 +266,7 @@ function findNative(roots, extensions, ignore, enableSymlinks, callback) {
   });
 }
 
-module.exports = async function nodeCrawl(options) {
+async function nodeCrawl(options) {
   const {
     data,
     extensions,
@@ -306,4 +308,4 @@ module.exports = async function nodeCrawl(options) {
       find(roots, extensions, ignore, enableSymlinks, callback);
     }
   });
-};
+}

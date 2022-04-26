@@ -17,16 +17,6 @@ function _interopRequireDefault(obj) {
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-const canUseWorkerThreads = () => {
-  try {
-    require('worker_threads');
-
-    return true;
-  } catch {
-    return false;
-  }
-};
-
 class WorkerPool extends _BaseWorkerPool.default {
   send(workerId, request, onStart, onEnd, onCustomMessage) {
     this.getWorkerById(workerId).send(request, onStart, onEnd, onCustomMessage);
@@ -35,7 +25,7 @@ class WorkerPool extends _BaseWorkerPool.default {
   createWorker(workerOptions) {
     let Worker;
 
-    if (this._options.enableWorkerThreads && canUseWorkerThreads()) {
+    if (this._options.enableWorkerThreads) {
       Worker = require('./workers/NodeThreadsWorker').default;
     } else {
       Worker = require('./workers/ChildProcessWorker').default;

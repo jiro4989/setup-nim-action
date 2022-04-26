@@ -36,13 +36,21 @@ function fs() {
   return data;
 }
 
+function _jestUtil() {
+  const data = require('jest-util');
+
+  _jestUtil = function () {
+    return data;
+  };
+
+  return data;
+}
+
 var _blacklist = _interopRequireDefault(require('./blacklist'));
 
 var _constants = _interopRequireDefault(require('./constants'));
 
-var dependencyExtractor = _interopRequireWildcard(
-  require('./lib/dependencyExtractor')
-);
+var _dependencyExtractor = require('./lib/dependencyExtractor');
 
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {default: obj};
@@ -96,7 +104,7 @@ function _interopRequireWildcard(obj, nodeInterop) {
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-const PACKAGE_JSON = path().sep + 'package.json';
+const PACKAGE_JSON = `${path().sep}package.json`;
 let hasteImpl = null;
 let hasteImplModulePath = null;
 
@@ -155,14 +163,18 @@ async function worker(data) {
 
     if (computeDependencies) {
       const content = getContent();
+      const extractor = data.dependencyExtractor
+        ? await (0, _jestUtil().requireOrImportModule)(
+            data.dependencyExtractor,
+            false
+          )
+        : _dependencyExtractor.extractor;
       dependencies = Array.from(
-        data.dependencyExtractor
-          ? require(data.dependencyExtractor).extract(
-              content,
-              filePath,
-              dependencyExtractor.extract
-            )
-          : dependencyExtractor.extract(content)
+        extractor.extract(
+          content,
+          filePath,
+          _dependencyExtractor.extractor.extract
+        )
       );
     }
 

@@ -59,38 +59,23 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {default: obj};
 }
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
-
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 class CustomConsole extends _console().Console {
+  _stdout;
+  _stderr;
+  _formatBuffer;
+  _counters = {};
+  _timers = {};
+  _groupDepth = 0;
+  Console = _console().Console;
+
   constructor(stdout, stderr, formatBuffer = (_type, message) => message) {
     super(stdout, stderr);
-
-    _defineProperty(this, '_stdout', void 0);
-
-    _defineProperty(this, '_stderr', void 0);
-
-    _defineProperty(this, '_formatBuffer', void 0);
-
-    _defineProperty(this, '_counters', {});
-
-    _defineProperty(this, '_timers', {});
-
-    _defineProperty(this, '_groupDepth', 0);
-
-    _defineProperty(this, 'Console', _console().Console);
-
     this._stdout = stdout;
     this._stderr = stderr;
     this._formatBuffer = formatBuffer;

@@ -1,5 +1,10 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.watchmanCrawl = watchmanCrawl;
+
 function path() {
   const data = _interopRequireWildcard(require('path'));
 
@@ -112,7 +117,7 @@ async function capabilityCheck(client, caps) {
   });
 }
 
-module.exports = async function watchmanCrawl(options) {
+async function watchmanCrawl(options) {
   const fields = ['name', 'exists', 'mtime_ms', 'size'];
   const {data, extensions, ignore, rootDir, roots} = options;
   const defaultWatchExpression = ['allof', ['type', 'f']];
@@ -382,4 +387,4 @@ module.exports = async function watchmanCrawl(options) {
     hasteMap: data,
     removedFiles
   };
-};
+}

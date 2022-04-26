@@ -5,40 +5,74 @@
  * LICENSE file in the root directory of this source tree.
  */
 /// <reference types="node" />
-import { EventEmitter } from 'events';
-import type { Config } from '@jest/types';
-import HasteModuleMap from './ModuleMap';
-import type { HasteMapStatic, HasteRegExp, InternalHasteMap, HasteMap as InternalHasteMapObject, SerializableModuleMap } from './types';
-declare type Options = {
-    cacheDirectory?: string;
-    computeDependencies?: boolean;
-    computeSha1?: boolean;
-    console?: Console;
-    dependencyExtractor?: string | null;
-    enableSymlinks?: boolean;
-    extensions: Array<string>;
-    forceNodeFilesystemAPI?: boolean;
-    hasteImplModulePath?: string;
-    hasteMapModulePath?: string;
-    ignorePattern?: HasteRegExp;
-    maxWorkers: number;
-    mocksPattern?: string;
-    name: string;
-    platforms: Array<string>;
-    resetCache?: boolean;
-    retainAllFiles: boolean;
-    rootDir: string;
-    roots: Array<string>;
-    skipPackageJson?: boolean;
-    throwOnModuleCollision?: boolean;
-    useWatchman?: boolean;
-    watch?: boolean;
+
+import type {Config} from '@jest/types';
+import {EventEmitter} from 'events';
+import type {Stats} from 'graceful-fs';
+
+export declare type ChangeEvent = {
+  eventsQueue: EventsQueue;
+  hasteFS: FS;
+  moduleMap: ModuleMap;
 };
-export { default as ModuleMap } from './ModuleMap';
-export type { SerializableModuleMap } from './types';
-export type { IModuleMap } from './types';
-export type { default as FS } from './HasteFS';
-export type { ChangeEvent, HasteMap as HasteMapObject } from './types';
+
+export declare class DuplicateError extends Error {
+  mockPath1: string;
+  mockPath2: string;
+  constructor(mockPath1: string, mockPath2: string);
+}
+
+declare class DuplicateHasteCandidatesError extends Error {
+  hasteName: string;
+  platform: string | null;
+  supportsNativePlatform: boolean;
+  duplicatesSet: DuplicatesSet;
+  constructor(
+    name: string,
+    platform: string,
+    supportsNativePlatform: boolean,
+    duplicatesSet: DuplicatesSet,
+  );
+}
+
+declare type DuplicatesIndex = Map<string, Map<string, DuplicatesSet>>;
+
+declare type DuplicatesSet = Map<string, /* type */ number>;
+
+declare type EventsQueue = Array<{
+  filePath: string;
+  stat: Stats | undefined;
+  type: string;
+}>;
+
+declare type FileData = Map<string, FileMetaData>;
+
+declare type FileMetaData = [
+  id: string,
+  mtime: number,
+  size: number,
+  visited: 0 | 1,
+  dependencies: string,
+  sha1: string | null | undefined,
+];
+
+export declare class FS {
+  private readonly _rootDir;
+  private readonly _files;
+  constructor({rootDir, files}: {rootDir: string; files: FileData});
+  getModuleName(file: string): string | null;
+  getSize(file: string): number | null;
+  getDependencies(file: string): Array<string> | null;
+  getSha1(file: string): string | null;
+  exists(file: string): boolean;
+  getAllFiles(): Array<string>;
+  getFileIterator(): Iterable<string>;
+  getAbsoluteFileIterator(): Iterable<string>;
+  matchFiles(pattern: RegExp | string): Array<string>;
+  matchFilesWithGlob(globs: Array<string>, root: string | null): Set<string>;
+  private _getFileData;
+}
+
 /**
  * HasteMap is a JavaScript implementation of Facebook's haste module system.
  *
@@ -117,68 +151,230 @@ export type { ChangeEvent, HasteMap as HasteMapObject } from './types';
  *     Worker processes can directly access the cache through `HasteMap.read()`.
  *
  */
-export default class HasteMap extends EventEmitter {
-    private _buildPromise;
-    private _cachePath;
-    private _changeInterval?;
-    private _console;
-    private _options;
-    private _watchers;
-    private _worker;
-    static getStatic(config: Config.ProjectConfig): HasteMapStatic;
-    static create(options: Options): HasteMap;
-    private constructor();
-    static getCacheFilePath(tmpdir: Config.Path, name: string, ...extra: Array<string>): string;
-    static getModuleMapFromJSON(json: SerializableModuleMap): HasteModuleMap;
-    getCacheFilePath(): string;
-    build(): Promise<InternalHasteMapObject>;
-    /**
-     * 1. read data from the cache or create an empty structure.
-     */
-    read(): InternalHasteMap;
-    readModuleMap(): HasteModuleMap;
-    /**
-     * 2. crawl the file system.
-     */
-    private _buildFileMap;
-    /**
-     * 3. parse and extract metadata from changed files.
-     */
-    private _processFile;
-    private _buildHasteMap;
-    private _cleanup;
-    /**
-     * 4. serialize the new `HasteMap` in a cache file.
-     */
-    private _persist;
-    /**
-     * Creates workers or parses files and extracts metadata in-process.
-     */
-    private _getWorker;
-    private _crawl;
-    /**
-     * Watch mode
-     */
-    private _watch;
-    /**
-     * This function should be called when the file under `filePath` is removed
-     * or changed. When that happens, we want to figure out if that file was
-     * part of a group of files that had the same ID. If it was, we want to
-     * remove it from the group. Furthermore, if there is only one file
-     * remaining in the group, then we want to restore that single file as the
-     * correct resolution for its ID, and cleanup the duplicates index.
-     */
-    private _recoverDuplicates;
-    end(): Promise<void>;
-    /**
-     * Helpers
-     */
-    private _ignore;
-    private _createEmptyMap;
-    static H: import("./types").HType;
+declare class HasteMap extends EventEmitter {
+  private _buildPromise;
+  private _cachePath;
+  private _changeInterval?;
+  private _console;
+  private _isWatchmanInstalledPromise;
+  private _options;
+  private _watchers;
+  private _worker;
+  static getStatic(config: Config.ProjectConfig): HasteMapStatic;
+  static create(options: Options): Promise<HasteMap>;
+  private constructor();
+  private setupCachePath;
+  static getCacheFilePath(
+    tmpdir: string,
+    id: string,
+    ...extra: Array<string>
+  ): string;
+  static getModuleMapFromJSON(json: SerializableModuleMap): ModuleMap;
+  getCacheFilePath(): string;
+  build(): Promise<HasteMapObject>;
+  /**
+   * 1. read data from the cache or create an empty structure.
+   */
+  read(): InternalHasteMap;
+  readModuleMap(): ModuleMap;
+  /**
+   * 2. crawl the file system.
+   */
+  private _buildFileMap;
+  /**
+   * 3. parse and extract metadata from changed files.
+   */
+  private _processFile;
+  private _buildHasteMap;
+  private _cleanup;
+  /**
+   * 4. serialize the new `HasteMap` in a cache file.
+   */
+  private _persist;
+  /**
+   * Creates workers or parses files and extracts metadata in-process.
+   */
+  private _getWorker;
+  private _crawl;
+  /**
+   * Watch mode
+   */
+  private _watch;
+  /**
+   * This function should be called when the file under `filePath` is removed
+   * or changed. When that happens, we want to figure out if that file was
+   * part of a group of files that had the same ID. If it was, we want to
+   * remove it from the group. Furthermore, if there is only one file
+   * remaining in the group, then we want to restore that single file as the
+   * correct resolution for its ID, and cleanup the duplicates index.
+   */
+  private _recoverDuplicates;
+  end(): Promise<void>;
+  /**
+   * Helpers
+   */
+  private _ignore;
+  private _shouldUseWatchman;
+  private _createEmptyMap;
+  static H: HType;
 }
-export declare class DuplicateError extends Error {
-    mockPath1: string;
-    mockPath2: string;
-    constructor(mockPath1: string, mockPath2: string);
+export default HasteMap;
+
+export declare type HasteMapObject = {
+  hasteFS: FS;
+  moduleMap: ModuleMap;
+  __hasteMapForTest?: InternalHasteMap | null;
+};
+
+declare type HasteMapStatic<S = SerializableModuleMap> = {
+  getCacheFilePath(
+    tmpdir: string,
+    name: string,
+    ...extra: Array<string>
+  ): string;
+  getModuleMapFromJSON(json: S): IModuleMap<S>;
+};
+
+declare type HasteRegExp = RegExp | ((str: string) => boolean);
+
+declare type HType = {
+  ID: 0;
+  MTIME: 1;
+  SIZE: 2;
+  VISITED: 3;
+  DEPENDENCIES: 4;
+  SHA1: 5;
+  PATH: 0;
+  TYPE: 1;
+  MODULE: 0;
+  PACKAGE: 1;
+  GENERIC_PLATFORM: 'g';
+  NATIVE_PLATFORM: 'native';
+  DEPENDENCY_DELIM: '\0';
+};
+
+declare type HTypeValue = HType[keyof HType];
+
+export declare interface IModuleMap<S = SerializableModuleMap> {
+  getModule(
+    name: string,
+    platform?: string | null,
+    supportsNativePlatform?: boolean | null,
+    type?: HTypeValue | null,
+  ): string | null;
+  getPackage(
+    name: string,
+    platform: string | null | undefined,
+    _supportsNativePlatform: boolean | null,
+  ): string | null;
+  getMockModule(name: string): string | undefined;
+  getRawModuleMap(): RawModuleMap;
+  toJSON(): S;
 }
+
+declare type InternalHasteMap = {
+  clocks: WatchmanClocks;
+  duplicates: DuplicatesIndex;
+  files: FileData;
+  map: ModuleMapData;
+  mocks: MockData;
+};
+
+declare type MockData = Map<string, string>;
+
+export declare class ModuleMap implements IModuleMap<SerializableModuleMap> {
+  static DuplicateHasteCandidatesError: typeof DuplicateHasteCandidatesError;
+  private readonly _raw;
+  private json;
+  private static mapToArrayRecursive;
+  private static mapFromArrayRecursive;
+  constructor(raw: RawModuleMap);
+  getModule(
+    name: string,
+    platform?: string | null,
+    supportsNativePlatform?: boolean | null,
+    type?: HTypeValue | null,
+  ): string | null;
+  getPackage(
+    name: string,
+    platform: string | null | undefined,
+    _supportsNativePlatform: boolean | null,
+  ): string | null;
+  getMockModule(name: string): string | undefined;
+  getRawModuleMap(): RawModuleMap;
+  toJSON(): SerializableModuleMap;
+  static fromJSON(serializableModuleMap: SerializableModuleMap): ModuleMap;
+  /**
+   * When looking up a module's data, we walk through each eligible platform for
+   * the query. For each platform, we want to check if there are known
+   * duplicates for that name+platform pair. The duplication logic normally
+   * removes elements from the `map` object, but we want to check upfront to be
+   * extra sure. If metadata exists both in the `duplicates` object and the
+   * `map`, this would be a bug.
+   */
+  private _getModuleMetadata;
+  private _assertNoDuplicates;
+  static create(rootDir: string): ModuleMap;
+}
+
+declare type ModuleMapData = Map<string, ModuleMapItem>;
+
+declare type ModuleMapItem = {
+  [platform: string]: ModuleMetaData;
+};
+
+declare type ModuleMetaData = [path: string, type: number];
+
+declare type Options = {
+  cacheDirectory?: string;
+  computeDependencies?: boolean;
+  computeSha1?: boolean;
+  console?: Console;
+  dependencyExtractor?: string | null;
+  enableSymlinks?: boolean;
+  extensions: Array<string>;
+  forceNodeFilesystemAPI?: boolean;
+  hasteImplModulePath?: string;
+  hasteMapModulePath?: string;
+  id: string;
+  ignorePattern?: HasteRegExp;
+  maxWorkers: number;
+  mocksPattern?: string;
+  platforms: Array<string>;
+  resetCache?: boolean;
+  retainAllFiles: boolean;
+  rootDir: string;
+  roots: Array<string>;
+  skipPackageJson?: boolean;
+  throwOnModuleCollision?: boolean;
+  useWatchman?: boolean;
+  watch?: boolean;
+};
+
+declare type RawModuleMap = {
+  rootDir: string;
+  duplicates: DuplicatesIndex;
+  map: ModuleMapData;
+  mocks: MockData;
+};
+
+export declare type SerializableModuleMap = {
+  duplicates: ReadonlyArray<[string, [string, [string, [string, number]]]]>;
+  map: ReadonlyArray<[string, ValueType<ModuleMapData>]>;
+  mocks: ReadonlyArray<[string, ValueType<MockData>]>;
+  rootDir: string;
+};
+
+declare type ValueType<T> = T extends Map<string, infer V> ? V : never;
+
+declare type WatchmanClocks = Map<string, WatchmanClockSpec>;
+
+declare type WatchmanClockSpec =
+  | string
+  | {
+      scm: {
+        'mergebase-with': string;
+      };
+    };
+
+export {};

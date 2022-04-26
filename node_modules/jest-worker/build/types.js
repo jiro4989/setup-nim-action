@@ -18,8 +18,6 @@ exports.PARENT_MESSAGE_SETUP_ERROR =
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-// import type {ResourceLimits} from 'worker_threads';
-// This is not present in the Node 12 typings
 // Because of the dynamic nature of a worker communication process, all messages
 // coming from any of the other processes cannot be typed. Thus, many types
 // include "unknown" as a TS type, which is (unfortunately) correct here.

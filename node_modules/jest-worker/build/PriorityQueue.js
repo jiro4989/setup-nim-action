@@ -5,20 +5,6 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.default = void 0;
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
-
 /**
  * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
  *
@@ -28,7 +14,7 @@ function _defineProperty(obj, key, value) {
 
 /**
  * Priority queue that processes tasks in natural ordering (lower priority first)
- * accoridng to the priority computed by the function passed in the constructor.
+ * according to the priority computed by the function passed in the constructor.
  *
  * FIFO ordering isn't guaranteed for tasks with the same priority.
  *
@@ -36,11 +22,10 @@ function _defineProperty(obj, key, value) {
  * are always processed first.
  */
 class PriorityQueue {
+  _queue = [];
+  _sharedQueue = new MinHeap();
+
   constructor(_computePriority) {
-    _defineProperty(this, '_queue', []);
-
-    _defineProperty(this, '_sharedQueue', new MinHeap());
-
     this._computePriority = _computePriority;
   }
 
@@ -105,9 +90,7 @@ class PriorityQueue {
 exports.default = PriorityQueue;
 
 class MinHeap {
-  constructor() {
-    _defineProperty(this, '_heap', []);
-  }
+  _heap = [];
 
   peek() {
     var _this$_heap$;

@@ -71,36 +71,22 @@ function _interopRequireWildcard(obj, nodeInterop) {
   return newObj;
 }
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
-
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 class ModuleNotFoundError extends Error {
+  code = 'MODULE_NOT_FOUND';
+  hint;
+  requireStack;
+  siblingWithSimilarExtensionFound;
+  moduleName;
+  _originalMessage;
+
   constructor(message, moduleName) {
     super(message);
-
-    _defineProperty(this, 'code', 'MODULE_NOT_FOUND');
-
-    _defineProperty(this, 'hint', void 0);
-
-    _defineProperty(this, 'requireStack', void 0);
-
-    _defineProperty(this, 'siblingWithSimilarExtensionFound', void 0);
-
-    _defineProperty(this, 'moduleName', void 0);
-
-    _defineProperty(this, '_originalMessage', void 0);
-
     this._originalMessage = message;
     this.moduleName = moduleName;
   }

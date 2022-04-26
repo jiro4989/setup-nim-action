@@ -48,6 +48,7 @@ const formatTestResult = (testResult, codeCoverageFormatter, reporter) => {
 function formatTestAssertion(assertion) {
   const result = {
     ancestorTitles: assertion.ancestorTitles,
+    duration: assertion.duration,
     failureMessages: null,
     fullName: assertion.fullName,
     location: assertion.location,

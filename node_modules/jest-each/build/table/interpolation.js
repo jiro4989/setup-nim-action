@@ -37,7 +37,7 @@ const interpolateVariables = (title, template, index) =>
   Object.keys(template)
     .reduce(getMatchingKeyPaths(title), []) // aka flatMap
     .reduce(replaceKeyPathWithValue(template), title)
-    .replace('$#', '' + index);
+    .replace('$#', `${index}`);
 
 exports.interpolateVariables = interpolateVariables;
 
@@ -63,7 +63,7 @@ const replaceKeyPathWithValue = template => (title, match) => {
 /* eslint import/export: 0*/
 
 function getPath(template, [head, ...tail]) {
-  if (!head || !template.hasOwnProperty || !template.hasOwnProperty(head))
+  if (!head || !Object.prototype.hasOwnProperty.call(template, head))
     return template;
   return getPath(template[head], tail);
 }

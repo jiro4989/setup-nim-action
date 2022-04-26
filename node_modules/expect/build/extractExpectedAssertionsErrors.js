@@ -44,20 +44,18 @@ const extractExpectedAssertionsErrors = () => {
       (0, _jestMatcherUtils.pluralize)('assertion', expectedAssertionsNumber)
     );
     expectedAssertionsNumberError.message =
-      (0, _jestMatcherUtils.matcherHint)(
+      `${(0, _jestMatcherUtils.matcherHint)(
         '.assertions',
         '',
-        String(expectedAssertionsNumber),
+        expectedAssertionsNumber.toString(),
         {
           isDirectExpectCall: true
         }
-      ) +
-      '\n\n' +
-      `Expected ${numOfAssertionsExpected} to be called but received ` +
-      (0, _jestMatcherUtils.RECEIVED_COLOR)(
+      )}\n\n` +
+      `Expected ${numOfAssertionsExpected} to be called but received ${(0,
+      _jestMatcherUtils.RECEIVED_COLOR)(
         (0, _jestMatcherUtils.pluralize)('assertion call', assertionCalls || 0)
-      ) +
-      '.';
+      )}.`;
     result.push({
       actual: assertionCalls.toString(),
       error: expectedAssertionsNumberError,
@@ -70,12 +68,14 @@ const extractExpectedAssertionsErrors = () => {
       'at least one assertion'
     );
     const received = (0, _jestMatcherUtils.RECEIVED_COLOR)('received none');
-    isExpectingAssertionsError.message =
-      (0, _jestMatcherUtils.matcherHint)('.hasAssertions', '', '', {
+    isExpectingAssertionsError.message = `${(0, _jestMatcherUtils.matcherHint)(
+      '.hasAssertions',
+      '',
+      '',
+      {
         isDirectExpectCall: true
-      }) +
-      '\n\n' +
-      `Expected ${expected} to be called but ${received}.`;
+      }
+    )}\n\nExpected ${expected} to be called but ${received}.`;
     result.push({
       actual: 'none',
       error: isExpectingAssertionsError,

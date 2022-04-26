@@ -1,5 +1,10 @@
 'use strict';
 
+Object.defineProperty(exports, '__esModule', {
+  value: true
+});
+exports.default = void 0;
+
 var _jestUtil = require('jest-util');
 
 /**
@@ -31,11 +36,13 @@ const jestAdapter = async (
     testPath
   });
 
-  if (config.timers === 'fake' || config.timers === 'modern') {
-    // during setup, this cannot be null (and it's fine to explode if it is)
-    environment.fakeTimersModern.useFakeTimers();
-  } else if (config.timers === 'legacy') {
-    environment.fakeTimers.useFakeTimers();
+  if (config.fakeTimers.enableGlobally) {
+    if (config.fakeTimers.legacyFakeTimers) {
+      // during setup, this cannot be null (and it's fine to explode if it is)
+      environment.fakeTimers.useFakeTimers();
+    } else {
+      environment.fakeTimersModern.useFakeTimers();
+    }
   }
 
   globals.beforeEach(() => {
@@ -50,7 +57,10 @@ const jestAdapter = async (
     if (config.resetMocks) {
       runtime.resetAllMocks();
 
-      if (config.timers === 'legacy') {
+      if (
+        config.fakeTimers.enableGlobally &&
+        config.fakeTimers.legacyFakeTimers
+      ) {
         // during setup, this cannot be null (and it's fine to explode if it is)
         environment.fakeTimers.useFakeTimers();
       }
@@ -120,4 +130,5 @@ const _addSnapshotData = (results, snapshotState) => {
   results.snapshot.uncheckedKeys = Array.from(uncheckedKeys);
 };
 
-module.exports = jestAdapter;
+var _default = jestAdapter;
+exports.default = _default;

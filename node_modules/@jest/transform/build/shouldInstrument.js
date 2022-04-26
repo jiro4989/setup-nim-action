@@ -99,7 +99,7 @@ function _interopRequireWildcard(obj, nodeInterop) {
  */
 const MOCKS_PATTERN = new RegExp(
   (0, _jestRegexUtil().escapePathForRegex)(
-    path().sep + '__mocks__' + path().sep
+    `${path().sep}__mocks__${path().sep}`
   )
 );
 const cachedRegexes = new Map();

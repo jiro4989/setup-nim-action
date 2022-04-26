@@ -3,7 +3,7 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-exports.default = defaultResolver;
+exports.default = void 0;
 
 function _path() {
   const data = require('path');
@@ -49,75 +49,134 @@ function _interopRequireDefault(obj) {
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-function defaultResolver(path, options) {
+const defaultResolver = (path, options) => {
   // Yarn 2 adds support to `resolve` automatically so the pnpResolver is only
   // needed for Yarn 1 which implements version 1 of the pnp spec
   if (process.versions.pnp === '1') {
     return (0, _jestPnpResolver().default)(path, options);
   }
 
-  const result = (0, _resolve().sync)(path, {
+  const resolveOptions = {
     ...options,
     isDirectory: _fileWalkers.isDirectory,
     isFile: _fileWalkers.isFile,
-    packageFilter: createPackageFilter(
-      options.conditions,
-      options.packageFilter
-    ),
     preserveSymlinks: false,
     readPackageSync,
     realpathSync: _fileWalkers.realpathSync
-  }); // Dereference symlinks to ensure we don't create a separate
+  };
+  const pathToResolve = getPathInModule(path, resolveOptions);
+  const result = // if `getPathInModule` doesn't change the path, attempt to resolve it
+    pathToResolve === path
+      ? (0, _resolve().sync)(pathToResolve, resolveOptions)
+      : pathToResolve; // Dereference symlinks to ensure we don't create a separate
   // module instance depending on how it was referenced.
 
   return (0, _fileWalkers.realpathSync)(result);
-}
+};
+
+var _default = defaultResolver;
 /*
  * helper functions
  */
+
+exports.default = _default;
 
 function readPackageSync(_, file) {
   return (0, _fileWalkers.readPackageCached)(file);
 }
 
-function createPackageFilter(conditions, userFilter) {
-  function attemptExportsFallback(pkg) {
-    const options = conditions
-      ? {
-          conditions,
-          unsafe: true
-        } // no conditions were passed - let's assume this is Jest internal and it should be `require`
-      : {
-          browser: false,
-          require: true
-        };
+function getPathInModule(path, options) {
+  if (shouldIgnoreRequestForExports(path)) {
+    return path;
+  }
+
+  const segments = path.split('/');
+  let moduleName = segments.shift();
+
+  if (moduleName) {
+    // TODO: handle `#` here: https://github.com/facebook/jest/issues/12270
+    if (moduleName.startsWith('@')) {
+      moduleName = `${moduleName}/${segments.shift()}`;
+    } // self-reference
+
+    const closestPackageJson = (0, _fileWalkers.findClosestPackageJson)(
+      options.basedir
+    );
+
+    if (closestPackageJson) {
+      const pkg = (0, _fileWalkers.readPackageCached)(closestPackageJson);
+
+      if (pkg.name === moduleName && pkg.exports) {
+        const subpath = segments.join('/') || '.';
+        const resolved = (0, _resolve2.resolve)(
+          pkg,
+          subpath,
+          createResolveOptions(options.conditions)
+        );
+
+        if (!resolved) {
+          throw new Error(
+            '`exports` exists, but no results - this is a bug in Jest. Please report an issue'
+          );
+        }
+
+        return (0, _path().resolve)(
+          (0, _path().dirname)(closestPackageJson),
+          resolved
+        );
+      }
+    }
+
+    let packageJsonPath = '';
 
     try {
-      return (0, _resolve2.resolve)(pkg, '.', options);
+      packageJsonPath = (0, _resolve().sync)(
+        `${moduleName}/package.json`,
+        options
+      );
     } catch {
-      return undefined;
+      // ignore if package.json cannot be found
+    }
+
+    if (packageJsonPath && (0, _fileWalkers.isFile)(packageJsonPath)) {
+      const pkg = (0, _fileWalkers.readPackageCached)(packageJsonPath);
+
+      if (pkg.exports) {
+        const subpath = segments.join('/') || '.';
+        const resolved = (0, _resolve2.resolve)(
+          pkg,
+          subpath,
+          createResolveOptions(options.conditions)
+        );
+
+        if (!resolved) {
+          throw new Error(
+            '`exports` exists, but no results - this is a bug in Jest. Please report an issue'
+          );
+        }
+
+        return (0, _path().resolve)(
+          (0, _path().dirname)(packageJsonPath),
+          resolved
+        );
+      }
     }
   }
 
-  return function packageFilter(pkg, packageDir) {
-    let filteredPkg = pkg;
-
-    if (userFilter) {
-      filteredPkg = userFilter(filteredPkg, packageDir);
-    }
-
-    if (filteredPkg.main != null) {
-      return filteredPkg;
-    }
-
-    const indexInRoot = (0, _path().resolve)(packageDir, './index.js'); // if the module contains an `index.js` file in root, `resolve` will request
-    // that if there is no `main`. Since we don't wanna break that, add this
-    // check
-
-    if ((0, _fileWalkers.isFile)(indexInRoot)) {
-      return filteredPkg;
-    }
-
-    return {...filteredPkg, main: attemptExportsFallback(filteredPkg)};
-  };
+  return path;
 }
+
+function createResolveOptions(conditions) {
+  return conditions
+    ? {
+        conditions,
+        unsafe: true
+      } // no conditions were passed - let's assume this is Jest internal and it should be `require`
+    : {
+        browser: false,
+        require: true
+      };
+} // if it's a relative import or an absolute path, exports are ignored
+
+const shouldIgnoreRequestForExports = path =>
+  path.startsWith('.') || (0, _path().isAbsolute)(path);

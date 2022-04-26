@@ -5,15 +5,13 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.default = void 0;
 
+var _expectUtils = require('@jest/expect-utils');
+
 var _jestGetType = require('jest-get-type');
 
 var _jestMatcherUtils = require('jest-matcher-utils');
 
-var _jasmineUtils = require('./jasmineUtils');
-
 var _print = require('./print');
-
-var _utils = require('./utils');
 
 /**
  * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
@@ -33,10 +31,10 @@ const RECEIVED_VALUE_LABEL = 'Received value'; // The optional property of match
 const isExpand = expand => expand !== false;
 
 const toStrictEqualTesters = [
-  _utils.iterableEquality,
-  _utils.typeEquality,
-  _utils.sparseArrayEquality,
-  _utils.arrayBufferEquality
+  _expectUtils.iterableEquality,
+  _expectUtils.typeEquality,
+  _expectUtils.sparseArrayEquality,
+  _expectUtils.arrayBufferEquality
 ];
 const matchers = {
   toBe(received, expected) {
@@ -49,6 +47,7 @@ const matchers = {
     const pass = Object.is(received, expected);
     const message = pass
       ? () =>
+          // eslint-disable-next-line prefer-template
           (0, _jestMatcherUtils.matcherHint)(
             matcherName,
             undefined,
@@ -65,7 +64,7 @@ const matchers = {
             // If deep equality passes when referential identity fails,
             // but exclude map and set until review of their equality logic.
             if (
-              (0, _jasmineUtils.equals)(
+              (0, _expectUtils.equals)(
                 received,
                 expected,
                 toStrictEqualTesters,
@@ -74,8 +73,8 @@ const matchers = {
             ) {
               deepEqualityName = 'toStrictEqual';
             } else if (
-              (0, _jasmineUtils.equals)(received, expected, [
-                _utils.iterableEquality
+              (0, _expectUtils.equals)(received, expected, [
+                _expectUtils.iterableEquality
               ])
             ) {
               deepEqualityName = 'toEqual';
@@ -83,6 +82,7 @@ const matchers = {
           }
 
           return (
+            // eslint-disable-next-line prefer-template
             (0, _jestMatcherUtils.matcherHint)(
               matcherName,
               undefined,
@@ -91,9 +91,9 @@ const matchers = {
             ) +
             '\n\n' +
             (deepEqualityName !== null
-              ? (0, _jestMatcherUtils.DIM_COLOR)(
+              ? `${(0, _jestMatcherUtils.DIM_COLOR)(
                   `If it should pass with deep equality, replace "${matcherName}" with "${deepEqualityName}"`
-                ) + '\n\n'
+                )}\n\n`
               : '') +
             (0, _jestMatcherUtils.printDiffOrStringify)(
               expected,
@@ -185,6 +185,7 @@ const matchers = {
 
     const message = pass
       ? () =>
+          // eslint-disable-next-line prefer-template
           (0, _jestMatcherUtils.matcherHint)(
             matcherName,
             undefined,
@@ -198,14 +199,14 @@ const matchers = {
             : `Received:     ${(0, _jestMatcherUtils.printReceived)(
                 received
               )}\n` +
-              '\n' +
-              (0, _print.printCloseTo)(
+              `\n${(0, _print.printCloseTo)(
                 receivedDiff,
                 expectedDiff,
                 precision,
                 isNot
-              ))
+              )}`)
       : () =>
+          // eslint-disable-next-line prefer-template
           (0, _jestMatcherUtils.matcherHint)(
             matcherName,
             undefined,
@@ -238,6 +239,7 @@ const matchers = {
     const pass = received !== void 0;
 
     const message = () =>
+      // eslint-disable-next-line prefer-template
       (0, _jestMatcherUtils.matcherHint)(matcherName, undefined, '', options) +
       '\n\n' +
       `Received: ${(0, _jestMatcherUtils.printReceived)(received)}`;
@@ -258,6 +260,7 @@ const matchers = {
     const pass = !received;
 
     const message = () =>
+      // eslint-disable-next-line prefer-template
       (0, _jestMatcherUtils.matcherHint)(matcherName, undefined, '', options) +
       '\n\n' +
       `Received: ${(0, _jestMatcherUtils.printReceived)(received)}`;
@@ -284,6 +287,7 @@ const matchers = {
     const pass = received > expected;
 
     const message = () =>
+      // eslint-disable-next-line prefer-template
       (0, _jestMatcherUtils.matcherHint)(
         matcherName,
         undefined,
@@ -320,6 +324,7 @@ const matchers = {
     const pass = received >= expected;
 
     const message = () =>
+      // eslint-disable-next-line prefer-template
       (0, _jestMatcherUtils.matcherHint)(
         matcherName,
         undefined,
@@ -369,6 +374,7 @@ const matchers = {
     const pass = received instanceof expected;
     const message = pass
       ? () =>
+          // eslint-disable-next-line prefer-template
           (0, _jestMatcherUtils.matcherHint)(
             matcherName,
             undefined,
@@ -389,6 +395,7 @@ const matchers = {
               )
             : '')
       : () =>
+          // eslint-disable-next-line prefer-template
           (0, _jestMatcherUtils.matcherHint)(
             matcherName,
             undefined,
@@ -434,6 +441,7 @@ const matchers = {
     const pass = received < expected;
 
     const message = () =>
+      // eslint-disable-next-line prefer-template
       (0, _jestMatcherUtils.matcherHint)(
         matcherName,
         undefined,
@@ -470,6 +478,7 @@ const matchers = {
     const pass = received <= expected;
 
     const message = () =>
+      // eslint-disable-next-line prefer-template
       (0, _jestMatcherUtils.matcherHint)(
         matcherName,
         undefined,
@@ -498,6 +507,7 @@ const matchers = {
     const pass = Number.isNaN(received);
 
     const message = () =>
+      // eslint-disable-next-line prefer-template
       (0, _jestMatcherUtils.matcherHint)(matcherName, undefined, '', options) +
       '\n\n' +
       `Received: ${(0, _jestMatcherUtils.printReceived)(received)}`;
@@ -518,6 +528,7 @@ const matchers = {
     const pass = received === null;
 
     const message = () =>
+      // eslint-disable-next-line prefer-template
       (0, _jestMatcherUtils.matcherHint)(matcherName, undefined, '', options) +
       '\n\n' +
       `Received: ${(0, _jestMatcherUtils.printReceived)(received)}`;
@@ -538,6 +549,7 @@ const matchers = {
     const pass = !!received;
 
     const message = () =>
+      // eslint-disable-next-line prefer-template
       (0, _jestMatcherUtils.matcherHint)(matcherName, undefined, '', options) +
       '\n\n' +
       `Received: ${(0, _jestMatcherUtils.printReceived)(received)}`;
@@ -558,6 +570,7 @@ const matchers = {
     const pass = received === void 0;
 
     const message = () =>
+      // eslint-disable-next-line prefer-template
       (0, _jestMatcherUtils.matcherHint)(matcherName, undefined, '', options) +
       '\n\n' +
       `Received: ${(0, _jestMatcherUtils.printReceived)(received)}`;
@@ -614,7 +627,7 @@ const matchers = {
               String(expected),
               options
             ),
-            wrongTypeErrorMessage,
+            wrongTypeErrorMessage, // eslint-disable-next-line prefer-template
             (0, _jestMatcherUtils.printWithType)(
               'Expected',
               expected,
@@ -643,6 +656,7 @@ const matchers = {
           labelReceived
         );
         return (
+          // eslint-disable-next-line prefer-template
           (0, _jestMatcherUtils.matcherHint)(
             matcherName,
             undefined,
@@ -682,6 +696,7 @@ const matchers = {
         labelReceived
       );
       return (
+        // eslint-disable-next-line prefer-template
         (0, _jestMatcherUtils.matcherHint)(
           matcherName,
           undefined,
@@ -698,7 +713,9 @@ const matchers = {
         }` +
         (!isNot &&
         indexable.findIndex(item =>
-          (0, _jasmineUtils.equals)(item, expected, [_utils.iterableEquality])
+          (0, _expectUtils.equals)(item, expected, [
+            _expectUtils.iterableEquality
+          ])
         ) !== -1
           ? `\n\n${_jestMatcherUtils.SUGGEST_TO_CONTAIN_EQUAL}`
           : '')
@@ -742,7 +759,7 @@ const matchers = {
     }
 
     const index = Array.from(received).findIndex(item =>
-      (0, _jasmineUtils.equals)(item, expected, [_utils.iterableEquality])
+      (0, _expectUtils.equals)(item, expected, [_expectUtils.iterableEquality])
     );
     const pass = index !== -1;
 
@@ -754,6 +771,7 @@ const matchers = {
         labelReceived
       );
       return (
+        // eslint-disable-next-line prefer-template
         (0, _jestMatcherUtils.matcherHint)(
           matcherName,
           undefined,
@@ -784,11 +802,12 @@ const matchers = {
       isNot: this.isNot,
       promise: this.promise
     };
-    const pass = (0, _jasmineUtils.equals)(received, expected, [
-      _utils.iterableEquality
+    const pass = (0, _expectUtils.equals)(received, expected, [
+      _expectUtils.iterableEquality
     ]);
     const message = pass
       ? () =>
+          // eslint-disable-next-line prefer-template
           (0, _jestMatcherUtils.matcherHint)(
             matcherName,
             undefined,
@@ -802,6 +821,7 @@ const matchers = {
             ? `Received:     ${(0, _jestMatcherUtils.printReceived)(received)}`
             : '')
       : () =>
+          // eslint-disable-next-line prefer-template
           (0, _jestMatcherUtils.matcherHint)(
             matcherName,
             undefined,
@@ -880,6 +900,7 @@ const matchers = {
         labelReceivedValue
       );
       return (
+        // eslint-disable-next-line prefer-template
         (0, _jestMatcherUtils.matcherHint)(
           matcherName,
           undefined,
@@ -960,7 +981,7 @@ const matchers = {
 
     const expectedPathLength =
       typeof expectedPath === 'string'
-        ? (0, _utils.pathAsArray)(expectedPath).length
+        ? (0, _expectUtils.pathAsArray)(expectedPath).length
         : expectedPath.length;
 
     if (expectedPathType === 'array' && expectedPathLength === 0) {
@@ -984,56 +1005,20 @@ const matchers = {
       );
     }
 
-    const result = (0, _utils.getPath)(received, expectedPath);
-    const {lastTraversedObject, hasEndProp} = result;
+    const result = (0, _expectUtils.getPath)(received, expectedPath);
+    const {lastTraversedObject, endPropIsDefined, hasEndProp, value} = result;
     const receivedPath = result.traversedPath;
     const hasCompletePath = receivedPath.length === expectedPathLength;
     const receivedValue = hasCompletePath ? result.value : lastTraversedObject;
-    const pass = hasValue
-      ? (0, _jasmineUtils.equals)(result.value, expectedValue, [
-          _utils.iterableEquality
-        ])
-      : Boolean(hasEndProp); // theoretically undefined if empty path
-    // Remove type cast if we rewrite getPath as iterative algorithm.
-    // Delete this unique report if future breaking change
-    // removes the edge case that expected value undefined
-    // also matches absence of a property with the key path.
-
-    if (pass && !hasCompletePath) {
-      const message = () =>
-        (0, _jestMatcherUtils.matcherHint)(
-          matcherName,
-          undefined,
-          expectedArgument,
-          options
-        ) +
-        '\n\n' +
-        `Expected path: ${(0, _jestMatcherUtils.printExpected)(
-          expectedPath
-        )}\n` +
-        `Received path: ${(0, _jestMatcherUtils.printReceived)(
-          expectedPathType === 'array' || receivedPath.length === 0
-            ? receivedPath
-            : receivedPath.join('.')
-        )}\n\n` +
-        `Expected value: not ${(0, _jestMatcherUtils.printExpected)(
-          expectedValue
-        )}\n` +
-        `Received value:     ${(0, _jestMatcherUtils.printReceived)(
-          receivedValue
-        )}\n\n` +
-        (0, _jestMatcherUtils.DIM_COLOR)(
-          'Because a positive assertion passes for expected value undefined if the property does not exist, this negative assertion fails unless the property does exist and has a defined value'
-        );
-
-      return {
-        message,
-        pass
-      };
-    }
-
+    const pass =
+      hasValue && endPropIsDefined
+        ? (0, _expectUtils.equals)(value, expectedValue, [
+            _expectUtils.iterableEquality
+          ])
+        : Boolean(hasEndProp);
     const message = pass
       ? () =>
+          // eslint-disable-next-line prefer-template
           (0, _jestMatcherUtils.matcherHint)(
             matcherName,
             undefined,
@@ -1047,13 +1032,13 @@ const matchers = {
               )}\n\n` +
               `Expected value: not ${(0, _jestMatcherUtils.printExpected)(
                 expectedValue
-              )}` +
-              ((0, _jestMatcherUtils.stringify)(expectedValue) !==
-              (0, _jestMatcherUtils.stringify)(receivedValue)
-                ? `\nReceived value:     ${(0, _jestMatcherUtils.printReceived)(
-                    receivedValue
-                  )}`
-                : '')
+              )}${
+                (0, _jestMatcherUtils.stringify)(expectedValue) !==
+                (0, _jestMatcherUtils.stringify)(receivedValue)
+                  ? `\nReceived value:     ${(0,
+                    _jestMatcherUtils.printReceived)(receivedValue)}`
+                  : ''
+              }`
             : `Expected path: not ${(0, _jestMatcherUtils.printExpected)(
                 expectedPath
               )}\n\n` +
@@ -1061,6 +1046,7 @@ const matchers = {
                 receivedValue
               )}`)
       : () =>
+          // eslint-disable-next-line prefer-template
           (0, _jestMatcherUtils.matcherHint)(
             matcherName,
             undefined,
@@ -1072,25 +1058,24 @@ const matchers = {
             expectedPath
           )}\n` +
           (hasCompletePath
-            ? '\n' +
-              (0, _jestMatcherUtils.printDiffOrStringify)(
+            ? `\n${(0, _jestMatcherUtils.printDiffOrStringify)(
                 expectedValue,
                 receivedValue,
                 EXPECTED_VALUE_LABEL,
                 RECEIVED_VALUE_LABEL,
                 isExpand(this.expand)
-              )
+              )}`
             : `Received path: ${(0, _jestMatcherUtils.printReceived)(
                 expectedPathType === 'array' || receivedPath.length === 0
                   ? receivedPath
                   : receivedPath.join('.')
-              )}\n\n` +
-              (hasValue
-                ? `Expected value: ${(0, _jestMatcherUtils.printExpected)(
-                    expectedValue
-                  )}\n`
-                : '') +
-              `Received value: ${(0, _jestMatcherUtils.printReceived)(
+              )}\n\n${
+                hasValue
+                  ? `Expected value: ${(0, _jestMatcherUtils.printExpected)(
+                      expectedValue
+                    )}\n`
+                  : ''
+              }Received value: ${(0, _jestMatcherUtils.printReceived)(
                 receivedValue
               )}`);
     return {
@@ -1157,7 +1142,7 @@ const matchers = {
         : new RegExp(expected).test(received);
     const message = pass
       ? () =>
-          typeof expected === 'string'
+          typeof expected === 'string' // eslint-disable-next-line prefer-template
             ? (0, _jestMatcherUtils.matcherHint)(
                 matcherName,
                 undefined,
@@ -1173,7 +1158,7 @@ const matchers = {
                 received,
                 received.indexOf(expected),
                 expected.length
-              )}`
+              )}` // eslint-disable-next-line prefer-template
             : (0, _jestMatcherUtils.matcherHint)(
                 matcherName,
                 undefined,
@@ -1201,6 +1186,7 @@ const matchers = {
             labelReceived
           );
           return (
+            // eslint-disable-next-line prefer-template
             (0, _jestMatcherUtils.matcherHint)(
               matcherName,
               undefined,
@@ -1271,12 +1257,13 @@ const matchers = {
       );
     }
 
-    const pass = (0, _jasmineUtils.equals)(received, expected, [
-      _utils.iterableEquality,
-      _utils.subsetEquality
+    const pass = (0, _expectUtils.equals)(received, expected, [
+      _expectUtils.iterableEquality,
+      _expectUtils.subsetEquality
     ]);
     const message = pass
       ? () =>
+          // eslint-disable-next-line prefer-template
           (0, _jestMatcherUtils.matcherHint)(
             matcherName,
             undefined,
@@ -1292,6 +1279,7 @@ const matchers = {
               )}`
             : '')
       : () =>
+          // eslint-disable-next-line prefer-template
           (0, _jestMatcherUtils.matcherHint)(
             matcherName,
             undefined,
@@ -1301,7 +1289,7 @@ const matchers = {
           '\n\n' +
           (0, _jestMatcherUtils.printDiffOrStringify)(
             expected,
-            (0, _utils.getObjectSubset)(received, expected),
+            (0, _expectUtils.getObjectSubset)(received, expected),
             EXPECTED_LABEL,
             RECEIVED_LABEL,
             isExpand(this.expand)
@@ -1319,7 +1307,7 @@ const matchers = {
       isNot: this.isNot,
       promise: this.promise
     };
-    const pass = (0, _jasmineUtils.equals)(
+    const pass = (0, _expectUtils.equals)(
       received,
       expected,
       toStrictEqualTesters,
@@ -1327,6 +1315,7 @@ const matchers = {
     );
     const message = pass
       ? () =>
+          // eslint-disable-next-line prefer-template
           (0, _jestMatcherUtils.matcherHint)(
             matcherName,
             undefined,
@@ -1340,6 +1329,7 @@ const matchers = {
             ? `Received:     ${(0, _jestMatcherUtils.printReceived)(received)}`
             : '')
       : () =>
+          // eslint-disable-next-line prefer-template
           (0, _jestMatcherUtils.matcherHint)(
             matcherName,
             undefined,

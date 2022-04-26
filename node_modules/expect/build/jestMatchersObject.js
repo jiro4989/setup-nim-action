@@ -10,23 +10,11 @@ exports.setState =
   exports.INTERNAL_MATCHER_FLAG =
     void 0;
 
+var _jestGetType = require('jest-get-type');
+
 var _asymmetricMatchers = require('./asymmetricMatchers');
 
-var global = (function () {
-  if (typeof globalThis !== 'undefined') {
-    return globalThis;
-  } else if (typeof global !== 'undefined') {
-    return global;
-  } else if (typeof self !== 'undefined') {
-    return self;
-  } else if (typeof window !== 'undefined') {
-    return window;
-  } else {
-    return Function('return this')();
-  }
-})();
-
-var Symbol = global['jest-symbol-do-not-touch'] || global.Symbol;
+var Symbol = globalThis['jest-symbol-do-not-touch'] || globalThis.Symbol;
 // Global matchers object holds the list of available matchers and
 // the state, that can hold matcher specific values that change over time.
 const JEST_MATCHERS_OBJECT = Symbol.for('$$jest-matchers-object'); // Notes a built-in/internal Jest matcher.
@@ -35,14 +23,14 @@ const JEST_MATCHERS_OBJECT = Symbol.for('$$jest-matchers-object'); // Notes a bu
 const INTERNAL_MATCHER_FLAG = Symbol.for('$$jest-internal-matcher');
 exports.INTERNAL_MATCHER_FLAG = INTERNAL_MATCHER_FLAG;
 
-if (!global.hasOwnProperty(JEST_MATCHERS_OBJECT)) {
+if (!Object.prototype.hasOwnProperty.call(globalThis, JEST_MATCHERS_OBJECT)) {
   const defaultState = {
     assertionCalls: 0,
     expectedAssertionsNumber: null,
     isExpectingAssertions: false,
     suppressedErrors: [] // errors that are not thrown immediately.
   };
-  Object.defineProperty(global, JEST_MATCHERS_OBJECT, {
+  Object.defineProperty(globalThis, JEST_MATCHERS_OBJECT, {
     value: {
       matchers: Object.create(null),
       state: defaultState
@@ -50,23 +38,31 @@ if (!global.hasOwnProperty(JEST_MATCHERS_OBJECT)) {
   });
 }
 
-const getState = () => global[JEST_MATCHERS_OBJECT].state;
+const getState = () => globalThis[JEST_MATCHERS_OBJECT].state;
 
 exports.getState = getState;
 
 const setState = state => {
-  Object.assign(global[JEST_MATCHERS_OBJECT].state, state);
+  Object.assign(globalThis[JEST_MATCHERS_OBJECT].state, state);
 };
 
 exports.setState = setState;
 
-const getMatchers = () => global[JEST_MATCHERS_OBJECT].matchers;
+const getMatchers = () => globalThis[JEST_MATCHERS_OBJECT].matchers;
 
 exports.getMatchers = getMatchers;
 
 const setMatchers = (matchers, isInternal, expect) => {
   Object.keys(matchers).forEach(key => {
     const matcher = matchers[key];
+
+    if (typeof matcher !== 'function') {
+      throw new TypeError(
+        `expect.extend: \`${key}\` is not a valid matcher. Must be a function, is "${(0,
+        _jestGetType.getType)(matcher)}"`
+      );
+    }
+
     Object.defineProperty(matcher, INTERNAL_MATCHER_FLAG, {
       value: isInternal
     });
@@ -114,7 +110,7 @@ const setMatchers = (matchers, isInternal, expect) => {
       });
     }
   });
-  Object.assign(global[JEST_MATCHERS_OBJECT].matchers, matchers);
+  Object.assign(globalThis[JEST_MATCHERS_OBJECT].matchers, matchers);
 };
 
 exports.setMatchers = setMatchers;

@@ -13,35 +13,22 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {default: obj};
 }
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
-
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 class Farm {
+  _computeWorkerKey;
+  _workerSchedulingPolicy;
+  _cacheKeys = Object.create(null);
+  _locks = [];
+  _offset = 0;
+  _taskQueue;
+
   constructor(_numOfWorkers, _callback, options = {}) {
     var _options$workerSchedu, _options$taskQueue;
-
-    _defineProperty(this, '_computeWorkerKey', void 0);
-
-    _defineProperty(this, '_workerSchedulingPolicy', void 0);
-
-    _defineProperty(this, '_cacheKeys', Object.create(null));
-
-    _defineProperty(this, '_locks', []);
-
-    _defineProperty(this, '_offset', 0);
-
-    _defineProperty(this, '_taskQueue', void 0);
 
     this._numOfWorkers = _numOfWorkers;
     this._callback = _callback;
@@ -74,7 +61,7 @@ class Farm {
 
     const promise = new Promise( // Bind args to this function so it won't reference to the parent scope.
       // This prevents a memory leak in v8, because otherwise the function will
-      // retaine args for the closure.
+      // retain args for the closure.
       ((args, resolve, reject) => {
         const computeWorkerKey = this._computeWorkerKey;
         const request = [_types.CHILD_MESSAGE_CALL, false, method, args];
@@ -139,10 +126,14 @@ class Farm {
     // and other properties of the task object, such as task.request can be
     // garbage collected.
 
-    const taskOnEnd = task.onEnd;
+    let taskOnEnd = task.onEnd;
 
     const onEnd = (error, result) => {
-      taskOnEnd(error, result);
+      if (taskOnEnd) {
+        taskOnEnd(error, result);
+      }
+
+      taskOnEnd = null;
 
       this._unlock(workerId);
 

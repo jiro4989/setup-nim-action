@@ -20,7 +20,7 @@ exports.printSnapshotAndReceived =
 
 var _chalk = _interopRequireDefault(require('chalk'));
 
-var _utils = require('expect/build/utils');
+var _expectUtils = require('@jest/expect-utils');
 
 var _jestDiff = require('jest-diff');
 
@@ -34,7 +34,7 @@ var _colors = require('./colors');
 
 var _dedentLines = require('./dedentLines');
 
-var _utils2 = require('./utils');
+var _utils = require('./utils');
 
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {default: obj};
@@ -46,12 +46,6 @@ function _interopRequireDefault(obj) {
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-
-/* eslint-disable local/ban-types-eventually */
-// Temporary hack because getObjectSubset has known limitations,
-// is not in the public interface of the expect package,
-// and the long-term goal is to use a non-serialization diff.
-// Make sure to remove file from `exports` in `expect/package.json`.
 const getSnapshotColorForChalkInstance = chalkInstance => {
   const level = chalkInstance.level;
 
@@ -227,12 +221,12 @@ const isLineDiffable = received => {
 };
 
 const printExpected = val =>
-  (0, _jestMatcherUtils.EXPECTED_COLOR)((0, _utils2.minify)(val));
+  (0, _jestMatcherUtils.EXPECTED_COLOR)((0, _utils.minify)(val));
 
 exports.printExpected = printExpected;
 
 const printReceived = val =>
-  (0, _jestMatcherUtils.RECEIVED_COLOR)((0, _utils2.minify)(val));
+  (0, _jestMatcherUtils.RECEIVED_COLOR)((0, _utils.minify)(val));
 
 exports.printReceived = printReceived;
 
@@ -246,9 +240,9 @@ const printPropertiesAndReceived = (
 
   if (isLineDiffable(properties) && isLineDiffable(received)) {
     return (0, _jestDiff.diffLinesUnified)(
-      (0, _utils2.serialize)(properties).split('\n'),
-      (0, _utils2.serialize)(
-        (0, _utils.getObjectSubset)(received, properties)
+      (0, _utils.serialize)(properties).split('\n'),
+      (0, _utils.serialize)(
+        (0, _expectUtils.getObjectSubset)(received, properties)
       ).split('\n'),
       {
         aAnnotation,
@@ -269,13 +263,9 @@ const printPropertiesAndReceived = (
     aAnnotation,
     bAnnotation
   );
-  return (
-    printLabel(aAnnotation) +
-    printExpected(properties) +
-    '\n' +
-    printLabel(bAnnotation) +
-    printReceived(received)
-  );
+  return `${printLabel(aAnnotation) + printExpected(properties)}\n${printLabel(
+    bAnnotation
+  )}${printReceived(received)}`;
 };
 
 exports.printPropertiesAndReceived = printPropertiesAndReceived;
@@ -331,26 +321,20 @@ const printSnapshotAndReceived = (
           const hasCommon = diffs.some(
             diff => diff[0] === _jestDiff.DIFF_EQUAL
           );
-          aQuoted =
-            '"' + joinDiffs(diffs, _jestDiff.DIFF_DELETE, hasCommon) + '"';
-          bQuoted =
-            '"' + joinDiffs(diffs, _jestDiff.DIFF_INSERT, hasCommon) + '"';
+          aQuoted = `"${joinDiffs(diffs, _jestDiff.DIFF_DELETE, hasCommon)}"`;
+          bQuoted = `"${joinDiffs(diffs, _jestDiff.DIFF_INSERT, hasCommon)}"`;
         }
 
         const printLabel = (0, _jestMatcherUtils.getLabelPrinter)(
           aAnnotation,
           bAnnotation
         );
-        return (
-          printLabel(aAnnotation) +
-          aColor(aQuoted) +
-          '\n' +
-          printLabel(bAnnotation) +
-          bColor(bQuoted)
-        );
+        return `${printLabel(aAnnotation) + aColor(aQuoted)}\n${printLabel(
+          bAnnotation
+        )}${bColor(bQuoted)}`;
       } // Else either string is multiline, so display as unquoted strings.
 
-      a = (0, _utils2.deserializeString)(a); //  hypothetical expected string
+      a = (0, _utils.deserializeString)(a); //  hypothetical expected string
 
       b = received; // not serialized
     } // Else expected had custom serialization or was not a string
@@ -367,7 +351,7 @@ const printSnapshotAndReceived = (
     const bLines2 = b.split('\n'); // Fall through to fix a regression for custom serializers
     // like jest-snapshot-serializer-raw that ignore the indent option.
 
-    const b0 = (0, _utils2.serialize)(received, 0);
+    const b0 = (0, _utils.serialize)(received, 0);
 
     if (b0 !== b) {
       const aLines0 = (0, _dedentLines.dedentLines)(aLines2);
@@ -395,13 +379,9 @@ const printSnapshotAndReceived = (
     aAnnotation,
     bAnnotation
   );
-  return (
-    printLabel(aAnnotation) +
-    aColor(a) +
-    '\n' +
-    printLabel(bAnnotation) +
-    bColor(b)
-  );
+  return `${printLabel(aAnnotation) + aColor(a)}\n${printLabel(
+    bAnnotation
+  )}${bColor(b)}`;
 };
 
 exports.printSnapshotAndReceived = printSnapshotAndReceived;

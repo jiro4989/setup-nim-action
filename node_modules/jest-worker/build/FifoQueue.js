@@ -5,20 +5,6 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.default = void 0;
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
-
 /**
  * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
  *
@@ -32,11 +18,8 @@ function _defineProperty(obj, key, value) {
  * across the worker specific and shared queue.
  */
 class FifoQueue {
-  constructor() {
-    _defineProperty(this, '_workerQueues', []);
-
-    _defineProperty(this, '_sharedQueue', new InternalQueue());
-  }
+  _workerQueues = [];
+  _sharedQueue = new InternalQueue();
 
   enqueue(task, workerId) {
     if (workerId == null) {
@@ -80,8 +63,8 @@ class FifoQueue {
         ? _workerTop$previousSh
         : true; // Process the top task from the shared queue if
     // - there's no task in the worker specific queue or
-    // - if the non-worker-specific task after which this worker specifif task
-    //   hasn been queued wasn't processed yet
+    // - if the non-worker-specific task after which this worker specific task
+    //   has been queued wasn't processed yet
 
     if (workerTop != null && sharedTaskIsProcessed) {
       var _this$_workerQueues$w2,
@@ -111,11 +94,8 @@ exports.default = FifoQueue;
  * FIFO queue for a single worker / shared queue.
  */
 class InternalQueue {
-  constructor() {
-    _defineProperty(this, '_head', null);
-
-    _defineProperty(this, '_last', null);
-  }
+  _head = null;
+  _last = null;
 
   enqueue(value) {
     const item = {

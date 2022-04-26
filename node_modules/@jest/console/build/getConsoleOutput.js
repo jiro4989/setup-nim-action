@@ -36,14 +36,14 @@ function _interopRequireDefault(obj) {
  * LICENSE file in the root directory of this source tree.
  */
 function getConsoleOutput(buffer, config, globalConfig) {
-  const TITLE_INDENT = globalConfig.verbose ? '  ' : '    ';
-  const CONSOLE_INDENT = TITLE_INDENT + '  ';
+  const TITLE_INDENT = globalConfig.verbose ? ' '.repeat(2) : ' '.repeat(4);
+  const CONSOLE_INDENT = TITLE_INDENT + ' '.repeat(2);
   const logEntries = buffer.reduce((output, {type, message, origin}) => {
     message = message
       .split(/\n/)
       .map(line => CONSOLE_INDENT + line)
       .join('\n');
-    let typeMessage = 'console.' + type;
+    let typeMessage = `console.${type}`;
     let noStackTrace = true;
     let noCodeFrame = true;
 
@@ -86,16 +86,11 @@ function getConsoleOutput(buffer, config, globalConfig) {
       config,
       options
     );
-    return (
-      output +
-      TITLE_INDENT +
-      _chalk().default.dim(typeMessage) +
-      '\n' +
-      message.trimRight() +
-      '\n' +
-      _chalk().default.dim(formattedStackTrace.trimRight()) +
-      '\n\n'
-    );
+    return `${
+      output + TITLE_INDENT + _chalk().default.dim(typeMessage)
+    }\n${message.trimRight()}\n${_chalk().default.dim(
+      formattedStackTrace.trimRight()
+    )}\n\n`;
   }, '');
-  return logEntries.trimRight() + '\n';
+  return `${logEntries.trimRight()}\n`;
 }

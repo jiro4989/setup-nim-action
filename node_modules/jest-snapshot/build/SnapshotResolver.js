@@ -71,7 +71,7 @@ function _interopRequireWildcard(obj, nodeInterop) {
  */
 const EXTENSION = 'snap';
 exports.EXTENSION = EXTENSION;
-const DOT_EXTENSION = '.' + EXTENSION;
+const DOT_EXTENSION = `.${EXTENSION}`;
 exports.DOT_EXTENSION = DOT_EXTENSION;
 
 const isSnapshotPath = path => path.endsWith(DOT_EXTENSION);
@@ -155,12 +155,9 @@ async function createCustomSnapshotResolver(
 }
 
 function mustImplement(propName, requiredType) {
-  return (
-    _chalk.default.bold(
-      `Custom snapshot resolver must implement a \`${propName}\` as a ${requiredType}.`
-    ) +
-    '\nDocumentation: https://jestjs.io/docs/configuration#snapshotresolver-string'
-  );
+  return `${_chalk.default.bold(
+    `Custom snapshot resolver must implement a \`${propName}\` as a ${requiredType}.`
+  )}\nDocumentation: https://jestjs.io/docs/configuration#snapshotresolver-string`;
 }
 
 function verifyConsistentTransformations(custom) {
