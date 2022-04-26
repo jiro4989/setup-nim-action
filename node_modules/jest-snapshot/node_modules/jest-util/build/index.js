@@ -108,6 +108,14 @@ Object.defineProperty(exports, 'tryRealpath', {
   }
 });
 
+var preRunMessage = _interopRequireWildcard(require('./preRunMessage'));
+
+exports.preRunMessage = preRunMessage;
+
+var specialChars = _interopRequireWildcard(require('./specialChars'));
+
+exports.specialChars = specialChars;
+
 var _clearLine = _interopRequireDefault2(require('./clearLine'));
 
 var _createDirectory = _interopRequireDefault2(require('./createDirectory'));
@@ -134,10 +142,6 @@ var _convertDescriptorToString = _interopRequireDefault2(
   require('./convertDescriptorToString')
 );
 
-var _specialChars = _interopRequireWildcard(require('./specialChars'));
-
-exports.specialChars = _specialChars;
-
 var _replacePathSepForGlob = _interopRequireDefault2(
   require('./replacePathSepForGlob')
 );
@@ -148,10 +152,6 @@ var _testPathPatternToRegExp = _interopRequireDefault2(
 
 var _globsToMatcher = _interopRequireDefault2(require('./globsToMatcher'));
 
-var _preRunMessage = _interopRequireWildcard(require('./preRunMessage'));
-
-exports.preRunMessage = _preRunMessage;
-
 var _pluralize = _interopRequireDefault2(require('./pluralize'));
 
 var _formatTime = _interopRequireDefault2(require('./formatTime'));
@@ -161,6 +161,10 @@ var _tryRealpath = _interopRequireDefault2(require('./tryRealpath'));
 var _requireOrImportModule = _interopRequireDefault2(
   require('./requireOrImportModule')
 );
+
+function _interopRequireDefault2(obj) {
+  return obj && obj.__esModule ? obj : {default: obj};
+}
 
 function _getRequireWildcardCache(nodeInterop) {
   if (typeof WeakMap !== 'function') return null;
@@ -202,8 +206,4 @@ function _interopRequireWildcard(obj, nodeInterop) {
     cache.set(obj, newObj);
   }
   return newObj;
-}
-
-function _interopRequireDefault2(obj) {
-  return obj && obj.__esModule ? obj : {default: obj};
 }

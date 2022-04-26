@@ -3,13 +3,7 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-exports.extract = extract;
-
-var _isRegExpSupported = _interopRequireDefault(require('./isRegExpSupported'));
-
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : {default: obj};
-}
+exports.extractor = void 0;
 
 /**
  * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
@@ -17,10 +11,7 @@ function _interopRequireDefault(obj) {
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-// Negative look behind is only supported in Node 9+
-const NOT_A_DOT = (0, _isRegExpSupported.default)('(?<!\\.\\s*)')
-  ? '(?<!\\.\\s*)'
-  : '(?:^|[^.]\\s*)';
+const NOT_A_DOT = '(?<!\\.\\s*)';
 
 const CAPTURE_STRING_LITERAL = pos => `([\`'"])([^'"\`]*?)(?:\\${pos})`;
 
@@ -80,20 +71,22 @@ const JEST_EXTENSIONS_RE = createRegExp(
   ],
   'g'
 );
+const extractor = {
+  extract(code) {
+    const dependencies = new Set();
 
-function extract(code) {
-  const dependencies = new Set();
+    const addDependency = (match, _, dep) => {
+      dependencies.add(dep);
+      return match;
+    };
 
-  const addDependency = (match, _, dep) => {
-    dependencies.add(dep);
-    return match;
-  };
-
-  code
-    .replace(BLOCK_COMMENT_RE, '')
-    .replace(LINE_COMMENT_RE, '')
-    .replace(IMPORT_OR_EXPORT_RE, addDependency)
-    .replace(REQUIRE_OR_DYNAMIC_IMPORT_RE, addDependency)
-    .replace(JEST_EXTENSIONS_RE, addDependency);
-  return dependencies;
-}
+    code
+      .replace(BLOCK_COMMENT_RE, '')
+      .replace(LINE_COMMENT_RE, '')
+      .replace(IMPORT_OR_EXPORT_RE, addDependency)
+      .replace(REQUIRE_OR_DYNAMIC_IMPORT_RE, addDependency)
+      .replace(JEST_EXTENSIONS_RE, addDependency);
+    return dependencies;
+  }
+};
+exports.extractor = extractor;

@@ -94,7 +94,7 @@ const OUTSIDE_JEST_VM_PROTOCOL = 'jest-main:'; // String manipulation is easier 
 // plus setting non-standard protocols on URL objects is difficult.
 
 const createOutsideJestVmPath = path =>
-  OUTSIDE_JEST_VM_PROTOCOL + '//' + encodeURIComponent(path);
+  `${OUTSIDE_JEST_VM_PROTOCOL}//${encodeURIComponent(path)}`;
 
 exports.createOutsideJestVmPath = createOutsideJestVmPath;
 
@@ -102,7 +102,7 @@ const decodePossibleOutsideJestVmPath = outsideJestVmPath => {
   if (outsideJestVmPath.startsWith(OUTSIDE_JEST_VM_PROTOCOL)) {
     return decodeURIComponent(
       outsideJestVmPath.replace(
-        new RegExp('^' + OUTSIDE_JEST_VM_PROTOCOL + '//'),
+        new RegExp(`^${OUTSIDE_JEST_VM_PROTOCOL}//`),
         ''
       )
     );
@@ -143,8 +143,7 @@ const findSiblingsWithFileExtension = (
           .map(ext => `'${ext}'`)
           .join(', ');
         return (
-          foundMessage +
-          "\n\nYou might want to include a file extension in your import, or update your 'moduleFileExtensions', which is currently " +
+          `${foundMessage}\n\nYou might want to include a file extension in your import, or update your 'moduleFileExtensions', which is currently ` +
           `[${mappedModuleFileExtensions}].\n\nSee https://jestjs.io/docs/configuration#modulefileextensions-arraystring`
         );
       }

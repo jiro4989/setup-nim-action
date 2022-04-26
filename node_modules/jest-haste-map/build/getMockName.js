@@ -63,7 +63,7 @@ function _interopRequireWildcard(obj, nodeInterop) {
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-const MOCKS_PATTERN = path().sep + '__mocks__' + path().sep;
+const MOCKS_PATTERN = `${path().sep}__mocks__${path().sep}`;
 
 const getMockName = filePath => {
   const mockPath = filePath.split(MOCKS_PATTERN)[1];

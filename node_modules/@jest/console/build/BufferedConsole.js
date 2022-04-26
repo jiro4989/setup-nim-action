@@ -59,21 +59,19 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {default: obj};
 }
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
-
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 class BufferedConsole extends _console().Console {
+  _buffer = [];
+  _counters = {};
+  _timers = {};
+  _groupDepth = 0;
+  Console = _console().Console;
+
   constructor() {
     super({
       write: message => {
@@ -81,16 +79,6 @@ class BufferedConsole extends _console().Console {
         return true;
       }
     });
-
-    _defineProperty(this, '_buffer', []);
-
-    _defineProperty(this, '_counters', {});
-
-    _defineProperty(this, '_timers', {});
-
-    _defineProperty(this, '_groupDepth', 0);
-
-    _defineProperty(this, 'Console', _console().Console);
   }
 
   static write(buffer, type, message, level) {

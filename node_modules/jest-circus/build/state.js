@@ -47,6 +47,7 @@ const createState = () => {
     hasFocusedTests: false,
     hasStarted: false,
     includeTestLocationInResult: false,
+    maxConcurrency: 5,
     parentProcess: null,
     rootDescribeBlock: ROOT_DESCRIBE_BLOCK,
     testNamePattern: null,
@@ -54,6 +55,7 @@ const createState = () => {
     unhandledErrors: []
   };
 };
+/* eslint-disable no-restricted-globals */
 
 const resetState = () => {
   global[_types.STATE_SYM] = createState();
@@ -67,6 +69,7 @@ const getState = () => global[_types.STATE_SYM];
 exports.getState = getState;
 
 const setState = state => (global[_types.STATE_SYM] = state);
+/* eslint-enable */
 
 exports.setState = setState;
 

@@ -86,10 +86,6 @@ const getOperatorName = (operator, stack) => {
 
   if (stack.match('.throws')) {
     return 'throws';
-  } // this fallback is only needed for versions older than node 10
-
-  if (stack.match('.fail')) {
-    return 'fail';
   }
 
   return '';
@@ -106,7 +102,7 @@ const operatorMessage = operator => {
 const assertThrowingMatcherHint = operatorName =>
   operatorName
     ? _chalk.default.dim('assert') +
-      _chalk.default.dim('.' + operatorName + '(') +
+      _chalk.default.dim(`.${operatorName}(`) +
       _chalk.default.red('function') +
       _chalk.default.dim(')')
     : '';
@@ -123,7 +119,7 @@ const assertMatcherHint = (operator, operatorName, expected) => {
   } else if (operatorName) {
     message =
       _chalk.default.dim('assert') +
-      _chalk.default.dim('.' + operatorName + '(') +
+      _chalk.default.dim(`.${operatorName}(`) +
       _chalk.default.red('received') +
       _chalk.default.dim(', ') +
       _chalk.default.green('expected') +
@@ -144,12 +140,13 @@ function assertionErrorMessage(error, options) {
 
   if (operatorName === 'doesNotThrow') {
     return (
+      // eslint-disable-next-line prefer-template
       buildHintString(assertThrowingMatcherHint(operatorName)) +
       _chalk.default.reset('Expected the function not to throw an error.\n') +
       _chalk.default.reset('Instead, it threw:\n') +
       `  ${(0, _jestMatcherUtils.printReceived)(actual)}` +
       _chalk.default.reset(
-        hasCustomMessage ? '\n\nMessage:\n  ' + message : ''
+        hasCustomMessage ? `\n\nMessage:\n  ${message}` : ''
       ) +
       trimmedStack
     );
@@ -161,7 +158,7 @@ function assertionErrorMessage(error, options) {
       _chalk.default.reset('Expected the function to throw an error.\n') +
       _chalk.default.reset("But it didn't throw anything.") +
       _chalk.default.reset(
-        hasCustomMessage ? '\n\nMessage:\n  ' + message : ''
+        hasCustomMessage ? `\n\nMessage:\n  ${message}` : ''
       ) +
       trimmedStack
     );
@@ -170,18 +167,19 @@ function assertionErrorMessage(error, options) {
   if (operatorName === 'fail') {
     return (
       buildHintString(assertMatcherHint(operator, operatorName, expected)) +
-      _chalk.default.reset(hasCustomMessage ? 'Message:\n  ' + message : '') +
+      _chalk.default.reset(hasCustomMessage ? `Message:\n  ${message}` : '') +
       trimmedStack
     );
   }
 
   return (
+    // eslint-disable-next-line prefer-template
     buildHintString(assertMatcherHint(operator, operatorName, expected)) +
     _chalk.default.reset(`Expected value ${operatorMessage(operator)}`) +
     `  ${(0, _jestMatcherUtils.printExpected)(expected)}\n` +
     _chalk.default.reset('Received:\n') +
     `  ${(0, _jestMatcherUtils.printReceived)(actual)}` +
-    _chalk.default.reset(hasCustomMessage ? '\n\nMessage:\n  ' + message : '') +
+    _chalk.default.reset(hasCustomMessage ? `\n\nMessage:\n  ${message}` : '') +
     (diffString ? `\n\nDifference:\n\n${diffString}` : '') +
     trimmedStack
   );
@@ -197,7 +195,7 @@ function isAssertionError(error) {
 }
 
 function buildHintString(hint) {
-  return hint ? hint + '\n\n' : '';
+  return hint ? `${hint}\n\n` : '';
 }
 
 var _default = formatNodeAssertErrors;

@@ -44,7 +44,7 @@ const messageListener = request => {
 
     default:
       throw new TypeError(
-        'Unexpected request from parent process: ' + request[0]
+        `Unexpected request from parent process: ${request[0]}`
       );
   }
 };

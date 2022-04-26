@@ -35,6 +35,8 @@ function _interopRequireDefault(obj) {
 function bind(cb, supportsDone = true) {
   return (table, ...taggedTemplateData) =>
     function eachBind(title, test, timeout) {
+      title = (0, _jestUtil().convertDescriptorToString)(title);
+
       try {
         const tests = isArrayTable(taggedTemplateData)
           ? buildArrayTests(title, table)

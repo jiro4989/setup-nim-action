@@ -34,13 +34,10 @@ const printReceivedStringContainExpectedSubstring = (
   length // not end
 ) =>
   (0, _jestMatcherUtils.RECEIVED_COLOR)(
-    '"' +
-      printSubstring(received.slice(0, start)) +
-      (0, _jestMatcherUtils.INVERTED_COLOR)(
-        printSubstring(received.slice(start, start + length))
-      ) +
-      printSubstring(received.slice(start + length)) +
-      '"'
+    `"${printSubstring(received.slice(0, start))}${(0,
+    _jestMatcherUtils.INVERTED_COLOR)(
+      printSubstring(received.slice(start, start + length))
+    )}${printSubstring(received.slice(start + length))}"`
   );
 
 exports.printReceivedStringContainExpectedSubstring =
@@ -62,16 +59,14 @@ exports.printReceivedStringContainExpectedResult =
 
 const printReceivedArrayContainExpectedItem = (received, index) =>
   (0, _jestMatcherUtils.RECEIVED_COLOR)(
-    '[' +
-      received
-        .map((item, i) => {
-          const stringified = (0, _jestMatcherUtils.stringify)(item);
-          return i === index
-            ? (0, _jestMatcherUtils.INVERTED_COLOR)(stringified)
-            : stringified;
-        })
-        .join(', ') +
-      ']'
+    `[${received
+      .map((item, i) => {
+        const stringified = (0, _jestMatcherUtils.stringify)(item);
+        return i === index
+          ? (0, _jestMatcherUtils.INVERTED_COLOR)(stringified)
+          : stringified;
+      })
+      .join(', ')}]`
   );
 
 exports.printReceivedArrayContainExpectedItem =
@@ -99,17 +94,17 @@ const printCloseTo = (receivedDiff, expectedDiff, precision, isNot) => {
 exports.printCloseTo = printCloseTo;
 
 const printExpectedConstructorName = (label, expected) =>
-  printConstructorName(label, expected, false, true) + '\n';
+  `${printConstructorName(label, expected, false, true)}\n`;
 
 exports.printExpectedConstructorName = printExpectedConstructorName;
 
 const printExpectedConstructorNameNot = (label, expected) =>
-  printConstructorName(label, expected, true, true) + '\n';
+  `${printConstructorName(label, expected, true, true)}\n`;
 
 exports.printExpectedConstructorNameNot = printExpectedConstructorNameNot;
 
 const printReceivedConstructorName = (label, received) =>
-  printConstructorName(label, received, false, false) + '\n'; // Do not call function if received is equal to expected.
+  `${printConstructorName(label, received, false, false)}\n`; // Do not call function if received is equal to expected.
 
 exports.printReceivedConstructorName = printReceivedConstructorName;
 
@@ -118,14 +113,12 @@ const printReceivedConstructorNameNot = (label, received, expected) =>
   expected.name.length !== 0 &&
   typeof received.name === 'string' &&
   received.name.length !== 0
-    ? printConstructorName(label, received, true, false) +
-      ` ${
+    ? `${printConstructorName(label, received, true, false)} ${
         Object.getPrototypeOf(received) === expected
           ? 'extends'
           : 'extends … extends'
-      } ${(0, _jestMatcherUtils.EXPECTED_COLOR)(expected.name)}` +
-      '\n'
-    : printConstructorName(label, received, false, false) + '\n';
+      } ${(0, _jestMatcherUtils.EXPECTED_COLOR)(expected.name)}\n`
+    : `${printConstructorName(label, received, false, false)}\n`;
 
 exports.printReceivedConstructorNameNot = printReceivedConstructorNameNot;
 

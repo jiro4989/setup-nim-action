@@ -55,24 +55,20 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {default: obj};
 }
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
-
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 const EMPTY_OBJ = {};
 const EMPTY_MAP = new Map();
 
 class ModuleMap {
+  static DuplicateHasteCandidatesError;
+  _raw;
+  json;
+
   static mapToArrayRecursive(map) {
     let arr = Array.from(map);
 
@@ -92,10 +88,6 @@ class ModuleMap {
   }
 
   constructor(raw) {
-    _defineProperty(this, '_raw', void 0);
-
-    _defineProperty(this, 'json', void 0);
-
     this._raw = raw;
   }
 
@@ -124,7 +116,7 @@ class ModuleMap {
 
   getMockModule(name) {
     const mockPath =
-      this._raw.mocks.get(name) || this._raw.mocks.get(name + '/index');
+      this._raw.mocks.get(name) || this._raw.mocks.get(`${name}/index`);
 
     return mockPath && fastPath.resolve(this._raw.rootDir, mockPath);
   }
@@ -247,9 +239,12 @@ class ModuleMap {
 
 exports.default = ModuleMap;
 
-_defineProperty(ModuleMap, 'DuplicateHasteCandidatesError', void 0);
-
 class DuplicateHasteCandidatesError extends Error {
+  hasteName;
+  platform;
+  supportsNativePlatform;
+  duplicatesSet;
+
   constructor(name, platform, supportsNativePlatform, duplicatesSet) {
     const platformMessage = getPlatformMessage(platform);
     super(
@@ -257,24 +252,16 @@ class DuplicateHasteCandidatesError extends Error {
         'cannot be resolved, because there exists several different ' +
         'files, or packages, that provide a module for ' +
         `that particular name and platform. ${platformMessage} You must ` +
-        'delete or exclude files until there remains only one of these:\n\n' +
-        Array.from(duplicatesSet)
+        `delete or exclude files until there remains only one of these:\n\n${Array.from(
+          duplicatesSet
+        )
           .map(
             ([dupFilePath, dupFileType]) =>
               `  * \`${dupFilePath}\` (${getTypeMessage(dupFileType)})\n`
           )
           .sort()
-          .join('')
+          .join('')}`
     );
-
-    _defineProperty(this, 'hasteName', void 0);
-
-    _defineProperty(this, 'platform', void 0);
-
-    _defineProperty(this, 'supportsNativePlatform', void 0);
-
-    _defineProperty(this, 'duplicatesSet', void 0);
-
     this.hasteName = name;
     this.platform = platform;
     this.supportsNativePlatform = supportsNativePlatform;

@@ -6,7 +6,7 @@ Object.defineProperty(exports, '__esModule', {
 exports.default = void 0;
 
 function _util() {
-  const data = _interopRequireDefault(require('util'));
+  const data = require('util');
 
   _util = function () {
     return data;
@@ -35,56 +35,33 @@ function _jestUtil() {
   return data;
 }
 
-function _interopRequireDefault(obj) {
-  return obj && obj.__esModule ? obj : {default: obj};
-}
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
-
+/* eslint-disable local/prefer-spread-eventually */
 const MS_IN_A_YEAR = 31536000000;
 
 class FakeTimers {
+  _cancelledTicks;
+  _config;
+  _disposed;
+  _fakeTimerAPIs;
+  _global;
+  _immediates;
+  _maxLoops;
+  _moduleMocker;
+  _now;
+  _ticks;
+  _timerAPIs;
+  _timers;
+  _uuidCounter;
+  _timerConfig;
+
   constructor({global, moduleMocker, timerConfig, config, maxLoops}) {
-    _defineProperty(this, '_cancelledTicks', void 0);
-
-    _defineProperty(this, '_config', void 0);
-
-    _defineProperty(this, '_disposed', void 0);
-
-    _defineProperty(this, '_fakeTimerAPIs', void 0);
-
-    _defineProperty(this, '_global', void 0);
-
-    _defineProperty(this, '_immediates', void 0);
-
-    _defineProperty(this, '_maxLoops', void 0);
-
-    _defineProperty(this, '_moduleMocker', void 0);
-
-    _defineProperty(this, '_now', void 0);
-
-    _defineProperty(this, '_ticks', void 0);
-
-    _defineProperty(this, '_timerAPIs', void 0);
-
-    _defineProperty(this, '_timers', void 0);
-
-    _defineProperty(this, '_uuidCounter', void 0);
-
-    _defineProperty(this, '_timerConfig', void 0);
-
     this._global = global;
     this._timerConfig = timerConfig;
     this._config = config;
@@ -138,7 +115,9 @@ class FakeTimers {
         break;
       }
 
-      if (!this._cancelledTicks.hasOwnProperty(tick.uuid)) {
+      if (
+        !Object.prototype.hasOwnProperty.call(this._cancelledTicks, tick.uuid)
+      ) {
         // Callback may throw, so update the map prior calling.
         this._cancelledTicks[tick.uuid] = true;
         tick.callback();
@@ -147,9 +126,7 @@ class FakeTimers {
 
     if (i === this._maxLoops) {
       throw new Error(
-        'Ran ' +
-          this._maxLoops +
-          ' ticks, and there are still more! ' +
+        `Ran ${this._maxLoops} ticks, and there are still more! ` +
           "Assuming we've hit an infinite recursion and bailing out..."
       );
     }
@@ -172,9 +149,7 @@ class FakeTimers {
 
     if (i === this._maxLoops) {
       throw new Error(
-        'Ran ' +
-          this._maxLoops +
-          ' immediates, and there are still more! Assuming ' +
+        `Ran ${this._maxLoops} immediates, and there are still more! Assuming ` +
           "we've hit an infinite recursion and bailing out..."
       );
     }
@@ -219,9 +194,7 @@ class FakeTimers {
 
     if (i === this._maxLoops) {
       throw new Error(
-        'Ran ' +
-          this._maxLoops +
-          ' timers, and there are still more! ' +
+        `Ran ${this._maxLoops} timers, and there are still more! ` +
           "Assuming we've hit an infinite recursion and bailing out..."
       );
     }
@@ -297,9 +270,7 @@ class FakeTimers {
 
     if (i === this._maxLoops) {
       throw new Error(
-        'Ran ' +
-          this._maxLoops +
-          ' timers, and there are still more! ' +
+        `Ran ${this._maxLoops} timers, and there are still more! ` +
           "Assuming we've hit an infinite recursion and bailing out..."
       );
     }
@@ -466,6 +437,7 @@ class FakeTimers {
   _checkFakeTimers() {
     var _this$_fakeTimerAPIs;
 
+    // @ts-expect-error: condition always returns 'true'
     if (
       this._global.setTimeout !==
       ((_this$_fakeTimerAPIs = this._fakeTimerAPIs) === null ||
@@ -474,37 +446,29 @@ class FakeTimers {
         : _this$_fakeTimerAPIs.setTimeout)
     ) {
       this._global.console.warn(
-        'A function to advance timers was called but the timers API is not ' +
-          'mocked with fake timers. Call `jest.useFakeTimers()` in this ' +
-          'test or enable fake timers globally by setting ' +
-          '`"timers": "fake"` in ' +
-          'the configuration file. This warning is likely a result of a ' +
-          'default configuration change in Jest 15.\n\n' +
-          'Release Blog Post: https://jestjs.io/blog/2016/09/01/jest-15\n' +
-          'Stack Trace:\n' +
-          (0, _jestMessageUtil().formatStackTrace)(
+        'A function to advance timers was called but the timers APIs are not mocked ' +
+          'with fake timers. Call `jest.useFakeTimers({legacyFakeTimers: true})` ' +
+          'in this test file or enable fake timers for all tests by setting ' +
+          "{'enableGlobally': true, 'legacyFakeTimers': true} in " +
+          `Jest configuration file.\nStack Trace:\n${(0,
+          _jestMessageUtil().formatStackTrace)(
             new Error().stack,
             this._config,
             {
               noStackTrace: false
             }
-          )
+          )}`
       );
     }
   }
 
   _createMocks() {
-    const fn = (
-      impl // @ts-expect-error TODO: figure out better typings here
-    ) => this._moduleMocker.fn().mockImplementation(impl);
+    const fn = implementation => this._moduleMocker.fn(implementation);
 
-    const promisifiableFakeSetTimeout = fn(this._fakeSetTimeout.bind(this)); // @ts-expect-error TODO: figure out better typings here
+    const promisifiableFakeSetTimeout = fn(this._fakeSetTimeout.bind(this)); // @ts-expect-error: no index
 
-    promisifiableFakeSetTimeout[_util().default.promisify.custom] = (
-      delay,
-      arg
-    ) =>
-      new Promise(resolve => promisifiableFakeSetTimeout(resolve, delay, arg)); // TODO: add better typings; these are mocks, but typed as regular timers
+    promisifiableFakeSetTimeout[_util().promisify.custom] = (delay, arg) =>
+      new Promise(resolve => promisifiableFakeSetTimeout(resolve, delay, arg));
 
     this._fakeTimerAPIs = {
       cancelAnimationFrame: fn(this._fakeClearTimer.bind(this)),
@@ -512,13 +476,9 @@ class FakeTimers {
       clearInterval: fn(this._fakeClearTimer.bind(this)),
       clearTimeout: fn(this._fakeClearTimer.bind(this)),
       nextTick: fn(this._fakeNextTick.bind(this)),
-      // @ts-expect-error TODO: figure out better typings here
       requestAnimationFrame: fn(this._fakeRequestAnimationFrame.bind(this)),
-      // @ts-expect-error TODO: figure out better typings here
       setImmediate: fn(this._fakeSetImmediate.bind(this)),
-      // @ts-expect-error TODO: figure out better typings here
       setInterval: fn(this._fakeSetInterval.bind(this)),
-      // @ts-expect-error TODO: figure out better typings here
       setTimeout: promisifiableFakeSetTimeout
     };
   }
@@ -552,7 +512,7 @@ class FakeTimers {
     const cancelledTicks = this._cancelledTicks;
 
     this._timerAPIs.nextTick(() => {
-      if (!cancelledTicks.hasOwnProperty(uuid)) {
+      if (!Object.prototype.hasOwnProperty.call(cancelledTicks, uuid)) {
         // Callback may throw, so update the map prior calling.
         cancelledTicks[uuid] = true;
         callback.apply(null, args);
@@ -665,7 +625,7 @@ class FakeTimers {
         break;
 
       default:
-        throw new Error('Unexpected timer type: ' + timer.type);
+        throw new Error(`Unexpected timer type: ${timer.type}`);
     }
   }
 }

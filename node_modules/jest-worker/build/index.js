@@ -33,6 +33,16 @@ function _os() {
   return data;
 }
 
+function _path() {
+  const data = require('path');
+
+  _path = function () {
+    return data;
+  };
+
+  return data;
+}
+
 var _Farm = _interopRequireDefault(require('./Farm'));
 
 var _WorkerPool = _interopRequireDefault(require('./WorkerPool'));
@@ -47,20 +57,12 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {default: obj};
 }
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
-
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 function getExposedMethods(workerPath, options) {
   let exposedMethods = options.exposedMethods; // If no methods list is given, try getting it by auto-requiring the module.
 
@@ -68,7 +70,6 @@ function getExposedMethods(workerPath, options) {
     const module = require(workerPath);
 
     exposedMethods = Object.keys(module).filter(
-      // @ts-expect-error: no index
       name => typeof module[name] === 'function'
     );
 
@@ -106,6 +107,11 @@ function getExposedMethods(workerPath, options) {
  */
 
 class Worker {
+  _ending;
+  _farm;
+  _options;
+  _workerPool;
+
   constructor(workerPath, options) {
     var _this$_options$enable,
       _this$_options$forkOp,
@@ -114,16 +120,13 @@ class Worker {
       _this$_options$resour,
       _this$_options$setupA;
 
-    _defineProperty(this, '_ending', void 0);
-
-    _defineProperty(this, '_farm', void 0);
-
-    _defineProperty(this, '_options', void 0);
-
-    _defineProperty(this, '_workerPool', void 0);
-
     this._options = {...options};
     this._ending = false;
+
+    if (!(0, _path().isAbsolute)(workerPath)) {
+      throw new Error(`'workerPath' must be absolute, got '${workerPath}'`);
+    }
+
     const workerPoolOptions = {
       enableWorkerThreads:
         (_this$_options$enable = this._options.enableWorkerThreads) !== null &&
@@ -158,7 +161,6 @@ class Worker {
     };
 
     if (this._options.WorkerPool) {
-      // @ts-expect-error: constructor target any?
       this._workerPool = new this._options.WorkerPool(
         workerPath,
         workerPoolOptions
@@ -184,10 +186,10 @@ class Worker {
     getExposedMethods(workerPath, options).forEach(name => {
       if (name.startsWith('_')) {
         return;
-      }
+      } // eslint-disable-next-line no-prototype-builtins
 
       if (this.constructor.prototype.hasOwnProperty(name)) {
-        throw new TypeError('Cannot define a method called ' + name);
+        throw new TypeError(`Cannot define a method called ${name}`);
       } // @ts-expect-error: dynamic extension of the class instance is expected.
 
       this[name] = this._callFunctionWithArgs.bind(this, name);

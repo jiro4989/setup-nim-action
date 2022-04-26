@@ -5,16 +5,6 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.default = void 0;
 
-function path() {
-  const data = _interopRequireWildcard(require('path'));
-
-  path = function () {
-    return data;
-  };
-
-  return data;
-}
-
 function _stream() {
   const data = require('stream');
 
@@ -51,88 +41,27 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {default: obj};
 }
 
-function _getRequireWildcardCache(nodeInterop) {
-  if (typeof WeakMap !== 'function') return null;
-  var cacheBabelInterop = new WeakMap();
-  var cacheNodeInterop = new WeakMap();
-  return (_getRequireWildcardCache = function (nodeInterop) {
-    return nodeInterop ? cacheNodeInterop : cacheBabelInterop;
-  })(nodeInterop);
-}
-
-function _interopRequireWildcard(obj, nodeInterop) {
-  if (!nodeInterop && obj && obj.__esModule) {
-    return obj;
-  }
-  if (obj === null || (typeof obj !== 'object' && typeof obj !== 'function')) {
-    return {default: obj};
-  }
-  var cache = _getRequireWildcardCache(nodeInterop);
-  if (cache && cache.has(obj)) {
-    return cache.get(obj);
-  }
-  var newObj = {};
-  var hasPropertyDescriptor =
-    Object.defineProperty && Object.getOwnPropertyDescriptor;
-  for (var key in obj) {
-    if (key !== 'default' && Object.prototype.hasOwnProperty.call(obj, key)) {
-      var desc = hasPropertyDescriptor
-        ? Object.getOwnPropertyDescriptor(obj, key)
-        : null;
-      if (desc && (desc.get || desc.set)) {
-        Object.defineProperty(newObj, key, desc);
-      } else {
-        newObj[key] = obj[key];
-      }
-    }
-  }
-  newObj.default = obj;
-  if (cache) {
-    cache.set(obj, newObj);
-  }
-  return newObj;
-}
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
-
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 class ExperimentalWorker {
+  _worker;
+  _options;
+  _request;
+  _retries;
+  _onProcessEnd;
+  _onCustomMessage;
+  _fakeStream;
+  _stdout;
+  _stderr;
+  _exitPromise;
+  _resolveExitPromise;
+  _forceExited;
+
   constructor(options) {
-    _defineProperty(this, '_worker', void 0);
-
-    _defineProperty(this, '_options', void 0);
-
-    _defineProperty(this, '_request', void 0);
-
-    _defineProperty(this, '_retries', void 0);
-
-    _defineProperty(this, '_onProcessEnd', void 0);
-
-    _defineProperty(this, '_onCustomMessage', void 0);
-
-    _defineProperty(this, '_fakeStream', void 0);
-
-    _defineProperty(this, '_stdout', void 0);
-
-    _defineProperty(this, '_stderr', void 0);
-
-    _defineProperty(this, '_exitPromise', void 0);
-
-    _defineProperty(this, '_resolveExitPromise', void 0);
-
-    _defineProperty(this, '_forceExited', void 0);
-
     this._options = options;
     this._request = null;
     this._fakeStream = null;
@@ -147,10 +76,9 @@ class ExperimentalWorker {
 
   initialize() {
     this._worker = new (_worker_threads().Worker)(
-      path().resolve(__dirname, './threadChild.js'),
+      require.resolve('./threadChild'),
       {
         eval: false,
-        // @ts-expect-error: added in newer versions
         resourceLimits: this._options.resourceLimits,
         stderr: true,
         stdout: true,
@@ -236,7 +164,7 @@ class ExperimentalWorker {
         if (error != null && typeof error === 'object') {
           const extra = error; // @ts-expect-error: no index
 
-          const NativeCtor = global[response[1]];
+          const NativeCtor = globalThis[response[1]];
           const Ctor = typeof NativeCtor === 'function' ? NativeCtor : Error;
           error = new Ctor(response[2]);
           error.type = response[1];
@@ -253,7 +181,7 @@ class ExperimentalWorker {
         break;
 
       case _types.PARENT_MESSAGE_SETUP_ERROR:
-        error = new Error('Error when calling setup: ' + response[2]); // @ts-expect-error: adding custom properties to errors.
+        error = new Error(`Error when calling setup: ${response[2]}`); // @ts-expect-error: adding custom properties to errors.
 
         error.type = response[1];
         error.stack = response[3];
@@ -268,7 +196,7 @@ class ExperimentalWorker {
         break;
 
       default:
-        throw new TypeError('Unexpected response from worker: ' + response[0]);
+        throw new TypeError(`Unexpected response from worker: ${response[0]}`);
     }
   }
 

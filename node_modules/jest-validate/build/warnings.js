@@ -32,14 +32,13 @@ const unknownOptionWarning = (config, exampleConfig, option, options, path) => {
     option,
     Object.keys(exampleConfig)
   );
-  const message =
-    `  Unknown option ${_chalk().default.bold(
-      `"${path && path.length > 0 ? path.join('.') + '.' : ''}${option}"`
-    )} with value ${_chalk().default.bold(
-      (0, _utils.format)(config[option])
-    )} was found.` +
-    (didYouMean && ` ${didYouMean}`) +
-    '\n  This is probably a typing mistake. Fixing it will remove this message.';
+  const message = `  Unknown option ${_chalk().default.bold(
+    `"${path && path.length > 0 ? `${path.join('.')}.` : ''}${option}"`
+  )} with value ${_chalk().default.bold(
+    (0, _utils.format)(config[option])
+  )} was found.${
+    didYouMean && ` ${didYouMean}`
+  }\n  This is probably a typing mistake. Fixing it will remove this message.`;
   const comment = options.comment;
   const name = (options.title && options.title.warning) || _utils.WARNING;
   (0, _utils.logValidationWarning)(name, message, comment);

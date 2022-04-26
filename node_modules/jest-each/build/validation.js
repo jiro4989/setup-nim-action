@@ -82,16 +82,15 @@ const isEmptyTable = table => table.length === 0;
 const isEmptyString = str => typeof str === 'string' && str.trim() === '';
 
 const validateTemplateTableArguments = (headings, data) => {
-  const missingData = data.length % headings.length;
+  const incompleteData = data.length % headings.length;
+  const missingData = headings.length - incompleteData;
 
-  if (missingData > 0) {
+  if (incompleteData > 0) {
     throw new Error(
-      'Not enough arguments supplied for given headings:\n' +
-        EXPECTED_COLOR(headings.join(' | ')) +
-        '\n\n' +
-        'Received:\n' +
-        RECEIVED_COLOR((0, _prettyFormat().format)(data)) +
-        '\n\n' +
+      `Not enough arguments supplied for given headings:\n${EXPECTED_COLOR(
+        headings.join(' | ')
+      )}\n\n` +
+        `Received:\n${RECEIVED_COLOR((0, _prettyFormat().format)(data))}\n\n` +
         `Missing ${RECEIVED_COLOR(missingData.toString())} ${pluralize(
           'argument',
           missingData
@@ -119,11 +118,11 @@ const extractValidTemplateHeadings = headings => {
 
   if (matches === null) {
     throw new Error(
-      'Table headings do not conform to expected format:\n\n' +
-        EXPECTED_COLOR('heading1 | headingN') +
-        '\n\n' +
-        'Received:\n\n' +
-        RECEIVED_COLOR((0, _prettyFormat().format)(headings))
+      `Table headings do not conform to expected format:\n\n${EXPECTED_COLOR(
+        'heading1 | headingN'
+      )}\n\nReceived:\n\n${RECEIVED_COLOR(
+        (0, _prettyFormat().format)(headings)
+      )}`
     );
   }
 

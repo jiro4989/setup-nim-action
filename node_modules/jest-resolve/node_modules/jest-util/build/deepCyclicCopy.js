@@ -21,7 +21,7 @@ function deepCyclicCopy(
   },
   cycles = new WeakMap()
 ) {
-  if (typeof value !== 'object' || value === null) {
+  if (typeof value !== 'object' || value === null || Buffer.isBuffer(value)) {
     return value;
   } else if (cycles.has(value)) {
     return cycles.get(value);

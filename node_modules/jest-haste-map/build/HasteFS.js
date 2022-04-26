@@ -65,26 +65,17 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {default: obj};
 }
 
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-  return obj;
-}
-
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
 class HasteFS {
+  _rootDir;
+  _files;
+
   constructor({rootDir, files}) {
-    _defineProperty(this, '_rootDir', void 0);
-
-    _defineProperty(this, '_files', void 0);
-
     this._rootDir = rootDir;
     this._files = files;
   }

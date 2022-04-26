@@ -5,6 +5,16 @@ Object.defineProperty(exports, '__esModule', {
 });
 exports.default = getCallsite;
 
+function _traceMapping() {
+  const data = require('@jridgewell/trace-mapping');
+
+  _traceMapping = function () {
+    return data;
+  };
+
+  return data;
+}
+
 function _callsites() {
   const data = _interopRequireDefault(require('callsites'));
 
@@ -25,16 +35,6 @@ function _gracefulFs() {
   return data;
 }
 
-function _sourceMap() {
-  const data = require('source-map');
-
-  _sourceMap = function () {
-    return data;
-  };
-
-  return data;
-}
-
 function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {default: obj};
 }
@@ -46,14 +46,14 @@ function _interopRequireDefault(obj) {
  * LICENSE file in the root directory of this source tree.
  */
 // Copied from https://github.com/rexxars/sourcemap-decorate-callsites/blob/5b9735a156964973a75dc62fd2c7f0c1975458e8/lib/index.js#L113-L158
-const addSourceMapConsumer = (callsite, consumer) => {
+const addSourceMapConsumer = (callsite, tracer) => {
   const getLineNumber = callsite.getLineNumber;
   const getColumnNumber = callsite.getColumnNumber;
   let position = null;
 
   function getPosition() {
     if (!position) {
-      position = consumer.originalPositionFor({
+      position = (0, _traceMapping().originalPositionFor)(tracer, {
         column: getColumnNumber.call(callsite) || -1,
         line: getLineNumber.call(callsite) || -1
       });
@@ -93,12 +93,8 @@ function getCallsite(level, sourceMaps) {
       const sourceMap = (0, _gracefulFs().readFileSync)(
         sourceMapFileName,
         'utf8'
-      ); // @ts-expect-error: Not allowed to pass string
-
-      addSourceMapConsumer(
-        stack,
-        new (_sourceMap().SourceMapConsumer)(sourceMap)
       );
+      addSourceMapConsumer(stack, new (_traceMapping().TraceMap)(sourceMap));
     } catch {
       // ignore
     }

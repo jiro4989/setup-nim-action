@@ -86,7 +86,7 @@ const install = (g, table, ...data) => {
   };
 };
 
-const each = (table, ...data) => install(global, table, ...data);
+const each = (table, ...data) => install(globalThis, table, ...data);
 
 each.withGlobal =
   g =>

@@ -45,7 +45,7 @@ const errorMessage = (option, received, defaultValue, options, path) => {
     new Set(conditions.map(_jestGetType().getType))
   );
   const message = `  Option ${_chalk().default.bold(
-    `"${path && path.length > 0 ? path.join('.') + '.' : ''}${option}"`
+    `"${path && path.length > 0 ? `${path.join('.')}.` : ''}${option}"`
   )} must be of type:
     ${validTypes.map(e => _chalk().default.bold.green(e)).join(' or ')}
   but instead received:
