@@ -3,7 +3,8 @@
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
-exports.remove = exports.print = void 0;
+exports.print = print;
+exports.remove = remove;
 
 function _chalk() {
   const data = _interopRequireDefault(require('chalk'));
@@ -29,20 +30,16 @@ function _interopRequireDefault(obj) {
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
-const print = stream => {
+function print(stream) {
   if (_isInteractive.default) {
     stream.write(
       _chalk().default.bold.dim('Determining test suites to run...')
     );
   }
-};
+}
 
-exports.print = print;
-
-const remove = stream => {
+function remove(stream) {
   if (_isInteractive.default) {
     (0, _clearLine.default)(stream);
   }
-};
-
-exports.remove = remove;
+}
