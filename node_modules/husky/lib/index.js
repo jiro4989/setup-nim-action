@@ -7,10 +7,14 @@ const p = require("path");
 const l = (msg) => console.log(`husky - ${msg}`);
 const git = (args) => cp.spawnSync('git', args, { stdio: 'inherit' });
 function install(dir = '.husky') {
+    if (process.env.HUSKY === '0') {
+        l('HUSKY env variable is set to 0, skipping install');
+        return;
+    }
     if (git(['rev-parse']).status !== 0) {
         return;
     }
-    const url = 'https://git.io/Jc3F9';
+    const url = 'https://typicode.github.io/husky/#/?id=custom-directory';
     if (!p.resolve(process.cwd(), dir).startsWith(process.cwd())) {
         throw new Error(`.. not allowed (see ${url})`);
     }
@@ -38,8 +42,8 @@ function set(file, cmd) {
     if (!fs.existsSync(dir)) {
         throw new Error(`can't create hook, ${dir} directory doesn't exist (try running husky install)`);
     }
-    fs.writeFileSync(file, `#!/bin/sh
-. "$(dirname "$0")/_/husky.sh"
+    fs.writeFileSync(file, `#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
 
 ${cmd}
 `, { mode: 0o0755 });

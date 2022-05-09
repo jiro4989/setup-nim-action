@@ -25,6 +25,6 @@ try {
     cmds[cmd] ? cmds[cmd]() : help(0);
 }
 catch (e) {
-    console.error(e.message);
+    console.error(e instanceof Error ? `husky - ${e.message}` : e);
     process.exit(1);
 }
