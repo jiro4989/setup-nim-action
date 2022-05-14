@@ -13,7 +13,7 @@ async function run() {
     if (version) {
       await installer.getNim(version, noColor, yes)
     }
-  } catch (error) {
+  } catch (error: any) {
     core.setFailed(error.message)
   }
 }
