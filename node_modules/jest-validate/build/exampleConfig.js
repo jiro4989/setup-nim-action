@@ -18,6 +18,7 @@ const config = {
   deprecatedConfig: {
     key: () => 'Deprecation message'
   },
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   error: () => {},
   exampleConfig: {
     key: 'value',
@@ -30,6 +31,7 @@ const config = {
     error: 'Validation Error',
     warning: 'Validation Warning'
   },
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   unknown: () => {}
 };
 var _default = config;
