@@ -35,7 +35,7 @@ const hasUnmatchedDoubleQuoteMarks = string => {
   return n % 2 !== 0;
 };
 
-const isFirstLineOfTag = line => /^( {2})*\</.test(line); // The length of the output array is the index of the next input line.
+const isFirstLineOfTag = line => /^( {2})*</.test(line); // The length of the output array is the index of the next input line.
 // Push dedented lines of start tag onto output and return true;
 // otherwise return false because:
 // * props include a multiline string (or text node, if props have markup)

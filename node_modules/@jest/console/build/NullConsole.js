@@ -11,6 +11,8 @@ function _interopRequireDefault(obj) {
   return obj && obj.__esModule ? obj : {default: obj};
 }
 
+/* eslint-disable @typescript-eslint/no-empty-function */
+
 /**
  * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
  *

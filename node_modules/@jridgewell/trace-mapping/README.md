@@ -17,11 +17,17 @@ npm install @jridgewell/trace-mapping
 ## Usage
 
 ```typescript
-import { TraceMap, originalPositionFor, generatedPositionFor } from '@jridgewell/trace-mapping';
+import {
+  TraceMap,
+  originalPositionFor,
+  generatedPositionFor,
+  sourceContentFor,
+} from '@jridgewell/trace-mapping';
 
 const tracer = new TraceMap({
   version: 3,
   sources: ['input.js'],
+  sourcesContent: ['content of input.js'],
   names: ['foo'],
   mappings: 'KAyCIA',
 });
@@ -34,6 +40,9 @@ assert.deepEqual(traced, {
   column: 4,
   name: 'foo',
 });
+
+const content = sourceContentFor(tracer, traced.source);
+assert.strictEqual(content, 'content for input.js');
 
 const generated = generatedPositionFor(tracer, {
   source: 'input.js',

@@ -36,6 +36,10 @@ export declare let generatedPositionFor: (map: TraceMap, needle: SourceNeedle) =
  */
 export declare let eachMapping: (map: TraceMap, cb: (mapping: EachMapping) => void) => void;
 /**
+ * Retrieves the source content for a particular source, if its found. Returns null if not.
+ */
+export declare let sourceContentFor: (map: TraceMap, source: string) => string | null;
+/**
  * A helper that skips sorting of the input map's mappings array, which can be expensive for larger
  * maps.
  */
