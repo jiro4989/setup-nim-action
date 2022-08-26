@@ -1,0 +1,10 @@
+import type { Tester } from './types';
+export declare type EqualsFunction = (a: unknown, b: unknown, customTesters?: Array<Tester>, strictCheck?: boolean) => boolean;
+export declare const equals: EqualsFunction;
+export declare function isA(typeName: string, value: unknown): boolean;
+export declare function isImmutableUnorderedKeyed(maybeKeyed: any): boolean;
+export declare function isImmutableUnorderedSet(maybeSet: any): boolean;
+export declare function isImmutableList(maybeList: any): boolean;
+export declare function isImmutableOrderedKeyed(maybeKeyed: any): boolean;
+export declare function isImmutableOrderedSet(maybeSet: any): boolean;
+export declare function isImmutableRecord(maybeSet: any): boolean;
