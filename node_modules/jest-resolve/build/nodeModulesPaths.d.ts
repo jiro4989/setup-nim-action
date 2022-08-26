@@ -1,0 +1,14 @@
+/**
+ * Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ *
+ * Adapted from: https://github.com/substack/node-resolve
+ */
+declare type NodeModulesPathsOptions = {
+    moduleDirectory?: Array<string>;
+    paths?: Array<string>;
+};
+export default function nodeModulesPaths(basedir: string, options: NodeModulesPathsOptions): Array<string>;
+export {};
