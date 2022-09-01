@@ -1,6 +1,6 @@
 import * as path from 'path'
 const request = require('request-promise')
-import compareVersions from 'compare-versions'
+import { compareVersions } from 'compare-versions'
 
 const patchVersionPattern = /^\d+\.\d+\.x$/
 export function isGlobPatchVersion(version: string): boolean {
