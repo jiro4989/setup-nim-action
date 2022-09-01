@@ -2,42 +2,29 @@ import * as util from '../src/util'
 import * as path from 'path'
 
 describe('function isGlobPatchVersion', () => {
-  test('ok: 1.2.x', () => {
-    expect(util.isGlobPatchVersion('1.2.x')).toBe(true)
-  })
-
-  test('ok: 1.99.x', () => {
-    expect(util.isGlobPatchVersion('1.99.x')).toBe(true)
-  })
-
-  test('ng: 1.2.3', () => {
-    expect(util.isGlobPatchVersion('1.2.3')).toBe(false)
-  })
-
-  test('ng: 1.x', () => {
-    expect(util.isGlobPatchVersion('1.x')).toBe(false)
-  })
-
-  test('ng: 寿司', () => {
-    expect(util.isGlobPatchVersion('寿司')).toBe(false)
+  type TestPattern = [string, string, boolean]
+  const tests: TestPattern[] = [
+    ['ok', '1.2.x', true],
+    ['ok', '1.99.x', true],
+    ['ng', '1.2.3', false],
+    ['ng', '1.x', false],
+    ['ng', '寿司', false],
+  ]
+  test.each(tests)('%s: %s = %s', (prefix, version, want) => {
+    expect(util.isGlobPatchVersion(version)).toBe(want)
   })
 })
 
 describe('function isGlobMinorVersion', () => {
-  test('ok: 1.x', () => {
-    expect(util.isGlobMinorVersion('1.x')).toBe(true)
-  })
-
-  test('ok: 99.x', () => {
-    expect(util.isGlobMinorVersion('99.x')).toBe(true)
-  })
-
-  test('ng: 1.2', () => {
-    expect(util.isGlobMinorVersion('1.2')).toBe(false)
-  })
-
-  test('ng: 寿司', () => {
-    expect(util.isGlobMinorVersion('寿司')).toBe(false)
+  type TestPattern = [string, string, boolean]
+  const tests: TestPattern[] = [
+    ['ok', '1.x', true],
+    ['ok', '99.x', true],
+    ['ng', '1.2', false],
+    ['ng', '寿司', false],
+  ]
+  test.each(tests)('%s: %s = %s', (prefix, version, want) => {
+    expect(util.isGlobMinorVersion(version)).toBe(want)
   })
 })
 
@@ -50,123 +37,135 @@ describe('function fetchTagList', () => {
 })
 
 describe('function getLatestVersionWithTags', () => {
-  test('ok: returns a matched latest patch version from 5 versions', () => {
-    const want = '1.2.3'
-    const got = util.getLatestVersionWithTags('1.2.x', [
-      'v1.0.3',
-      'v1.2.1',
-      'v1.2.2',
-      'v1.2.3',
-      'v1.20.3',
-    ])
-    expect(got).toBe(want)
-  })
-
-  test('ok: returns a matched latest patch version from 1 version', () => {
-    const want = '1.2.3'
-    const got = util.getLatestVersionWithTags('1.2.x', ['v1.2.3'])
-    expect(got).toBe(want)
-  })
-
-  test('ok: returns a matched latest minor version from 5 versions', () => {
-    const want = '1.10.0'
-    const got = util.getLatestVersionWithTags('1.x', [
-      'v1.1.1',
-      'v1.2.2',
-      'v1.3.3',
-      'v1.4.4-beta',
-      'v1.10.0',
-    ])
-    expect(got).toBe(want)
-  })
-
-  test('ok: returns a matched latest minor version from 1 version', () => {
-    const want = '1.9.0'
-    const got = util.getLatestVersionWithTags('1.x', ['v1.9.0'])
-    expect(got).toBe(want)
-  })
-
-  test('ok: returns a matched latest special patch version (-beta)', () => {
-    const want = '1.2.5-beta'
-    const got = util.getLatestVersionWithTags('1.2.x', [
-      'v1.2.1',
-      'v1.2.2',
-      'v1.2.3-rc1',
-      'v1.2.4',
-      'v1.2.5-beta',
-    ])
-    expect(got).toBe(want)
-  })
-
-  test("ok: returns a empty string when a version doesn't match", () => {
-    const want = ''
-    const got = util.getLatestVersionWithTags('1.2.x', [
-      'v1.0.0',
-      'v1.1.0',
-      'v1.3.0',
-      'v1.3.x',
-    ])
-    expect(got).toBe(want)
-  })
-
-  test("ok: returns a empty string when a version doesn't match (minor)", () => {
-    const want = ''
-    const got = util.getLatestVersionWithTags('1.x', [
-      'v1.a',
-      'vtuber',
-      'v',
-      'vvvv',
-      'v1',
+  type TestPattern = [string, string, string[], string]
+  const tests: TestPattern[] = [
+    [
+      'ok: returns a matched latest patch version from 5 versions',
+      '1.2.x',
+      [
+        'v1.0.3',
+        'v1.2.1',
+        'v1.2.2',
+        'v1.2.3',
+        'v1.20.3',
+      ],
+      '1.2.3',
+    ],
+    [
+      'ok: returns a matched latest patch version from 1 version',
+      '1.2.x',
+      [
+        'v1.2.3',
+      ],
+      '1.2.3',
+    ],
+    [
+      'ok: returns a matched latest minor version from 5 versions',
+      '1.x',
+      [
+        'v1.1.1',
+        'v1.2.2',
+        'v1.3.3',
+        'v1.4.4-beta',
+        'v1.10.0',
+      ],
+      '1.10.0',
+    ],
+    [
+      'ok: returns a matched latest minor version from 1 version',
+      '1.x',
+      [
+        'v1.9.0',
+      ],
+      '1.9.0',
+    ],
+    [
+      'ok: returns a matched latest special patch version (-beta)',
+      '1.2.x',
+      [
+        'v1.2.1',
+        'v1.2.2',
+        'v1.2.3-rc1',
+        'v1.2.4',
+        'v1.2.5-beta',
+      ],
+      '1.2.5-beta',
+    ],
+    [
+      "ok: returns a empty string when a version doesn't match",
+      '1.2.x',
+      [
+        'v1.0.0',
+        'v1.1.0',
+        'v1.3.0',
+        'v1.3.x',
+      ],
+      '',
+    ],
+    [
+      "ok: returns a empty string when a version doesn't match (minor)",
+      '1.x',
+      [
+        'v1.a',
+        'vtuber',
+        'v',
+        'vvvv',
+        'v1',
+        '寿司',
+      ],
+      '',
+    ],
+    [
+      "ok: returns a empty string when a version doesn't match (patch)",
+      '1.2.x',
+      [
+        'v1.a',
+        'vtuber',
+        'v',
+        'vvvv',
+        'v1',
+      ],
+      '',
+    ],
+    [
+      "ng: returns a empty string when the first argument is illagal",
+      '1.2.9',
+      [
+        'v1.2.1',
+        'v1.2.2',
+        'v1.2.3',
+      ],
+      '',
+    ],
+    [
+      "ng: returns a empty string when the first argument is illagal",
       '寿司',
-    ])
-    expect(got).toBe(want)
-  })
-
-  test("ok: returns a empty string when a version doesn't match (patch)", () => {
-    const want = ''
-    const got = util.getLatestVersionWithTags('1.2.x', [
-      'v1.a',
-      'vtuber',
-      'v',
-      'vvvv',
-      'v1',
-    ])
-    expect(got).toBe(want)
-  })
-
-  test('ng: returns a empty string when the first argument is illagal', () => {
-    const want = ''
-    const got = util.getLatestVersionWithTags('1.2.9', [
-      'v1.2.1',
-      'v1.2.2',
-      'v1.2.3',
-    ])
-    expect(got).toBe(want)
-  })
-
-  test('ng: returns a empty string when the first argument is illagal', () => {
-    const want = ''
-    const got = util.getLatestVersionWithTags('寿司', [
-      'v1.2.1',
-      'v1.2.2',
-      'v1.2.3',
-    ])
-    expect(got).toBe(want)
-  })
-
-  test('ng: returns a empty string when the first argument is a empty string', () => {
-    const want = ''
-    const got = util.getLatestVersionWithTags('', [
-      'v1.2.1',
-      'v1.2.2',
-      'v1.2.3',
-    ])
-    expect(got).toBe(want)
-  })
-
-  test('ng: returns a version of the first argument when the second argument length is 0', () => {
-    const want = '1.2.x'
-    const got = util.getLatestVersionWithTags('1.2.x', [])
+      [
+        'v1.2.1',
+        'v1.2.2',
+        'v1.2.3',
+      ],
+      '',
+    ],
+    [
+      "ng: returns a empty string when the first argument is a empty string",
+      '',
+      [
+        'v1.2.1',
+        'v1.2.2',
+        'v1.2.3',
+      ],
+      '',
+    ],
+    [
+      "ng: returns a version of the first argument when the second argument length is 0",
+      '1.2.x',
+      [],
+      '1.2.x',
+    ],
+  ]
+  test.each(tests)('%s', (_, pattern, versions, want) => {
+    const got = util.getLatestVersionWithTags(pattern, versions)
     expect(got).toBe(want)
   })
 
