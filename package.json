@@ -24,7 +24,7 @@
   "license": "MIT",
   "dependencies": {
     "@actions/core": "^1.9.1",
-    "@babel/parser": "^7.18.13",
+    "@babel/parser": "^7.19.0",
     "child_process": "^1.0.2",
     "compare-versions": "^5.0.1",
     "fs": "0.0.1-security",
