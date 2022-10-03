@@ -23,7 +23,7 @@
   "author": "GitHub",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.9.1",
+    "@actions/core": "^1.10.0",
     "@babel/parser": "^7.19.3",
     "child_process": "^1.0.2",
     "compare-versions": "^5.0.1",
