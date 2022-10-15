@@ -34,7 +34,7 @@
     "request": "^2.88.2",
     "request-promise": "^4.2.6",
     "requests": "^0.3.0",
-    "semver": "^7.3.7",
+    "semver": "^7.3.8",
     "tunnel": "^0.0.6"
   },
   "devDependencies": {
