@@ -81,13 +81,23 @@ steps:
 
 ### Matrix testing usage
 
+If you want to support multiple Nim versions or multiple platforms, `strategy.matrix` is useful.
+
+e.g. Tests multiple Nim versions:
+
 ```yaml
 jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        nim: [ '1.2.0', 'stable', 'devel' ]
+        nim:
+          - '1.2.0'
+          - '1.2.x'
+          - '1.4.x'
+          - '1.6.x'
+          - 'stable'
+          - 'devel'
     name: Nim ${{ matrix.nim }} sample
     steps:
       - uses: actions/checkout@v3
@@ -95,7 +105,58 @@ jobs:
         uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: ${{ matrix.nim }}
-      - run: nimble build
+      - run: nimble build -Y
+      - run: nimble test -Y
+```
+
+e.g. Tests multiple platforms:
+
+```yaml
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macOS-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup nim
+        uses: jiro4989/setup-nim-action@v1
+      - run: nimble build -Y
+      - run: nimble test -Y
+```
+
+e.g. Tests multiple Nim versions and platforms:
+
+```yaml
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        nim:
+          - '1.2.0'
+          - '1.2.x'
+          - '1.4.x'
+          - '1.6.x'
+          - 'stable'
+          - 'devel'
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macOS-latest
+    name: Nim ${{ matrix.nim }} sample
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup nim
+        uses: jiro4989/setup-nim-action@v1
+        with:
+          nim-version: ${{ matrix.nim }}
+      - run: nimble build -Y
+      - run: nimble test -Y
 ```
 
 ### `devel` usage
