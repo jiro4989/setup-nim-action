@@ -131,6 +131,9 @@ jobs:
 
 e.g. Tests multiple Nim versions and platforms:
 
+WARNING: Depending on matrix count, the number of test jobs may be very large.
+It is recommend to keep the small matrix count.
+
 ```yaml
 jobs:
   build:
@@ -138,12 +141,9 @@ jobs:
     strategy:
       matrix:
         nim:
-          - '1.2.0'
-          - '1.2.x'
           - '1.4.x'
           - '1.6.x'
           - 'stable'
-          - 'devel'
         os:
           - ubuntu-latest
           - windows-latest
