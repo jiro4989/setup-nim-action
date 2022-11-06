@@ -14,7 +14,6 @@ jobs:
           - windows-latest
           - macOS-latest
         version:
-          - 1.0.0
           - stable
           - devel
         exclude:
