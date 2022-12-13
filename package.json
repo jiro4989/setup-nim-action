@@ -42,7 +42,7 @@
     "@actions/tool-cache": "^2.0.1",
     "@types/jest": "^27.5.0",
     "@types/nock": "^11.1.0",
-    "@types/node": "^18.11.12",
+    "@types/node": "^18.11.14",
     "@types/semver": "^7.3.13",
     "ansi-regex": "^6.0.1",
     "husky": "^8.0.2",
