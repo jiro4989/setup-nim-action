@@ -15,7 +15,6 @@ jobs:
           - macOS-latest
         version:
           - stable
-          - devel
         exclude:
           - os: macOS-latest
             version: devel

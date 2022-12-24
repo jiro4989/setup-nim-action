@@ -37,6 +37,12 @@ jobs:
           - devel
         exclude:
           - os: macOS-latest
+            version: 1.4.0
+          - os: macOS-latest
+            version: devel
+          - os: windows-latest
+            version: 1.4.0
+          - os: windows-latest
             version: devel
     steps:
       - uses: actions/checkout@v3
