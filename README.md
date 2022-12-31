@@ -30,9 +30,15 @@ steps:
   - uses: jiro4989/setup-nim-action@v1
     with:
       nim-version: '1.6.0' # default is 'stable'
+      repo-token: ${{ secrets.GITHUB_TOKEN }}
   - run: nimble build -Y
   - run: nimble test -Y
 ```
+
+`repo-token` is using for [Rate limiting](https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting).
+It works without setting this parameter, but please set it if the following error message is returned.
+
+> Error: 403 - {"message":"API rate limit exceeded for nn.nn.nn.nnn. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)","documentation_url":"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"}
 
 ### Setup a latest patch version Nim
 
@@ -44,6 +50,7 @@ steps:
   - uses: jiro4989/setup-nim-action@v1
     with:
       nim-version: '1.2.x' # ex: 1.0.x, 1.2.x, 1.4.x ...
+      repo-token: ${{ secrets.GITHUB_TOKEN }}
   - run: nimble build -Y
   - run: nimble test -Y
 ```
@@ -58,6 +65,7 @@ steps:
   - uses: jiro4989/setup-nim-action@v1
     with:
       nim-version: '1.x'
+      repo-token: ${{ secrets.GITHUB_TOKEN }}
   - run: nimble build -Y
   - run: nimble test -Y
 ```
@@ -75,6 +83,8 @@ steps:
       key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
     if: runner.os != 'Windows'
   - uses: jiro4989/setup-nim-action@v1
+    with:
+      repo-token: ${{ secrets.GITHUB_TOKEN }}
   - run: nimble build -Y
   - run: nimble test -Y
 ```
@@ -105,6 +115,7 @@ jobs:
         uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: ${{ matrix.nim }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: nimble build -Y
       - run: nimble test -Y
 ```
@@ -125,6 +136,8 @@ jobs:
       - uses: actions/checkout@v3
       - name: Setup nim
         uses: jiro4989/setup-nim-action@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: nimble build -Y
       - run: nimble test -Y
 ```
@@ -155,6 +168,7 @@ jobs:
         uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: ${{ matrix.nim }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: nimble build -Y
       - run: nimble test -Y
 ```
@@ -196,6 +210,7 @@ jobs:
       - uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: "${{ matrix.nim-version }}"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: nimble build
 ```
