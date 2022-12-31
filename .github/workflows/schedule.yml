@@ -45,6 +45,8 @@ jobs:
           path: ~/.nimble
           key: ${{ runner.os }}-nimble
       - uses: jiro4989/setup-nim-action@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Print Nim version
         run: nim -v

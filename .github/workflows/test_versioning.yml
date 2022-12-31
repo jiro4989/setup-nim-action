@@ -27,19 +27,27 @@ jobs:
           key: ${{ runner.os }}-nimble
 
       - uses: jiro4989/setup-nim-action@v1
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
         if: matrix.type == 'default'
+
       - uses: ./
         with:
           no-color: true
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
         if: matrix.type == 'no-color'
+
       - uses: ./
         with:
           yes: true
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
         if: matrix.type == 'yes'
+
       - uses: ./
         with:
           no-color: true
           yes: true
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
         if: matrix.type == 'all'
 
       - name: Print Nim version
