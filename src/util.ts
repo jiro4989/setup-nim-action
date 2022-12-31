@@ -1,4 +1,5 @@
 import * as path from 'path'
+import * as core from '@actions/core'
 const request = require('request-promise')
 import { compareVersions } from 'compare-versions'
 
@@ -17,8 +18,13 @@ export function isGlobMinorVersion(version: string): boolean {
  */
 export async function fetchTagList(): Promise<any> {
   const tagURL = 'https://api.github.com/repos/nim-lang/Nim/tags'
-  let headers = {
+  let headers: any = {
     'User-Agent': 'setup-nim-action',
+  }
+  const token = core.getInput('repo-token', {required: false})
+  if (token != '') {
+    const bearer = `Bearer ${token}`
+    headers['Authorization'] = bearer
   }
   return request({
     url: tagURL,
