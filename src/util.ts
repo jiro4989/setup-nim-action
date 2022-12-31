@@ -21,7 +21,7 @@ export async function fetchTagList(): Promise<any> {
   let headers: any = {
     'User-Agent': 'setup-nim-action',
   }
-  const token = core.getInput('repo-token', {required: false})
+  const token = core.getInput('repo-token', { required: false })
   if (token != '') {
     const bearer = `Bearer ${token}`
     headers['Authorization'] = bearer
