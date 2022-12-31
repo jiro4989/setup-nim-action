@@ -49,6 +49,7 @@ jobs:
       - uses: ./
         with:
           nim-version: ${{ matrix.version }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Print Nim version
         run: nim -v
@@ -71,6 +72,7 @@ jobs:
       - uses: ./
         with:
           nim-version: ${{ matrix.version }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Print Nim version
         run: nim -v

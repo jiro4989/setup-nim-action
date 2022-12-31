@@ -16,7 +16,7 @@ inputs:
     default: false
   repo-token:
     description: 'The GITHUB_TOKEN secret'
-    default: false
+    required: false
 runs:
   using: 'node16'
   main: 'lib/setup-nim.js'
