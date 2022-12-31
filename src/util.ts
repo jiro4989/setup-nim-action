@@ -17,12 +17,13 @@ export function isGlobMinorVersion(version: string): boolean {
  */
 export async function fetchTagList(): Promise<any> {
   const tagURL = 'https://api.github.com/repos/nim-lang/Nim/tags'
+  let headers = {
+    'User-Agent': 'setup-nim-action',
+  }
   return request({
     url: tagURL,
     method: 'GET',
-    headers: {
-      'User-Agent': 'setup-nim-action',
-    },
+    headers: headers,
     json: true,
   }).then((obj: any[]) => {
     return obj.map((v) => v.name)
