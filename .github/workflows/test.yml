@@ -13,7 +13,7 @@ on:
       - '*.md'
 
 jobs:
-  test-typescript:
+  unit-test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -22,8 +22,10 @@ jobs:
           node-version: '16'
       - name: Run test
         run: npm test
+      - name: Check unused packages
+        run: npm run check-deps
 
-  test:
+  test-actions:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -60,7 +62,7 @@ jobs:
       - name: Run command
         run: nimjson -h
 
-  test-glob-version:
+  test-actions-glob-version:
     runs-on: ubuntu-latest
     strategy:
       matrix:
