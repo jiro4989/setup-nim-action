@@ -8,8 +8,7 @@
     "build": "tsc",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
-    "test": "jest",
-    "update-package": "ncu -u"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
