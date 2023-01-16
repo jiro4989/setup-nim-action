@@ -9,7 +9,8 @@
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
     "test": "jest",
-    "check-deps": "depcheck"
+    "check-deps": "depcheck",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
