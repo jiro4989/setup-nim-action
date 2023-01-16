@@ -8,7 +8,8 @@
     "build": "tsc",
     "format": "prettier --write **/*.ts",
     "format-check": "prettier --check **/*.ts",
-    "test": "jest"
+    "test": "jest",
+    "check-deps": "depcheck"
   },
   "repository": {
     "type": "git",
