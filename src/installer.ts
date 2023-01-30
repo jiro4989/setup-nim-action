@@ -32,65 +32,72 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
   // #21
   if (process.platform === 'win32') {
     process.env.CHOOSENIM_CHOOSE_VERSION = version
-    proc.exec('bash init.sh -y', (err: any, stdout: string, stderr: string) => {
-      if (err) {
-        core.error(err)
-        throw err
-      }
-      core.info(stdout)
-
-      // #41
-      // WindowsのみなぜかZIPファイルが展開されないので一度別バージョンにスイッチ
-      // してから戻すと展開される
-      proc.exec(
-        `choosenim.exe 1.4.0`,
-        (err: any, stdout: string, stderr: string) => {
-          if (err) {
-            core.error(err)
-            throw err
-          }
-          core.info(stdout)
-          proc.exec(
-            `choosenim.exe ${version}`,
-            (err: any, stdout: string, stderr: string) => {
-              if (err) {
-                core.error(err)
-                throw err
-              }
-              core.info(stdout)
-            }
-          )
-        }
-      )
-    })
-    return
-  }
-
-  proc.exec('bash init.sh -y', (err: any, stdout: string, stderr: string) => {
-    if (err) {
-      core.error(err)
-      throw err
-    }
-    core.info(stdout)
-
-    // Build optional parameters of choosenim.
-    let opts: string[] = []
-    if (noColor) opts.push('--noColor')
-    if (yes) opts.push('--yes')
-    let optsStr = ''
-    if (0 < opts.length) {
-      optsStr = ' ' + opts.join(' ')
-    }
-
-    proc.exec(
-      `choosenim ${version}${optsStr}`,
+    proc.execFile(
+      'bash',
+      ['init.sh', '-y'],
       (err: any, stdout: string, stderr: string) => {
         if (err) {
           core.error(err)
           throw err
         }
         core.info(stdout)
+
+        // #41
+        // WindowsのみなぜかZIPファイルが展開されないので一度別バージョンにスイッチ
+        // してから戻すと展開される
+        proc.execFile(
+          'choosenim.exe',
+          ['1.4.0'],
+          (err: any, stdout: string, stderr: string) => {
+            if (err) {
+              core.error(err)
+              throw err
+            }
+            core.info(stdout)
+            proc.execFile(
+              'choosenim.exe',
+              [version],
+              (err: any, stdout: string, stderr: string) => {
+                if (err) {
+                  core.error(err)
+                  throw err
+                }
+                core.info(stdout)
+              }
+            )
+          }
+        )
       }
     )
-  })
+    return
+  }
+
+  proc.execFile(
+    'bash',
+    ['init.sh', '-y'],
+    (err: any, stdout: string, stderr: string) => {
+      if (err) {
+        core.error(err)
+        throw err
+      }
+      core.info(stdout)
+
+      // Build optional parameters of choosenim.
+      let args: string[] = [version]
+      if (noColor) args.push('--noColor')
+      if (yes) args.push('--yes')
+
+      proc.execFile(
+        'choosenim',
+        args,
+        (err: any, stdout: string, stderr: string) => {
+          if (err) {
+            core.error(err)
+            throw err
+          }
+          core.info(stdout)
+        }
+      )
+    }
+  )
 }
