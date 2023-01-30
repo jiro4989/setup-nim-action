@@ -29,8 +29,6 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
     version = await util.getLatestVersion(version)
   }
 
-  version = `"${version}"`
-
   // #21
   if (process.platform === 'win32') {
     process.env.CHOOSENIM_CHOOSE_VERSION = version
