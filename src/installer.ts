@@ -56,7 +56,7 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
             core.info(stdout)
             proc.execFile(
               'choosenim.exe',
-              [version],
+              version.split(/\s+/),
               (err: any, stdout: string, stderr: string) => {
                 if (err) {
                   core.error(err)
@@ -83,7 +83,7 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
       core.info(stdout)
 
       // Build optional parameters of choosenim.
-      let args: string[] = [version]
+      let args: string[] = version.split(/\s+/)
       if (noColor) args.push('--noColor')
       if (yes) args.push('--yes')
 
