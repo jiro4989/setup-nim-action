@@ -134,3 +134,7 @@ export function getNewPathAppenedNimbleBinPath(platform: string): string {
   const envPath = process.env['PATH'] || ''
   return `${binPath}${delim}${envPath}`
 }
+
+export function parseVersion(version: string): string[] {
+  return version.trim().split(/\s+/)
+}

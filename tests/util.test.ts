@@ -145,3 +145,19 @@ describe('function getNewPathAppenedNimbleBinPath', () => {
     expect(got.startsWith(want)).toBe(true)
   })
 })
+
+describe('function parseVersion', () => {
+  type TestPattern = [string, string, string[]]
+  const tests: TestPattern[] = [
+    ['ok', 'stable', ['stable']],
+    ['ok', ' stable ', ['stable']],
+    ['ok', 'devel', ['devel']],
+    ['ok', 'devel --latest', ['devel', '--latest']],
+    ['ok', 'devel \t --latest', ['devel', '--latest']],
+    ['ok', '#version-1-6', ['#version-1-6']],
+    ['ok', '1.6.x', ['1.6.x']],
+  ]
+  test.each(tests)('%s: %s = %s', (prefix, version, want) => {
+    expect(util.parseVersion(version)).toEqual(want)
+  })
+})
