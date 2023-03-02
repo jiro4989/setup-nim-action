@@ -77,10 +77,12 @@ steps:
   - uses: actions/checkout@v3
   - name: Cache nimble
     id: cache-nimble
-    uses: actions/cache@v1
+    uses: actions/cache@v3
     with:
       path: ~/.nimble
       key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
+      restore-keys: |
+        ${{ runner.os }}-nimble-
     if: runner.os != 'Windows'
   - uses: jiro4989/setup-nim-action@v1
     with:
