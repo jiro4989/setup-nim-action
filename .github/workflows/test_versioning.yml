@@ -25,6 +25,8 @@ jobs:
         with:
           path: ~/.nimble
           key: ${{ runner.os }}-nimble
+          restore-keys: |
+            ${{ runner.os }}-nimble
 
       - uses: jiro4989/setup-nim-action@v1
         with:
