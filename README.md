@@ -1,12 +1,12 @@
-# setup-nim-action
+# :crown:setup-nim-action
 
 ![Build Status](https://github.com/jiro4989/setup-nim-action/workflows/build/badge.svg)
 
-This action sets up a Nim environment.
+This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
 
 <!-- vim-markdown-toc GFM -->
 
-* [Usage](#usage)
+* [Usage](#mag_rightusage)
   * [Basic usage](#basic-usage)
   * [Setup a latest patch version Nim](#setup-a-latest-patch-version-nim)
   * [Setup a latest minor version Nim](#setup-a-latest-minor-version-nim)
@@ -14,11 +14,11 @@ This action sets up a Nim environment.
   * [Matrix testing usage](#matrix-testing-usage)
   * [`devel` usage](#devel-usage)
   * [Full example](#full-example)
-* [License](#license)
+* [License](#page_facing_uplicense)
 
 <!-- vim-markdown-toc -->
 
-## Usage
+## :mag_right:Usage
 
 See [action.yml](action.yml)
 
@@ -146,7 +146,7 @@ jobs:
 
 e.g. Tests multiple Nim versions and platforms:
 
-WARNING: Depending on matrix count, the number of test jobs may be very large.
+:warning: **WARN** :warning: Depending on matrix count, the number of test jobs may be very large.
 It is recommend to keep the small matrix count.
 
 ```yaml
@@ -225,7 +225,7 @@ jobs:
 
 See [.github/workflows/test.yml](.github/workflows/test.yml).
 
-## License
+## :page_facing_up:License
 
 MIT
 
