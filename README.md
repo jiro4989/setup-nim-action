@@ -14,6 +14,7 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
   * [Matrix testing usage](#matrix-testing-usage)
   * [`devel` usage](#devel-usage)
   * [Full example](#full-example)
+* [Development](#hammerdevelopment)
 * [License](#page_facing_uplicense)
 
 <!-- vim-markdown-toc -->
@@ -225,7 +226,21 @@ jobs:
 
 See [.github/workflows/test.yml](.github/workflows/test.yml).
 
+## :hammer:Development
+
+This project uses [TypeScript](https://www.typescriptlang.org/).
+Place TypeScript codes under the `src` directory.
+Run `npm run build` when you edited source code.
+
+```bash
+$ vim src/installer.ts
+$ npm run build
+```
+
+`npm run build` command will output a JavaScript file under the `lib` directory. Please commit this.
+
+And please add [test code](https://github.com/jiro4989/setup-nim-action/tree/master/tests) if possible.
+
 ## :page_facing_up:License
 
 MIT
-
