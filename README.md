@@ -199,16 +199,20 @@ jobs:
 
       - name: Cache choosenim
         id: cache-choosenim
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~/.choosenim
           key: ${{ runner.os }}-choosenim-${{ matrix.cache-key }}-${{ steps.get-date.outputs.date }}
+          restore-keys: |
+            ${{ runner.os }}-choosenim-${{ matrix.cache-key }}-
       - name: Cache nimble
         id: cache-nimble
-        uses: actions/cache@v1
+        uses: actions/cache@v3
         with:
           path: ~/.nimble
           key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
+          restore-keys: |
+            ${{ runner.os }}-nimble-
       - uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: "${{ matrix.nim-version }}"
