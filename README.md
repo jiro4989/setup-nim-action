@@ -229,7 +229,6 @@ See [.github/workflows/test.yml](.github/workflows/test.yml).
 ## :hammer:Development
 
 This project uses [TypeScript](https://www.typescriptlang.org/).
-Place TypeScript codes under the `src` directory.
 Run `npm run build` when you edited source code.
 
 ```bash
