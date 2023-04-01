@@ -89,7 +89,7 @@ jobs:
   sushi:
     runs-on: ubuntu-latest
     steps:
-      - uses: ./
+      - uses: jiro4989/setup-nim-action@v1
         with:
           nim-version: stable
           repo-token: ${{ secrets.GITHUB_TOKEN }}
