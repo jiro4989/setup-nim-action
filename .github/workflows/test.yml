@@ -85,3 +85,12 @@ jobs:
         run: nimble install -Y nimjson
       - name: Run command
         run: nimjson -h
+
+  sushi:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: ./
+        with:
+          nim-version: stable
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v3
