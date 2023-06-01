@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jiro4989/setup-nim-actions.git"
+    "url": "git+https://github.com/jiro4989/setup-nim-action.git"
   },
   "keywords": [
     "actions",
@@ -66,5 +66,13 @@
     "testMatch": [
       "**/tests/**/*.test.ts"
     ]
+  },
+  "bugs": {
+    "url": "https://github.com/jiro4989/setup-nim-actions/issues"
+  },
+  "homepage": "https://github.com/jiro4989/setup-nim-actions#readme",
+  "directories": {
+    "lib": "lib",
+    "test": "tests"
   }
 }
