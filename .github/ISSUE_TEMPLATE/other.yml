@@ -1,0 +1,18 @@
+name: Other Report
+description: Write something that is neither a Bug nor a Feature.
+title: ""
+labels: []
+assignees:
+  - jiro4989
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this report!
+  - type: textarea
+    id: requirements
+    attributes:
+      label: What are your requirements?
+      description: Write your requirements.
+    validations:
+      required: true
