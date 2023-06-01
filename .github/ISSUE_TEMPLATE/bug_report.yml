@@ -1,0 +1,31 @@
+name: Bug Report
+description: Create a report to help us improve
+title: ""
+labels: ["bug"]
+assignees:
+  - jiro4989
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Also tell us, what did you expect to happen?
+      placeholder: Tell us what you see!
+      value: "A bug happened!"
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant log output
+      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
+      render: shell
+  - type: textarea
+    id: log-url
+    attributes:
+      label: Actions log url
+      description: Please paste a actions log url.
