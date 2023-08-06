@@ -69,6 +69,8 @@ jobs:
         version:
           - 1.4.x
           - 1.x
+          - 2.0.x
+          - 2.x
           - '#version-1-6'
     steps:
       - uses: actions/checkout@v3
