@@ -30,7 +30,7 @@ steps:
   - uses: actions/checkout@v3
   - uses: jiro4989/setup-nim-action@v1
     with:
-      nim-version: '1.6.0' # default is 'stable'
+      nim-version: '2.0.0' # default is 'stable'
       repo-token: ${{ secrets.GITHUB_TOKEN }}
   - run: nimble build -Y
   - run: nimble test -Y
@@ -43,14 +43,14 @@ It works without setting this parameter, but please set it if the following erro
 
 ### Setup a latest patch version Nim
 
-Setup a latest patch version Nim when `nim-version` is `1.n.x` .
+Setup a latest patch version Nim when `nim-version` is `2.n.x` .
 
 ```yaml
 steps:
   - uses: actions/checkout@v3
   - uses: jiro4989/setup-nim-action@v1
     with:
-      nim-version: '1.2.x' # ex: 1.0.x, 1.2.x, 1.4.x ...
+      nim-version: '2.0.x' # ex: 1.0.x, 1.2.x, 1.4.x, 2.0.x ...
       repo-token: ${{ secrets.GITHUB_TOKEN }}
   - run: nimble build -Y
   - run: nimble test -Y
@@ -58,14 +58,14 @@ steps:
 
 ### Setup a latest minor version Nim
 
-Setup a latest minor version Nim when `nim-version` is `1.x` .
+Setup a latest minor version Nim when `nim-version` is `2.x` .
 
 ```yaml
 steps:
   - uses: actions/checkout@v3
   - uses: jiro4989/setup-nim-action@v1
     with:
-      nim-version: '1.x'
+      nim-version: '2.x'
       repo-token: ${{ secrets.GITHUB_TOKEN }}
   - run: nimble build -Y
   - run: nimble test -Y
@@ -109,6 +109,7 @@ jobs:
           - '1.2.x'
           - '1.4.x'
           - '1.6.x'
+          - '2.0.x'
           - 'stable'
           - 'devel'
     name: Nim ${{ matrix.nim }} sample
@@ -159,6 +160,7 @@ jobs:
         nim:
           - '1.4.x'
           - '1.6.x'
+          - '2.0.x'
           - 'stable'
         os:
           - ubuntu-latest
