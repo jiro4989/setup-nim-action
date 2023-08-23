@@ -31,7 +31,7 @@
   },
   "devDependencies": {
     "@types/jest": "^29.2.5",
-    "@types/node": "^20.4.9",
+    "@types/node": "^20.5.3",
     "depcheck": "^1.4.3",
     "husky": "^8.0.3",
     "jest": "^26.6.3",
