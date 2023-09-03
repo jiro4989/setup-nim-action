@@ -673,9 +673,9 @@ var require_lib = __commonJS({
   }
 });
 
-// node_modules/@babel/highlight/node_modules/escape-string-regexp/index.js
+// node_modules/@babel/code-frame/node_modules/escape-string-regexp/index.js
 var require_escape_string_regexp = __commonJS({
-  "node_modules/@babel/highlight/node_modules/escape-string-regexp/index.js"(exports, module) {
+  "node_modules/@babel/code-frame/node_modules/escape-string-regexp/index.js"(exports, module) {
     "use strict";
     var matchOperatorsRe = /[|\\{}()[\]^$+*?.]/g;
     module.exports = function(str) {
@@ -1829,9 +1829,9 @@ var require_ansi_styles = __commonJS({
   }
 });
 
-// node_modules/@babel/highlight/node_modules/has-flag/index.js
+// node_modules/@babel/code-frame/node_modules/has-flag/index.js
 var require_has_flag = __commonJS({
-  "node_modules/@babel/highlight/node_modules/has-flag/index.js"(exports, module) {
+  "node_modules/@babel/code-frame/node_modules/has-flag/index.js"(exports, module) {
     "use strict";
     module.exports = (flag, argv) => {
       argv = argv || process.argv;
@@ -1843,9 +1843,9 @@ var require_has_flag = __commonJS({
   }
 });
 
-// node_modules/@babel/highlight/node_modules/supports-color/index.js
+// node_modules/@babel/code-frame/node_modules/supports-color/index.js
 var require_supports_color = __commonJS({
-  "node_modules/@babel/highlight/node_modules/supports-color/index.js"(exports, module) {
+  "node_modules/@babel/code-frame/node_modules/supports-color/index.js"(exports, module) {
     "use strict";
     var os = __require("os");
     var hasFlag = require_has_flag();
@@ -1938,9 +1938,9 @@ var require_supports_color = __commonJS({
   }
 });
 
-// node_modules/@babel/highlight/node_modules/chalk/templates.js
+// node_modules/@babel/code-frame/node_modules/chalk/templates.js
 var require_templates = __commonJS({
-  "node_modules/@babel/highlight/node_modules/chalk/templates.js"(exports, module) {
+  "node_modules/@babel/code-frame/node_modules/chalk/templates.js"(exports, module) {
     "use strict";
     var TEMPLATE_REGEX = /(?:\\(u[a-f\d]{4}|x[a-f\d]{2}|.))|(?:\{(~)?(\w+(?:\([^)]*\))?(?:\.\w+(?:\([^)]*\))?)*)(?:[ \t]|(?=\r?\n)))|(\})|((?:.|[\r\n\f])+?)/gi;
     var STYLE_REGEX = /(?:^|\.)(\w+)(?:\(([^)]*)\))?/g;
@@ -2049,9 +2049,9 @@ var require_templates = __commonJS({
   }
 });
 
-// node_modules/@babel/highlight/node_modules/chalk/index.js
+// node_modules/@babel/code-frame/node_modules/chalk/index.js
 var require_chalk = __commonJS({
-  "node_modules/@babel/highlight/node_modules/chalk/index.js"(exports, module) {
+  "node_modules/@babel/code-frame/node_modules/chalk/index.js"(exports, module) {
     "use strict";
     var escapeStringRegexp = require_escape_string_regexp();
     var ansiStyles = require_ansi_styles();
@@ -2224,23 +2224,23 @@ var require_lib2 = __commonJS({
       value: true
     });
     exports.default = highlight;
-    exports.getChalk = getChalk;
     exports.shouldHighlight = shouldHighlight;
     var _jsTokens = require_js_tokens();
     var _helperValidatorIdentifier = require_lib();
-    var _chalk = require_chalk();
+    var _chalk2 = require_chalk();
+    var chalk = _chalk2;
     var sometimesKeywords = /* @__PURE__ */ new Set(["as", "async", "from", "get", "of", "set"]);
-    function getDefs(chalk) {
+    function getDefs(chalk2) {
       return {
-        keyword: chalk.cyan,
-        capitalized: chalk.yellow,
-        jsxIdentifier: chalk.yellow,
-        punctuator: chalk.yellow,
-        number: chalk.magenta,
-        string: chalk.green,
-        regex: chalk.magenta,
-        comment: chalk.grey,
-        invalid: chalk.white.bgRed.bold
+        keyword: chalk2.cyan,
+        capitalized: chalk2.yellow,
+        jsxIdentifier: chalk2.yellow,
+        punctuator: chalk2.yellow,
+        number: chalk2.magenta,
+        string: chalk2.green,
+        regex: chalk2.magenta,
+        comment: chalk2.grey,
+        invalid: chalk2.white.bgRed.bold
       };
     }
     var NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
@@ -2295,18 +2295,28 @@ var require_lib2 = __commonJS({
       return highlighted;
     }
     function shouldHighlight(options) {
-      return !!_chalk.supportsColor || options.forceColor;
+      return !!chalk.supportsColor || options.forceColor;
     }
-    function getChalk(options) {
-      return options.forceColor ? new _chalk.constructor({
-        enabled: true,
-        level: 1
-      }) : _chalk;
+    var chalkWithForcedColor = void 0;
+    function getChalk(forceColor) {
+      if (forceColor) {
+        var _chalkWithForcedColor;
+        (_chalkWithForcedColor = chalkWithForcedColor) != null ? _chalkWithForcedColor : chalkWithForcedColor = new chalk.constructor({
+          enabled: true,
+          level: 1
+        });
+        return chalkWithForcedColor;
+      }
+      return chalk;
+    }
+    {
+      {
+        exports.getChalk = (options) => getChalk(options.forceColor);
+      }
     }
     function highlight(code, options = {}) {
       if (code !== "" && shouldHighlight(options)) {
-        const chalk = getChalk(options);
-        const defs = getDefs(chalk);
+        const defs = getDefs(getChalk(options.forceColor));
         return highlightTokens(defs, code);
       } else {
         return code;
@@ -2325,12 +2335,26 @@ var require_lib3 = __commonJS({
     exports.codeFrameColumns = codeFrameColumns;
     exports.default = _default;
     var _highlight = require_lib2();
+    var _chalk2 = require_chalk();
+    var chalk = _chalk2;
+    var chalkWithForcedColor = void 0;
+    function getChalk(forceColor) {
+      if (forceColor) {
+        var _chalkWithForcedColor;
+        (_chalkWithForcedColor = chalkWithForcedColor) != null ? _chalkWithForcedColor : chalkWithForcedColor = new chalk.constructor({
+          enabled: true,
+          level: 1
+        });
+        return chalkWithForcedColor;
+      }
+      return chalk;
+    }
     var deprecationWarningShown = false;
-    function getDefs(chalk) {
+    function getDefs(chalk2) {
       return {
-        gutter: chalk.grey,
-        marker: chalk.red.bold,
-        message: chalk.red.bold
+        gutter: chalk2.grey,
+        marker: chalk2.red.bold,
+        message: chalk2.red.bold
       };
     }
     var NEWLINE = /\r\n|[\n\r\u2028\u2029]/;
@@ -2392,8 +2416,8 @@ var require_lib3 = __commonJS({
     }
     function codeFrameColumns(rawLines, loc, opts = {}) {
       const highlighted = (opts.highlightCode || opts.forceColor) && (0, _highlight.shouldHighlight)(opts);
-      const chalk = (0, _highlight.getChalk)(opts);
-      const defs = getDefs(chalk);
+      const chalk2 = getChalk(opts.forceColor);
+      const defs = getDefs(chalk2);
       const maybeHighlight = (chalkFn, string) => {
         return highlighted ? chalkFn(string) : string;
       };
@@ -2432,7 +2456,7 @@ var require_lib3 = __commonJS({
 ${frame}`;
       }
       if (highlighted) {
-        return chalk.reset(frame);
+        return chalk2.reset(frame);
       } else {
         return frame;
       }
