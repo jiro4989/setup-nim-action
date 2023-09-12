@@ -32,7 +32,7 @@
   "devDependencies": {
     "@types/jest": "^29.2.5",
     "@types/node": "^20.5.9",
-    "depcheck": "^1.4.5",
+    "depcheck": "^1.4.6",
     "husky": "^8.0.3",
     "jest": "^26.6.3",
     "prettier": "^3.0.3",
