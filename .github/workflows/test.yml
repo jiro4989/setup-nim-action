@@ -16,7 +16,7 @@ jobs:
   unit-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: actions/setup-node@v3
         with:
           node-version: '16'
@@ -47,7 +47,7 @@ jobs:
           - os: windows-latest
             version: devel
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           nim-version: ${{ matrix.version }}
@@ -73,7 +73,7 @@ jobs:
           - 2.x
           - '#version-1-6'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: ./
         with:
           nim-version: ${{ matrix.version }}
