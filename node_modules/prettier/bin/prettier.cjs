@@ -61,7 +61,8 @@ var pleaseUpgradeNode = require_please_upgrade_node();
 var packageJson = require("../package.json");
 pleaseUpgradeNode(packageJson);
 function runCli(cli) {
-  return cli.run(process.argv.slice(2));
+  return cli.run();
 }
 var dynamicImport = new Function("module", "return import(module)");
-module.exports.promise = dynamicImport("../internal/cli.mjs").then(runCli);
+var promise = dynamicImport("../internal/cli.mjs").then(runCli);
+module.exports.__promise = promise;

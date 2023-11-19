@@ -6204,18 +6204,27 @@ import path2 from "path";
 async function* expandPatterns(context) {
   const seen = /* @__PURE__ */ new Set();
   let noResults = true;
-  for await (const pathOrError of expandPatternsInternal(context)) {
+  for await (const {
+    filePath,
+    ignoreUnknown,
+    error
+  } of expandPatternsInternal(context)) {
     noResults = false;
-    if (typeof pathOrError !== "string") {
-      yield pathOrError;
+    if (error) {
+      yield {
+        error
+      };
       continue;
     }
-    const fileName = path2.resolve(pathOrError);
-    if (seen.has(fileName)) {
+    const filename = path2.resolve(filePath);
+    if (seen.has(filename)) {
       continue;
     }
-    seen.add(fileName);
-    yield fileName;
+    seen.add(filename);
+    yield {
+      filename,
+      ignoreUnknown
+    };
   }
   if (noResults && context.argv.errorOnUnmatchedPattern !== false) {
     yield {
@@ -6233,7 +6242,6 @@ async function* expandPatternsInternal(context) {
     ignore: silentlyIgnoredDirs.map((dir) => "**/" + dir),
     followSymbolicLinks: false
   };
-  let supportedFilesGlob;
   const cwd2 = process.cwd();
   const entries = [];
   for (const pattern of context.filePatterns) {
@@ -6258,8 +6266,9 @@ async function* expandPatternsInternal(context) {
         const prefix = escapePathForGlob(fixWindowsSlashes(relativePath));
         entries.push({
           type: "dir",
-          glob: getSupportedFilesGlob().map((pattern2) => `${prefix}/**/${pattern2}`),
-          input: pattern
+          glob: `${prefix}/**/*`,
+          input: pattern,
+          ignoreUnknown: true
         });
       }
     } else if (pattern[0] === "!") {
@@ -6275,7 +6284,8 @@ async function* expandPatternsInternal(context) {
   for (const {
     type,
     glob,
-    input
+    input,
+    ignoreUnknown
   } of entries) {
     let result;
     try {
@@ -6296,22 +6306,10 @@ ${message}`
         };
       }
     } else {
-      yield* sortPaths(result);
-    }
-  }
-  function getSupportedFilesGlob() {
-    supportedFilesGlob ?? (supportedFilesGlob = [...getSupportedFilesGlobWithoutCache()]);
-    return supportedFilesGlob;
-  }
-  function* getSupportedFilesGlobWithoutCache() {
-    for (const {
-      extensions = [],
-      filenames = []
-    } of context.languages) {
-      yield* filenames;
-      for (const extension of extensions) {
-        yield `*${extension.startsWith(".") ? extension : `.${extension}`}`;
-      }
+      yield* sortPaths(result).map((filePath) => ({
+        filePath,
+        ignoreUnknown
+      }));
     }
   }
 }
@@ -6649,9 +6647,6 @@ function useDirectory(directory, options) {
   if (options.create) {
     fs3.mkdirSync(directory, { recursive: true });
   }
-  if (options.thunk) {
-    return (...arguments_) => path6.join(directory, ...arguments_);
-  }
   return directory;
 }
 function getNodeModuleDirectory(directory) {
@@ -6665,9 +6660,12 @@ function findCacheDirectory(options = {}) {
   if (env2.CACHE_DIR && !["true", "false", "1", "0"].includes(env2.CACHE_DIR)) {
     return useDirectory(path6.join(env2.CACHE_DIR, options.name), options);
   }
-  let { cwd: directory = cwd() } = options;
-  if (options.files) {
-    directory = (0, import_common_path_prefix.default)(options.files.map((file) => path6.resolve(directory, file)));
+  let { cwd: directory = cwd(), files } = options;
+  if (files) {
+    if (!Array.isArray(files)) {
+      throw new TypeError(`Expected \`files\` option to be an array, got \`${typeof files}\`.`);
+    }
+    directory = (0, import_common_path_prefix.default)(files.map((file) => path6.resolve(directory, file)));
   }
   directory = packageDirectorySync({ cwd: directory });
   if (!directory) {
@@ -6793,17 +6791,18 @@ function diff(a, b) {
 var DebugError = class extends Error {
   name = "DebugError";
 };
-function handleError(context, filename, error, printedFilename) {
+function handleError(context, filename, error, printedFilename, ignoreUnknown) {
+  ignoreUnknown || (ignoreUnknown = context.argv.ignoreUnknown);
   const errorIsUndefinedParseError = error instanceof errors.UndefinedParserError;
   if (printedFilename) {
-    if ((context.argv.write || context.argv.ignoreUnknown) && errorIsUndefinedParseError) {
+    if ((context.argv.write || ignoreUnknown) && errorIsUndefinedParseError) {
       printedFilename.clear();
     } else {
       process.stdout.write("\n");
     }
   }
   if (errorIsUndefinedParseError) {
-    if (context.argv.ignoreUnknown) {
+    if (ignoreUnknown) {
       return;
     }
     if (!context.argv.check && !context.argv.listDifferent) {
@@ -7014,27 +7013,20 @@ async function formatFiles(context) {
       cacheFilePath,
       context.argv.cacheStrategy || "content"
     );
-  } else {
-    if (context.argv.cacheStrategy) {
-      context.logger.error(
-        "`--cache-strategy` cannot be used without `--cache`."
-      );
-      process.exit(2);
-    }
-    if (!context.argv.cacheLocation) {
-      const stat = await statSafe(cacheFilePath);
-      if (stat) {
-        await fs5.unlink(cacheFilePath);
-      }
+  } else if (!context.argv.cacheLocation) {
+    const stat = await statSafe(cacheFilePath);
+    if (stat) {
+      await fs5.unlink(cacheFilePath);
     }
   }
-  for await (const pathOrError of expandPatterns(context)) {
-    if (typeof pathOrError === "object") {
-      context.logger.error(pathOrError.error);
+  for await (const { error, filename, ignoreUnknown } of expandPatterns(
+    context
+  )) {
+    if (error) {
+      context.logger.error(error);
       process.exitCode = 2;
       continue;
     }
-    const filename = pathOrError;
     const isFileIgnored = isIgnored(filename);
     if (isFileIgnored && (context.argv.debugCheck || context.argv.write || context.argv.check || context.argv.listDifferent)) {
       continue;
@@ -7054,11 +7046,11 @@ async function formatFiles(context) {
     let input;
     try {
       input = await fs5.readFile(filename, "utf8");
-    } catch (error) {
+    } catch (error2) {
       context.logger.log("");
       context.logger.error(
         `Unable to read file "${fileNameToDisplay}":
-${error.message}`
+${error2.message}`
       );
       process.exitCode = 2;
       continue;
@@ -7082,8 +7074,14 @@ ${error.message}`
         result = await format2(context, input, options);
       }
       output = result.formatted;
-    } catch (error) {
-      handleError(context, fileNameToDisplay, error, printedFilename);
+    } catch (error2) {
+      handleError(
+        context,
+        fileNameToDisplay,
+        error2,
+        printedFilename,
+        ignoreUnknown
+      );
       continue;
     }
     const isDifferent = output !== input;
@@ -7103,15 +7101,15 @@ ${error.message}`
         try {
           await writeFormattedFile(filename, output);
           shouldSetCache = true;
-        } catch (error) {
+        } catch (error2) {
           context.logger.error(
             `Unable to write file "${fileNameToDisplay}":
-${error.message}`
+${error2.message}`
           );
           process.exitCode = 2;
         }
       } else if (!context.argv.check && !context.argv.listDifferent) {
-        const message = `${source_default.grey(fileNameToDisplay)} ${Date.now() - start}ms`;
+        const message = `${source_default.grey(fileNameToDisplay)} ${Date.now() - start}ms (unchanged)`;
         if (isCacheExists) {
           context.logger.log(`${message} (cached)`);
         } else {
@@ -7209,7 +7207,7 @@ async function printSupportInfo() {
 var print_support_info_default = printSupportInfo;
 
 // src/cli/index.js
-async function run(rawArguments) {
+async function run(rawArguments = process.argv.slice(2)) {
   let logger = logger_default();
   try {
     const { logLevel } = parseArgvWithoutPlugins(
@@ -7245,6 +7243,9 @@ async function main(context) {
   if (context.argv.fileInfo && context.filePatterns.length > 0) {
     throw new Error("Cannot use --file-info with multiple files");
   }
+  if (!context.argv.cache && context.argv.cacheStrategy) {
+    throw new Error("`--cache-strategy` cannot be used without `--cache`.");
+  }
   if (context.argv.version) {
     printToScreen(prettier2.version);
     return;
@@ -7258,24 +7259,29 @@ async function main(context) {
   if (context.argv.supportInfo) {
     return print_support_info_default();
   }
-  const hasFilePatterns = context.filePatterns.length > 0;
-  const useStdin = !hasFilePatterns && (!process.stdin.isTTY || context.argv.filePath);
   if (context.argv.findConfigPath) {
     await find_config_path_default(context);
-  } else if (context.argv.fileInfo) {
+    return;
+  }
+  if (context.argv.fileInfo) {
     await file_info_default(context);
-  } else if (useStdin) {
+    return;
+  }
+  const hasFilePatterns = context.filePatterns.length > 0;
+  const useStdin = !hasFilePatterns && (!process.stdin.isTTY || context.argv.filepath);
+  if (useStdin) {
     if (context.argv.cache) {
-      context.logger.error("`--cache` cannot be used with stdin.");
-      process.exit(2);
+      throw new Error("`--cache` cannot be used when formatting stdin.");
     }
     await formatStdin(context);
-  } else if (hasFilePatterns) {
-    await formatFiles(context);
-  } else {
-    process.exitCode = 1;
-    printToScreen(createUsage(context));
+    return;
   }
+  if (hasFilePatterns) {
+    await formatFiles(context);
+    return;
+  }
+  process.exitCode = 1;
+  printToScreen(createUsage(context));
 }
 export {
   run
