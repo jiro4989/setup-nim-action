@@ -1,6 +1,6 @@
 {
   "name": "prettier",
-  "version": "3.0.3",
+  "version": "3.1.0",
   "description": "Prettier is an opinionated code formatter",
   "bin": "./bin/prettier.cjs",
   "repository": "prettier/prettier",
@@ -15,6 +15,10 @@
     ".": {
       "types": "./index.d.ts",
       "require": "./index.cjs",
+      "browser": {
+        "import": "./standalone.mjs",
+        "default": "./standalone.js"
+      },
       "default": "./index.mjs"
     },
     "./*": "./*",
