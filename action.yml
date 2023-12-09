@@ -18,5 +18,5 @@ inputs:
     description: 'The GITHUB_TOKEN secret'
     required: false
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'lib/setup-nim.js'
