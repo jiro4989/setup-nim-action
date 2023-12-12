@@ -1371,23 +1371,19 @@ var require_src = __commonJS({
             return void 0;
           }
           if (isArray) {
-            const result = [];
-            for (let row of data) {
+            return data.map((row, index) => {
               if (typeof row === "string") {
                 row = this.opts.deserialize(row);
               }
               if (row === void 0 || row === null) {
-                result.push(void 0);
-                continue;
+                return void 0;
               }
               if (typeof row.expires === "number" && Date.now() > row.expires) {
-                this.delete(key).then(() => void 0);
-                result.push(void 0);
-              } else {
-                result.push(options && options.raw ? row : row.value);
+                this.delete(key[index]).then(() => void 0);
+                return void 0;
               }
-            }
-            return result;
+              return options && options.raw ? row : row.value;
+            });
           }
           if (typeof data.expires === "number" && Date.now() > data.expires) {
             return this.delete(key).then(() => void 0);
@@ -5408,7 +5404,8 @@ var {
   getSupportInfoWithoutPlugins,
   normalizeOptionSettings,
   vnopts,
-  fastGlob
+  fastGlob,
+  mockable
 } = sharedWithCli;
 
 // src/cli/cli-options.evaluate.js
@@ -6197,7 +6194,6 @@ import fs5 from "fs/promises";
 import path8 from "path";
 var import_diff = __toESM(require_create(), 1);
 import * as prettier from "../index.mjs";
-import mockable2 from "./internal.mjs";
 
 // src/cli/expand-patterns.js
 import path2 from "path";
@@ -6252,9 +6248,13 @@ async function* expandPatternsInternal(context) {
     const stat = await lstatSafe(absolutePath);
     if (stat) {
       if (stat.isSymbolicLink()) {
-        yield {
-          error: `Explicitly specified pattern "${pattern}" is a symbolic link.`
-        };
+        if (context.argv.errorOnUnmatchedPattern !== false) {
+          yield {
+            error: `Explicitly specified pattern "${pattern}" is a symbolic link.`
+          };
+        } else {
+          context.logger.debug(`Skipping pattern "${pattern}", as it is a symbolic link.`);
+        }
       } else if (stat.isFile()) {
         entries.push({
           type: "file",
@@ -6418,7 +6418,7 @@ async function getOptionsOrDie(context, filePath) {
     return options;
   } catch (error) {
     context.logger.error(
-      `Invalid configuration for file "${filePath}":
+      `Invalid configuration${filePath ? ` for file "${filePath}"` : ""}:
 ` + error.message
     );
     process.exit(2);
@@ -6465,7 +6465,6 @@ async function getOptionsForFile(context, filepath) {
 var get_options_for_file_default = getOptionsForFile;
 
 // src/cli/is-tty.js
-import mockable from "./internal.mjs";
 function isTTY() {
   return process.stdout.isTTY && !mockable.isCI();
 }
@@ -6784,7 +6783,7 @@ _fileEntryCache = new WeakMap();
 var format_results_cache_default = FormatResultsCache;
 
 // src/cli/format.js
-var { getStdin, writeFormattedFile } = mockable2;
+var { getStdin, writeFormattedFile } = mockable;
 function diff(a, b) {
   return (0, import_diff.createTwoFilesPatch)("", "", a, b, "", "", { context: 2 });
 }
@@ -6980,7 +6979,7 @@ async function formatStdin(context) {
     }
     const options = await get_options_for_file_default(
       context,
-      filepath ? path8.resolve(process.cwd(), filepath) : process.cwd()
+      filepath ? path8.resolve(filepath) : void 0
     );
     if (await listDifferent(context, input, options, "(stdin)")) {
       return;

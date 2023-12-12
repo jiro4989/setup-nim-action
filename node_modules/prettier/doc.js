@@ -13,13 +13,13 @@
       typeof globalThis !== "undefined"
         ? globalThis
         : typeof global !== "undefined"
-        ? global
-        : typeof self !== "undefined"
-        ? self
-        : this || {};
+          ? global
+          : typeof self !== "undefined"
+            ? self
+            : this || {};
     root.doc = interopModuleDefault();
   }
-})(function() {
+})(function () {
   "use strict";
   var __defProp = Object.defineProperty;
   var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
