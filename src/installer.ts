@@ -26,12 +26,22 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
   // #38
   if (util.isGlobPatchVersion(version) || util.isGlobMinorVersion(version)) {
     core.info(`Fetch a latest versions with ${version}`)
+    const beginDate = Date.now()
     version = await util.getLatestVersion(version)
+    const endDate = Date.now()
+    const elapsed = endDate - beginDate
+    core.info(
+      `Succeeded to fetch version: version = ${version} elapsed = ${elapsed} millisecond`,
+    )
   }
+
+  // #483
+  // なぜか init.sh を実行したときに 2.x 以降のバージョンをインストールしようとすると非常に遅い。
+  // しかし 1.x を一度インストールしてから 2.x に切り替える場合は高速に完了するため、一旦その方法で回避する。
+  process.env.CHOOSENIM_CHOOSE_VERSION = '1.6.0'
 
   // #21
   if (process.platform === 'win32') {
-    process.env.CHOOSENIM_CHOOSE_VERSION = version
     proc.execFile(
       'bash',
       ['init.sh', '-y'],
@@ -63,15 +73,17 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
                   throw err
                 }
                 core.info(stdout)
-              }
+              },
             )
-          }
+          },
         )
-      }
+      },
     )
     return
   }
 
+  const beginDate = Date.now()
+  core.info(`Run init.sh`)
   proc.execFile(
     'bash',
     ['init.sh', '-y'],
@@ -80,7 +92,10 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
         core.error(err)
         throw err
       }
+      const endDate = Date.now()
+      const elapsed = endDate - beginDate
       core.info(stdout)
+      core.info(`Succeeded to run init.sh: elapsed = ${elapsed} millisecond`)
 
       // Build optional parameters of choosenim.
       let args: string[] = util.parseVersion(version)
@@ -96,8 +111,8 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
             throw err
           }
           core.info(stdout)
-        }
+        },
       )
-    }
+    },
   )
 }
