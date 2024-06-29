@@ -40,6 +40,14 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
   // しかし 1.x を一度インストールしてから 2.x に切り替える場合は高速に完了するため、一旦その方法で回避する。
   process.env.CHOOSENIM_CHOOSE_VERSION = '1.6.0'
 
+  // #483
+  // Mac 環境では choosenim インストール後の切り替えすらも非常に遅いので、
+  // 一度インストールしたら切り替え操作はしない。
+  const isMac = process.platform === 'darwin'
+  if (isMac) {
+    process.env.CHOOSENIM_CHOOSE_VERSION = version
+  }
+
   const beginDate = Date.now()
   core.info(`Run init.sh`)
   proc.execFile(
@@ -54,6 +62,13 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
       const elapsed = endDate - beginDate
       core.info(stdout)
       core.info(`Succeeded to run init.sh: elapsed = ${elapsed} millisecond`)
+
+      // #483
+      // Mac 環境では choosenim インストール後の切り替えすらも非常に遅いので、
+      // 一度インストールしたら切り替え操作はしない。
+      if (isMac) {
+        return
+      }
 
       // Build optional parameters of choosenim.
       let args: string[] = util.parseVersion(version)
