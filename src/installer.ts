@@ -40,48 +40,6 @@ async function installNim(version: string, noColor: boolean, yes: boolean) {
   // しかし 1.x を一度インストールしてから 2.x に切り替える場合は高速に完了するため、一旦その方法で回避する。
   process.env.CHOOSENIM_CHOOSE_VERSION = '1.6.0'
 
-  // #21
-  if (process.platform === 'win32') {
-    proc.execFile(
-      'bash',
-      ['init.sh', '-y'],
-      (err: any, stdout: string, stderr: string) => {
-        if (err) {
-          core.error(err)
-          throw err
-        }
-        core.info(stdout)
-
-        // #41
-        // WindowsのみなぜかZIPファイルが展開されないので一度別バージョンにスイッチ
-        // してから戻すと展開される
-        proc.execFile(
-          'choosenim.exe',
-          ['1.4.0'],
-          (err: any, stdout: string, stderr: string) => {
-            if (err) {
-              core.error(err)
-              throw err
-            }
-            core.info(stdout)
-            proc.execFile(
-              'choosenim.exe',
-              util.parseVersion(version),
-              (err: any, stdout: string, stderr: string) => {
-                if (err) {
-                  core.error(err)
-                  throw err
-                }
-                core.info(stdout)
-              },
-            )
-          },
-        )
-      },
-    )
-    return
-  }
-
   const beginDate = Date.now()
   core.info(`Run init.sh`)
   proc.execFile(
