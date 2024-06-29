@@ -41,7 +41,7 @@ export async function fetchTagList(): Promise<any> {
  */
 export function getLatestVersionWithTags(
   version: string,
-  tags: string[]
+  tags: string[],
 ): string {
   if (!isGlobPatchVersion(version) && !isGlobMinorVersion(version)) {
     return ''
