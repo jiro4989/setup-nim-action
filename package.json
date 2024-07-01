@@ -30,7 +30,7 @@
     "request-promise": "^4.2.6"
   },
   "devDependencies": {
-    "@types/jest": "^29.2.5",
+    "@types/jest": "^29.5.12",
     "@types/node": "^20.14.9",
     "depcheck": "^1.4.7",
     "husky": "^9.0.11",
