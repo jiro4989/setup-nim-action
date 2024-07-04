@@ -25,6 +25,7 @@ runs:
     - name: Install choosenim
       shell: bash
       run: |
+        export CHOOSENIM_NO_ANALYTICS=1
         curl https://nim-lang.org/choosenim/init.sh -sSf > init.sh
         chmod +x init.sh
         ./init.sh -n
