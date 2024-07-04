@@ -2,6 +2,7 @@
 name: 'Setup Nim environment'
 description: 'Setup a Nim environment and add it to the PATH'
 author: 'jiro4989'
+
 inputs:
   nim-version:
     description: >-
@@ -17,6 +18,18 @@ inputs:
   repo-token:
     description: 'The GITHUB_TOKEN secret'
     required: false
+
 runs:
-  using: 'node20'
-  main: 'lib/setup-nim.js'
+  using: 'composite'
+  steps:
+    - name: Install choosenim
+      shell: bash
+      run: |
+        curl https://nim-lang.org/choosenim/init.sh -sSf > init.sh
+        chmod +x init.sh
+        ./init.sh -y
+
+    - name: Switch nim version
+      shell: bash
+      run: |
+        choosenim ${{ inputs.nim-version }}
