@@ -27,7 +27,7 @@ runs:
       run: |
         curl https://nim-lang.org/choosenim/init.sh -sSf > init.sh
         chmod +x init.sh
-        ./init.sh -y
+        ./init.sh -n
 
     - name: Switch nim version
       shell: bash
