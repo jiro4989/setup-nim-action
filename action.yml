@@ -26,3 +26,5 @@ runs:
       shell: bash
       run: |
         ./install_nim.sh
+        echo "$PWD/.nim_runtime/bin" >> "$GITHUB_PATH"
+        echo "$HOME/.nimble/bin" >> "$GITHUB_PATH"

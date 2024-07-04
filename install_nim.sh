@@ -12,8 +12,4 @@ mkdir -p "${output_dir}"
 cd "${output_dir}"
 curl -sSL "${download_url}" > nim.tar.xz
 tar xf nim.tar.xz --strip-components 1
-export PATH=${PATH}:${PWD}/bin
 cd ..
-
-nim --version
-nimble --version
