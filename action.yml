@@ -22,15 +22,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Install choosenim
+    - name: Install nim
       shell: bash
       run: |
-        export CHOOSENIM_NO_ANALYTICS=1
-        curl https://nim-lang.org/choosenim/init.sh -sSf > init.sh
-        chmod +x init.sh
-        ./init.sh -y
-
-    - name: Switch nim version
-      shell: bash
-      run: |
-        choosenim ${{ inputs.nim-version }}
+        ./install_nim.sh
