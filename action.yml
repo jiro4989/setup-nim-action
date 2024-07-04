@@ -28,7 +28,7 @@ runs:
         export CHOOSENIM_NO_ANALYTICS=1
         curl https://nim-lang.org/choosenim/init.sh -sSf > init.sh
         chmod +x init.sh
-        ./init.sh -n
+        ./init.sh -y
 
     - name: Switch nim version
       shell: bash
