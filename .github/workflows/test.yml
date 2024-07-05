@@ -96,8 +96,6 @@ jobs:
         os:
           - ubuntu-latest
         version:
-          - 1.0.x
-          - 1.2.x
           - 1.4.x
           - 1.6.0
           - 1.6.x
