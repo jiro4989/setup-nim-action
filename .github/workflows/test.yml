@@ -63,13 +63,15 @@ jobs:
   #       run: nimjson -h
 
   test-actions:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+            # - macOS-latest
         version:
-          - 1.4.0
           - 1.6.0
-          - 2.0.0
           - 2.0.6
           - stable
           # - 1.4.x
