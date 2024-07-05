@@ -45,12 +45,19 @@ if [[ "$os" = Windows ]]; then
   curl -sSL "${download_url}" > nim.zip
   unzip -q nim.zip
   rm -f nim.zip
+elif [[ "$os" = macOS ]]; then
+  # Need to build compiler
+  download_url="https://nim-lang.org/download/nim-${nim_version}.tar.xz"
+  curl -sSL "${download_url}" > nim.tar.xz
+  tar xf nim.tar.xz
+  rm -f nim.tar.xz
+
+  cd "nim-${nim_version}"
+  ./build_all.sh
+  ./koch boot -d:release -d:useLinenoise
+  cd ..
 else
-  os="linux"
-  if [[ "$os" = macOS ]]; then
-    os="macosx"
-  fi
-  download_url="https://nim-lang.org/download/nim-${nim_version}-${os}_${arch}.tar.xz"
+  download_url="https://nim-lang.org/download/nim-${nim_version}-linux_${arch}.tar.xz"
   curl -sSL "${download_url}" > nim.tar.xz
   tar xf nim.tar.xz
   rm -f nim.tar.xz
