@@ -70,6 +70,7 @@ jobs:
           # - ubuntu-latest
           # - windows-latest
           - macOS-13
+          - macOS-latest
         version:
           - 1.6.0
           - 2.0.6
