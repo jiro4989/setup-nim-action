@@ -46,6 +46,7 @@ if [[ "$os" = Windows ]]; then
   unzip -q nim.zip
   rm -f nim.zip
 else
+  os="linux"
   if [[ "$os" = macOS ]]; then
     os="macosx"
   fi
