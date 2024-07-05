@@ -42,7 +42,7 @@ arch="x64"
 if [[ "$os" = Windows ]]; then
   download_url="https://nim-lang.org/download/nim-${nim_version}_${arch}.zip"
   curl -sSL "${download_url}" > nim.zip
-  unzip nim.zip
+  unzip -q nim.zip
   rm -f nim.zip
 else
   download_url="https://nim-lang.org/download/nim-${nim_version}-linux_${arch}.tar.xz"
