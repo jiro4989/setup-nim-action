@@ -44,3 +44,11 @@ runs:
         mkdir -Force ~\.nimble\bin
         (Resolve-Path ~\.nimble\bin).Path >> $Env:GITHUB_PATH
       if: runner.os == 'Windows'
+
+    - name: Print nim version
+      shell: bash
+      run: nim -v
+
+    - name: Print nimble version
+      shell: bash
+      run: nimble -v
