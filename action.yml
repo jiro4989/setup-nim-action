@@ -11,8 +11,7 @@ inputs:
     default: 'stable'
   nim-install-directory:
     description: >-
-      The Nim version to download (if necessary)
-      and use. Example 1.0.2
+      The Nim compiler installation directory.
     default: '.nim_runtime'
   repo-token:
     description: 'The GITHUB_TOKEN secret'
