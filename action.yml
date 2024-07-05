@@ -40,7 +40,7 @@ runs:
       run: |
         echo "$PWD/${{ inputs.nim-install-directory }}/bin" >> "$GITHUB_PATH"
         echo "$HOME/.nimble/bin" >> "$GITHUB_PATH"
-      if: ${{ runner.os }} != "Windows"
+      if: runner.os != 'Windows'
 
     - name: Set PATH on Windows
       shell: bash
@@ -48,4 +48,4 @@ runs:
         cygpath "$PWD/${{ inputs.nim-install-directory }}/bin" >> "$GITHUB_PATH"
         cygpath "$HOME/.nimble/bin" >> "$GITHUB_PATH"
         cat "$GITHUB_PATH"
-      if: ${{ runner.os }} == "Windows"
+      if: runner.os == 'Windows'
