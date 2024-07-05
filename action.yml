@@ -43,9 +43,8 @@ runs:
       if: runner.os != 'Windows'
 
     - name: Set PATH on Windows
-      shell: bash
+      shell: pwsh
       run: |
-        cygpath "$PWD/${{ inputs.nim-install-directory }}/bin" >> "$GITHUB_PATH"
-        cygpath "$HOME/.nimble/bin" >> "$GITHUB_PATH"
-        "$PWD/${{ inputs.nim-install-directory }}/bin/nim.exe" --version
+        echo "$Pwd\${{ inputs.nim-install-directory }}\bin" >> $Env:GITHUB_PATH
+        (Resolve-Path ~\.nimble\bin).Path >> $Env:GITHUB_PATH
       if: runner.os == 'Windows'
