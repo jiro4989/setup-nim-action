@@ -35,14 +35,14 @@ runs:
           --nim-install-directory ${{ inputs.nim-install-directory }} \
           --os ${{ runner.os }}
 
-    - name: Set PATH on Unix
+    - name: Set PATH for Unix
       shell: bash
       run: |
         echo "$PWD/${{ inputs.nim-install-directory }}/bin" >> "$GITHUB_PATH"
         echo "$HOME/.nimble/bin" >> "$GITHUB_PATH"
       if: runner.os != 'Windows'
 
-    - name: Set PATH on Windows
+    - name: Set PATH for Windows
       shell: pwsh
       run: |
         echo "$Pwd\${{ inputs.nim-install-directory }}\bin" >> $Env:GITHUB_PATH
