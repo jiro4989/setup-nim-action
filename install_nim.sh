@@ -16,6 +16,10 @@ info() {
   echo "$(date) [INFO] $*"
 }
 
+err() {
+  echo "$(date) [ERR] $*"
+}
+
 tag_regexp() {
   version=$1
   echo "$version" |
@@ -52,6 +56,23 @@ while ((0 < $#)); do
       ;;
   esac
 done
+
+# build nim compiler for deve branch
+if [[ "$nim_version" = "devel" ]]; then
+  if [[ "$os" = Windows ]]; then
+    err "'devel' version and windows runner are not supported yet"
+    exit 1
+  fi
+
+  git clone -b devel --depth 1 https://github.com/nim-lang/Nim
+  cd Nim
+  info "build nim compiler (devel)"
+  ./build_all.sh
+  cd ..
+  mv Nim "${nim_install_dir}"
+
+  exit
+fi
 
 # fetch latest tag if 'nim_version' was 'stable'
 if [[ "$nim_version" = "stable" ]]; then
