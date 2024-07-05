@@ -24,6 +24,10 @@ jobs:
           - macOS-latest
         version:
           - 2.0.x
+          - devel
+        exclude:
+          - os: windows-latest
+            version: devel
     steps:
       - uses: actions/checkout@v4
       - uses: ./
