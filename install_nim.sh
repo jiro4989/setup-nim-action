@@ -38,6 +38,7 @@ if [[ "$nim_version" = "stable" ]]; then
   nim_version="$(fetch_tags | jq -r '.[].ref' | sort -V | tail -n 1 | sed -E 's:^refs/tags/v::')"
 fi
 
+# download nim compiler
 arch="x64"
 if [[ "$os" = Windows ]]; then
   download_url="https://nim-lang.org/download/nim-${nim_version}_${arch}.zip"
