@@ -47,4 +47,5 @@ runs:
       run: |
         cygpath "$PWD/${{ inputs.nim-install-directory }}/bin" >> "$GITHUB_PATH"
         cygpath "$HOME/.nimble/bin" >> "$GITHUB_PATH"
+        cat "$GITHUB_PATH"
       if: ${{ runner.os }} == "Windows"
