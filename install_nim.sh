@@ -12,6 +12,7 @@ fetch_tags() {
 # parse commandline args
 nim_version="stable"
 nim_install_dir=".nim_runtime"
+os="Linux"
 while ((0 < $#)); do
   opt=$1
   shift
@@ -21,6 +22,9 @@ while ((0 < $#)); do
       ;;
     --nim-install-directory)
       nim_install_dir=$1
+      ;;
+    --os)
+      os=$1
       ;;
     # --repo-token)
     #   repo_token=$1
@@ -34,12 +38,16 @@ if [[ "$nim_version" = "stable" ]]; then
   nim_version="$(fetch_tags | jq -r '.[].ref' | sort -V | tail -n 1 | sed -E 's:^refs/tags/v::')"
 fi
 
-os="linux"
 arch="x64"
-download_url="https://nim-lang.org/download/nim-${nim_version}-${os}_${arch}.tar.xz"
-
-mkdir -p "${nim_install_dir}"
-cd "${nim_install_dir}"
-curl -sSL "${download_url}" > nim.tar.xz
-tar xf nim.tar.xz --strip-components 1
-cd ..
+if [[ "$os" = Windows ]]; then
+  download_url="https://nim-lang.org/download/nim-${nim_version}_${arch}.zip"
+  curl -sSL "${download_url}" > nim.zip
+  unzip nim.zip
+  rm -f nim.zip
+else
+  download_url="https://nim-lang.org/download/nim-${nim_version}-linux_${arch}.tar.xz"
+  curl -sSL "${download_url}" > nim.tar.xz
+  tar xf nim.tar.xz
+  rm -f nim.tar.xz
+fi
+mv "nim-${nim_version}" "${nim_install_dir}"
