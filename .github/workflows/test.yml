@@ -62,24 +62,49 @@ jobs:
   #     - name: Run command
   #       run: nimjson -h
 
-  test-actions:
+  test-on-cross-platform:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os:
-          # - ubuntu-latest
-          # - windows-latest
+          - ubuntu-latest
+          - windows-latest
           - macOS-13
           - macOS-latest
         version:
+          - 2.0.x
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          nim-version: ${{ matrix.version }}
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print Nim version
+        run: nim -v
+      - name: Print Nimble version
+        run: nimble -v
+      - name: Run build test
+        run: nimble install -Y nimjson
+      - name: Run command
+        run: nimjson -h
+
+  test-multi-versions:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+        version:
+          - 1.0.x
+          - 1.2.x
+          - 1.4.x
           - 1.6.0
-          - 2.0.6
+          - 1.6.x
+          - 1.x
+          - 2.0.x
+          - 2.x
           - stable
-          # - 1.4.x
-          # - 1.x
-          # - 2.0.x
-          # - 2.x
-          # - '#version-1-6'
     steps:
       - uses: actions/checkout@v4
       - uses: ./
