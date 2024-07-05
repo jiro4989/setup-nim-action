@@ -56,8 +56,10 @@ elif [[ "$os" = macOS ]]; then
 
   cd "nim-${nim_version}"
   ls
-  sh build_all.sh
+  ./build.sh
+  ./bin/nim c -d:release koch
   ./koch boot -d:release -d:useLinenoise
+  ./koch tools
   cd ..
 else
   download_url="https://nim-lang.org/download/nim-${nim_version}-linux_${arch}.tar.xz"
