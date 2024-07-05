@@ -55,7 +55,6 @@ elif [[ "$os" = macOS ]]; then
   rm -f nim.tar.xz
 
   cd "nim-${nim_version}"
-  ls
   ./build.sh
   ./bin/nim c -d:release koch
   ./koch boot -d:release -d:useLinenoise
