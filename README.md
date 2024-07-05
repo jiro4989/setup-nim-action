@@ -6,7 +6,7 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
 
 <!-- vim-markdown-toc GFM -->
 
-* [Usage](#mag_rightusage)
+* [:mag_right:Usage](#mag_rightusage)
   * [Basic usage](#basic-usage)
   * [Setup a latest patch version Nim](#setup-a-latest-patch-version-nim)
   * [Setup a latest minor version Nim](#setup-a-latest-minor-version-nim)
@@ -14,8 +14,8 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
   * [Matrix testing usage](#matrix-testing-usage)
   * [`devel` usage](#devel-usage)
   * [Full example](#full-example)
-* [Development](#hammerdevelopment)
-* [License](#page_facing_uplicense)
+* [:hammer:Development](#hammerdevelopment)
+* [:page_facing_up:License](#page_facing_uplicense)
 
 <!-- vim-markdown-toc -->
 
@@ -28,7 +28,7 @@ See [action.yml](action.yml)
 ```yaml
 steps:
   - uses: actions/checkout@v3
-  - uses: jiro4989/setup-nim-action@v1
+  - uses: jiro4989/setup-nim-action@v2-beta
     with:
       nim-version: '2.0.0' # default is 'stable'
       repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -39,7 +39,7 @@ steps:
 `repo-token` is using for [Rate limiting](https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting).
 It works without setting this parameter, but please set it if the following error message is returned.
 
-> Error: 403 - {"message":"API rate limit exceeded for nn.nn.nn.nnn. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)","documentation_url":"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"}
+> Error: 403 - {"message":"API rate limit exceeded for nn.nn.nn.nnn. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)","documentation_url":"<https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"}>
 
 ### Setup a latest patch version Nim
 
@@ -48,7 +48,7 @@ Setup a latest patch version Nim when `nim-version` is `2.n.x` .
 ```yaml
 steps:
   - uses: actions/checkout@v3
-  - uses: jiro4989/setup-nim-action@v1
+  - uses: jiro4989/setup-nim-action@v2-beta
     with:
       nim-version: '2.0.x' # ex: 1.0.x, 1.2.x, 1.4.x, 2.0.x ...
       repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -63,7 +63,7 @@ Setup a latest minor version Nim when `nim-version` is `2.x` .
 ```yaml
 steps:
   - uses: actions/checkout@v3
-  - uses: jiro4989/setup-nim-action@v1
+  - uses: jiro4989/setup-nim-action@v2-beta
     with:
       nim-version: '2.x'
       repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -85,7 +85,7 @@ steps:
       restore-keys: |
         ${{ runner.os }}-nimble-
     if: runner.os != 'Windows'
-  - uses: jiro4989/setup-nim-action@v1
+  - uses: jiro4989/setup-nim-action@v2-beta
     with:
       repo-token: ${{ secrets.GITHUB_TOKEN }}
   - run: nimble build -Y
@@ -116,7 +116,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup nim
-        uses: jiro4989/setup-nim-action@v1
+        uses: jiro4989/setup-nim-action@v2-beta
         with:
           nim-version: ${{ matrix.nim }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -139,7 +139,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup nim
-        uses: jiro4989/setup-nim-action@v1
+        uses: jiro4989/setup-nim-action@v2-beta
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: nimble build -Y
@@ -170,7 +170,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup nim
-        uses: jiro4989/setup-nim-action@v1
+        uses: jiro4989/setup-nim-action@v2-beta
         with:
           nim-version: ${{ matrix.nim }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -179,6 +179,9 @@ jobs:
 ```
 
 ### `devel` usage
+
+:WARN: setup-nim-action@v2 is not supported `devel` version yet.
+Please use v1.
 
 Use `date` cache-key for speed-up if you want to use `devel`.
 See [cache documents](https://github.com/actions/cache) for more information and how to use the cache.
@@ -234,8 +237,8 @@ This project uses [TypeScript](https://www.typescriptlang.org/).
 Run `npm run build` when you edited source code.
 
 ```bash
-$ vim src/installer.ts
-$ npm run build
+vim src/installer.ts
+npm run build
 ```
 
 `npm run build` command will output a JavaScript file under the `lib` directory. Please commit this.
@@ -245,3 +248,4 @@ And please add [test code](https://github.com/jiro4989/setup-nim-action/tree/mas
 ## :page_facing_up:License
 
 MIT
+
