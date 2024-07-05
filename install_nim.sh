@@ -40,17 +40,16 @@ fi
 
 # download nim compiler
 arch="x64"
-if [[ $(uname -m) = arm64 ]]; then
-  arch="arm64"
-fi
-
 if [[ "$os" = Windows ]]; then
   download_url="https://nim-lang.org/download/nim-${nim_version}_${arch}.zip"
   curl -sSL "${download_url}" > nim.zip
   unzip -q nim.zip
   rm -f nim.zip
 else
-  download_url="https://nim-lang.org/download/nim-${nim_version}-linux_${arch}.tar.xz"
+  if [[ "$os" = macOS ]]; then
+    os="macosx"
+  fi
+  download_url="https://nim-lang.org/download/nim-${nim_version}-${os}_${arch}.tar.xz"
   curl -sSL "${download_url}" > nim.tar.xz
   tar xf nim.tar.xz
   rm -f nim.tar.xz
