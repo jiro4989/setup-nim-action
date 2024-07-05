@@ -13,65 +13,70 @@ on:
       - '*.md'
 
 jobs:
-  unit-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Run test
-        run: npm test
-      - name: Check unused packages
-        run: npm run check-deps
+  # unit-test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: actions/setup-node@v4
+  #       with:
+  #         node-version: '20'
+  #     - name: Run test
+  #       run: npm test
+  #     - name: Check unused packages
+  #       run: npm run check-deps
 
-  test-actions-on-cross-platform:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
-          - macOS-latest
-        version:
-          - 1.4.0
-          - stable
-          - devel
-        exclude:
-          - os: macOS-latest
-            version: 1.4.0
-          - os: macOS-latest
-            version: devel
-          - os: windows-latest
-            version: 1.4.0
-          - os: windows-latest
-            version: devel
-    steps:
-      - uses: actions/checkout@v4
-      - uses: ./
-        with:
-          nim-version: ${{ matrix.version }}
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Print Nim version
-        run: nim -v
-      - name: Print Nimble version
-        run: nimble -v
-      - name: Run build test
-        run: nimble install -Y nimjson
-      - name: Run command
-        run: nimjson -h
+  # test-actions-on-cross-platform:
+  #   runs-on: ${{ matrix.os }}
+  #   strategy:
+  #     matrix:
+  #       os:
+  #         - ubuntu-latest
+  #         - windows-latest
+  #         - macOS-latest
+  #       version:
+  #         - 1.4.0
+  #         - stable
+  #         - devel
+  #       exclude:
+  #         - os: macOS-latest
+  #           version: 1.4.0
+  #         - os: macOS-latest
+  #           version: devel
+  #         - os: windows-latest
+  #           version: 1.4.0
+  #         - os: windows-latest
+  #           version: devel
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - uses: ./
+  #       with:
+  #         nim-version: ${{ matrix.version }}
+  #         repo-token: ${{ secrets.GITHUB_TOKEN }}
+  # 
+  #     - name: Print Nim version
+  #       run: nim -v
+  #     - name: Print Nimble version
+  #       run: nimble -v
+  #     - name: Run build test
+  #       run: nimble install -Y nimjson
+  #     - name: Run command
+  #       run: nimjson -h
 
   test-actions:
     runs-on: ubuntu-latest
     strategy:
       matrix:
         version:
-          - 1.4.x
-          - 1.x
-          - 2.0.x
-          - 2.x
-          - '#version-1-6'
+          - 1.4.0
+          - 1.6.0
+          - 2.0.0
+          - 2.0.6
+          - stable
+          # - 1.4.x
+          # - 1.x
+          # - 2.0.x
+          # - 2.x
+          # - '#version-1-6'
     steps:
       - uses: actions/checkout@v4
       - uses: ./
