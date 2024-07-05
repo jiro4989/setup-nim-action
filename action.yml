@@ -30,7 +30,7 @@ runs:
     - name: Install nim
       shell: bash
       run: |
-        ./install_nim.sh \
+        "${{ github.action_path }}/install_nim.sh" \
           --nim-version "${{ inputs.nim-version }}" \
           --nim-install-directory "${{ inputs.nim-install-directory }}" \
           --os "${{ runner.os }}" \
