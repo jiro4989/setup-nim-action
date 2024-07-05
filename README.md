@@ -28,7 +28,7 @@ See [action.yml](action.yml)
 ```yaml
 steps:
   - uses: actions/checkout@v3
-  - uses: jiro4989/setup-nim-action@v2-beta
+  - uses: jiro4989/setup-nim-action@v2
     with:
       nim-version: '2.0.0' # default is 'stable'
       repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -48,7 +48,7 @@ Setup a latest patch version Nim when `nim-version` is `2.n.x` .
 ```yaml
 steps:
   - uses: actions/checkout@v3
-  - uses: jiro4989/setup-nim-action@v2-beta
+  - uses: jiro4989/setup-nim-action@v2
     with:
       nim-version: '2.0.x' # ex: 1.0.x, 1.2.x, 1.4.x, 2.0.x ...
       repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -63,7 +63,7 @@ Setup a latest minor version Nim when `nim-version` is `2.x` .
 ```yaml
 steps:
   - uses: actions/checkout@v3
-  - uses: jiro4989/setup-nim-action@v2-beta
+  - uses: jiro4989/setup-nim-action@v2
     with:
       nim-version: '2.x'
       repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -85,7 +85,7 @@ steps:
       restore-keys: |
         ${{ runner.os }}-nimble-
     if: runner.os != 'Windows'
-  - uses: jiro4989/setup-nim-action@v2-beta
+  - uses: jiro4989/setup-nim-action@v2
     with:
       repo-token: ${{ secrets.GITHUB_TOKEN }}
   - run: nimble build -Y
@@ -116,7 +116,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup nim
-        uses: jiro4989/setup-nim-action@v2-beta
+        uses: jiro4989/setup-nim-action@v2
         with:
           nim-version: ${{ matrix.nim }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -139,7 +139,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup nim
-        uses: jiro4989/setup-nim-action@v2-beta
+        uses: jiro4989/setup-nim-action@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: nimble build -Y
@@ -170,7 +170,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup nim
-        uses: jiro4989/setup-nim-action@v2-beta
+        uses: jiro4989/setup-nim-action@v2
         with:
           nim-version: ${{ matrix.nim }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -179,9 +179,6 @@ jobs:
 ```
 
 ### `devel` usage
-
-:WARN: setup-nim-action@v2 is not supported `devel` version yet.
-Please use v1.
 
 Use `date` cache-key for speed-up if you want to use `devel`.
 See [cache documents](https://github.com/actions/cache) for more information and how to use the cache.
@@ -219,7 +216,7 @@ jobs:
           key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
           restore-keys: |
             ${{ runner.os }}-nimble-
-      - uses: jiro4989/setup-nim-action@v1
+      - uses: jiro4989/setup-nim-action@v2
         with:
           nim-version: "${{ matrix.nim-version }}"
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -248,4 +245,3 @@ And please add [test code](https://github.com/jiro4989/setup-nim-action/tree/mas
 ## :page_facing_up:License
 
 MIT
-
