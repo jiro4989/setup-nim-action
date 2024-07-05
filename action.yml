@@ -38,6 +38,7 @@ runs:
     - name: Set PATH for Unix
       shell: bash
       run: |
+        uname -m
         echo "$PWD/${{ inputs.nim-install-directory }}/bin" >> "$GITHUB_PATH"
         echo "$HOME/.nimble/bin" >> "$GITHUB_PATH"
       if: runner.os != 'Windows'
