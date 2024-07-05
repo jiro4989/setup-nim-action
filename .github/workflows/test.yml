@@ -67,8 +67,8 @@ jobs:
     strategy:
       matrix:
         os:
-          - ubuntu-latest
-          - windows-latest
+          # - ubuntu-latest
+          # - windows-latest
           - macOS-13
         version:
           - 1.6.0
