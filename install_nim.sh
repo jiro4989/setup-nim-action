@@ -6,7 +6,7 @@ fetch_tags() {
   # https://docs.github.com/ja/rest/git/refs?apiVersion=2022-11-28
   curl \
     -H "Accept: application/vnd.github+json" \
-    -H "Authorization: Bearer ${INPUT_REPO_TOKEN}" \
+    -H "Authorization: Bearer ${repo_token}" \
     -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/nim-lang/nim/git/refs/tags
 }
 
@@ -14,6 +14,7 @@ fetch_tags() {
 nim_version="stable"
 nim_install_dir=".nim_runtime"
 os="Linux"
+repo_token=""
 while ((0 < $#)); do
   opt=$1
   shift
@@ -26,6 +27,9 @@ while ((0 < $#)); do
       ;;
     --os)
       os=$1
+      ;;
+    --repo-token)
+      repo_token=$1
       ;;
   esac
 done
