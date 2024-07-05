@@ -54,11 +54,13 @@ elif [[ "$os" = macOS ]]; then
   tar xf nim.tar.xz
   rm -f nim.tar.xz
 
+  # homebrew: https://github.com/Homebrew/homebrew-core/blob/736836cf038c04e304e635ccd04dcd0bdff8f57b/Formula/n/nim.rb
+  # nim: https://github.com/nim-lang/Nim/blob/devel/build_all.sh
   cd "nim-${nim_version}"
   ./build.sh
-  ./bin/nim c -d:release koch
-  ./koch boot -d:release -d:useLinenoise
-  ./koch tools
+  ./bin/nim c --noNimblePath --skipUserCfg --skipParentCfg --hints:off koch
+  ./koch boot -d:release --skipUserCfg --skipParentCfg --hints:off
+  ./koch tools --skipUserCfg --skipParentCfg --hints:off
   cd ..
 else
   download_url="https://nim-lang.org/download/nim-${nim_version}-linux_${arch}.tar.xz"
