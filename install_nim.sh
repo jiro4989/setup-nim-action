@@ -10,6 +10,10 @@ fetch_tags() {
     -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/nim-lang/nim/git/refs/tags
 }
 
+info() {
+  echo "$(date) [INFO] $*"
+}
+
 # parse commandline args
 nim_version="stable"
 nim_install_dir=".nim_runtime"
@@ -48,7 +52,7 @@ if [[ "$os" = Windows ]]; then
   unzip -q nim.zip
   rm -f nim.zip
 elif [[ "$os" = macOS ]]; then
-  # Need to build compiler
+  # need to build compiler
   download_url="https://nim-lang.org/download/nim-${nim_version}.tar.xz"
   curl -sSL "${download_url}" > nim.tar.xz
   tar xf nim.tar.xz
@@ -57,10 +61,19 @@ elif [[ "$os" = macOS ]]; then
   # homebrew: https://github.com/Homebrew/homebrew-core/blob/736836cf038c04e304e635ccd04dcd0bdff8f57b/Formula/n/nim.rb
   # nim: https://github.com/nim-lang/Nim/blob/devel/build_all.sh
   cd "nim-${nim_version}"
+
+  info "build nim compiler"
   ./build.sh
+
+  info "build koch tool"
   ./bin/nim c --noNimblePath --skipUserCfg --skipParentCfg --hints:off koch
+
+  info "koch boot"
   ./koch boot -d:release --skipUserCfg --skipParentCfg --hints:off
+
+  info "koch tools"
   ./koch tools --skipUserCfg --skipParentCfg --hints:off
+
   cd ..
 else
   download_url="https://nim-lang.org/download/nim-${nim_version}-linux_${arch}.tar.xz"
