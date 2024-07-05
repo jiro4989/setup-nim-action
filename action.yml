@@ -9,6 +9,11 @@ inputs:
       The Nim version to download (if necessary)
       and use. Example 1.0.2
     default: 'stable'
+  nim-install-directory:
+    description: >-
+      The Nim version to download (if necessary)
+      and use. Example 1.0.2
+    default: '.nim_runtime'
   no-color:
     description: 'Activate "--noColor" options of choosenim. Example: true'
     default: false
@@ -25,6 +30,6 @@ runs:
     - name: Install nim
       shell: bash
       run: |
-        ./install_nim.sh
-        echo "$PWD/.nim_runtime/bin" >> "$GITHUB_PATH"
+        ./install_nim.sh --nim-version ${{ inputs.nim-version }} --nim-install-directory ${{ inputs.nim-install-directory }}
+        echo "$PWD/${{ inputs.nim-install-directory }}/bin" >> "$GITHUB_PATH"
         echo "$HOME/.nimble/bin" >> "$GITHUB_PATH"
