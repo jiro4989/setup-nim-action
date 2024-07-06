@@ -6,6 +6,7 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
 
 <!-- vim-markdown-toc GFM -->
 
+* [`v2` version was released :tada:](#v2-version-was-released-tada)
 * [Migration to v2 from v1](#migration-to-v2-from-v1)
 * [:mag_right:Usage](#mag_rightusage)
   * [Basic usage](#basic-usage)
@@ -20,12 +21,25 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
 
 <!-- vim-markdown-toc -->
 
+## `v2` version was released :tada:
+
+setup-nim-action has released `v2` ( #491 ).
+
+setup-nim-action `v1` depended on `choosenim`.
+One day, an issue occurred that installation became very slow with `choosenim`.
+This process took between 6 and 20 minutes.
+
+I changed setup-nim-action so that is does not use choosenim to solve this problem.
+
 ## Migration to v2 from v1
 
 1. Upgrade version of setup-nim-action to `v2` from `v1`
 1. Change cache key to clear cache if you are using it.
-   The key can be anything if the cache will be cleared
-1. Remove `yes` and `no-color` parameters if you are using it. These parameters are not used now
+   The key can be anything if the cache will be cleared.
+   Nothing to do if you are not using `actions/cache`
+1. Remove `yes` and `no-color` parameters if you are using it.
+   These parameters are not used now.
+   Nothing to do if you are not these parameters
 
 ```diff
  steps:
