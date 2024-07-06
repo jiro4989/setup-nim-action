@@ -10,13 +10,6 @@ on:
 jobs:
   test_vX:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        type:
-          - default
-          - no-color
-          - 'yes'
-          - all
     steps:
       - uses: actions/checkout@v4
       - name: Cache nimble
@@ -28,29 +21,9 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nimble
 
-      - uses: jiro4989/setup-nim-action@v1
+      - uses: jiro4989/setup-nim-action@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
-        if: matrix.type == 'default'
-
-      - uses: ./
-        with:
-          no-color: true
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-        if: matrix.type == 'no-color'
-
-      - uses: ./
-        with:
-          yes: true
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-        if: matrix.type == 'yes'
-
-      - uses: ./
-        with:
-          no-color: true
-          yes: true
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
-        if: matrix.type == 'all'
 
       - name: Print Nim version
         run: nim -v
