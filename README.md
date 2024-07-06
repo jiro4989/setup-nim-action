@@ -23,7 +23,7 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
 
 ## `v2` version was released :tada:
 
-setup-nim-action has released `v2` ( #491 ).
+setup-nim-action has released `v2` ( <https://github.com/jiro4989/setup-nim-action/pull/491> ).
 
 setup-nim-action `v1` depended on `choosenim`.
 One day, an issue occurred that installation became very slow with `choosenim`.
