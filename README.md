@@ -51,9 +51,10 @@ I changed setup-nim-action so that is does not use choosenim to solve this probl
      with:
        path: ~/.nimble
 -      key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
-+      key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}-v2
++      key: ${{ runner.os }}-nimble-v2-${{ hashFiles('*.nimble') }}
        restore-keys: |
-         ${{ runner.os }}-nimble-
+-        ${{ runner.os }}-nimble-
++        ${{ runner.os }}-nimble-v2-
      if: runner.os != 'Windows'
 
 -  - uses: jiro4989/setup-nim-action@v1
