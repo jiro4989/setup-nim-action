@@ -5,12 +5,6 @@
 ---
 version: 2
 updates:
-  - package-ecosystem: "npm"
-    directory: "/"
-    schedule:
-      interval: "daily"
-    assignees:
-      - "jiro4989"
   - package-ecosystem: "github-actions"
     directory: "/"
     schedule:
