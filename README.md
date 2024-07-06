@@ -26,7 +26,7 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
 setup-nim-action has released `v2` ( <https://github.com/jiro4989/setup-nim-action/pull/491> ).
 
 setup-nim-action `v1` depended on `choosenim`.
-One day, an issue occurred that installation became very slow with `choosenim`.
+One day, an issue occurred that installation became very slow with `choosenim` ( <https://github.com/jiro4989/setup-nim-action/issues/483> ).
 This process took between 6 and 20 minutes.
 
 I changed setup-nim-action so that is does not use choosenim to solve this problem.
