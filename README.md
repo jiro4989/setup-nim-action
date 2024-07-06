@@ -6,6 +6,7 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
 
 <!-- vim-markdown-toc GFM -->
 
+* [Migration to v2 from v1](#migration-to-v2-from-v1)
 * [:mag_right:Usage](#mag_rightusage)
   * [Basic usage](#basic-usage)
   * [Setup a latest patch version Nim](#setup-a-latest-patch-version-nim)
@@ -18,6 +19,39 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
 * [:page_facing_up:License](#page_facing_uplicense)
 
 <!-- vim-markdown-toc -->
+
+## Migration to v2 from v1
+
+1. Upgrade version of setup-nim-action to `v2` from `v1`
+1. Change cache key to clear cache if you are using it.
+   The key can be anything if the cache will be cleared
+1. Remove `yes` and `no-color` parameters if you are using it. These parameters are not used now
+
+```diff
+ steps:
+   - uses: actions/checkout@v3
+
+   - name: Cache nimble
+     id: cache-nimble
+     uses: actions/cache@v3
+     with:
+       path: ~/.nimble
+-      key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
++      key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}-v2
+       restore-keys: |
+         ${{ runner.os }}-nimble-
+     if: runner.os != 'Windows'
+
+-  - uses: jiro4989/setup-nim-action@v1
++  - uses: jiro4989/setup-nim-action@v2
+     with:
+       nim-version: '2.0.0' # default is 'stable'
+       repo-token: ${{ secrets.GITHUB_TOKEN }}
+-      yes: false
+-      no-color: yes
+   - run: nimble build -Y
+   - run: nimble test -Y
+```
 
 ## :mag_right:Usage
 
