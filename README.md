@@ -229,8 +229,8 @@ jobs:
 
 ### `devel` usage
 
-Use `date` cache-key for speed-up if you want to use `devel`.
-See [cache documents](https://github.com/actions/cache) for more information and how to use the cache.
+Use `devel` version if you want to use devel compiler of nim.
+setup-nim-action will fetch the devel source code and build the nim compiler every time.
 
 ```yaml
 jobs:
@@ -244,19 +244,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Get Date
-        id: get-date
-        run: echo "::set-output name=date::$(date "+%Y-%m-%d")"
-        shell: bash
-
-      - name: Cache choosenim
-        id: cache-choosenim
-        uses: actions/cache@v3
-        with:
-          path: ~/.choosenim
-          key: ${{ runner.os }}-choosenim-${{ matrix.cache-key }}-${{ steps.get-date.outputs.date }}
-          restore-keys: |
-            ${{ runner.os }}-choosenim-${{ matrix.cache-key }}-
       - name: Cache nimble
         id: cache-nimble
         uses: actions/cache@v3
@@ -265,9 +252,10 @@ jobs:
           key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
           restore-keys: |
             ${{ runner.os }}-nimble-
+
       - uses: jiro4989/setup-nim-action@v2
         with:
-          nim-version: "${{ matrix.nim-version }}"
+          nim-version: devel
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: nimble build
