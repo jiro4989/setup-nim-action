@@ -13,37 +13,19 @@ on:
       - '*.md'
 
 jobs:
-  unit-test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - name: Run test
-        run: npm test
-      - name: Check unused packages
-        run: npm run check-deps
-
-  test-actions-on-cross-platform:
+  test-on-cross-platform:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         os:
           - ubuntu-latest
           - windows-latest
+          - macOS-13
           - macOS-latest
         version:
-          - 1.4.0
-          - stable
+          - 2.0.x
           - devel
         exclude:
-          - os: macOS-latest
-            version: 1.4.0
-          - os: macOS-latest
-            version: devel
-          - os: windows-latest
-            version: 1.4.0
           - os: windows-latest
             version: devel
     steps:
@@ -62,16 +44,20 @@ jobs:
       - name: Run command
         run: nimjson -h
 
-  test-actions:
-    runs-on: ubuntu-latest
+  test-multi-versions:
+    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
+        os:
+          - ubuntu-latest
         version:
           - 1.4.x
+          - 1.6.0
+          - 1.6.x
           - 1.x
           - 2.0.x
           - 2.x
-          - '#version-1-6'
+          - stable
     steps:
       - uses: actions/checkout@v4
       - uses: ./

@@ -6,7 +6,11 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
 
 <!-- vim-markdown-toc GFM -->
 
-* [Usage](#mag_rightusage)
+* [`v2` version was released :tada:](#v2-version-was-released-tada)
+* [Migration to v2 from v1](#migration-to-v2-from-v1)
+  * [Q&A](#qa)
+    * [getAppFilename failed](#getappfilename-failed)
+* [:mag_right:Usage](#mag_rightusage)
   * [Basic usage](#basic-usage)
   * [Setup a latest patch version Nim](#setup-a-latest-patch-version-nim)
   * [Setup a latest minor version Nim](#setup-a-latest-minor-version-nim)
@@ -14,10 +18,103 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
   * [Matrix testing usage](#matrix-testing-usage)
   * [`devel` usage](#devel-usage)
   * [Full example](#full-example)
-* [Development](#hammerdevelopment)
-* [License](#page_facing_uplicense)
+* [:hammer:Development](#hammerdevelopment)
+* [:page_facing_up:License](#page_facing_uplicense)
 
 <!-- vim-markdown-toc -->
+
+## `v2` version was released :tada:
+
+setup-nim-action has released `v2` ( <https://github.com/jiro4989/setup-nim-action/pull/491> ).
+
+setup-nim-action `v1` depended on `choosenim`.
+One day, an issue occurred that installation became very slow with `choosenim` ( <https://github.com/jiro4989/setup-nim-action/issues/483> ).
+This process took between 6 and 20 minutes.
+
+I changed setup-nim-action so that is does not use choosenim to solve this problem.
+
+## Migration to v2 from v1
+
+1. Upgrade version of setup-nim-action to `v2` from `v1`
+1. Change cache key to clear cache if you are using it.
+   The key can be anything if the cache will be cleared.
+   Nothing to do if you are not using `actions/cache`
+1. Remove caching `choosenim` if you are using it.
+   setup-nim-action does not use choosenim now.
+   Nothing to do if you are not these parameters
+1. Remove `yes` and `no-color` parameters if you are using it.
+   These parameters are not used now.
+   Nothing to do if you are not these parameters
+
+```diff
+ steps:
+   - uses: actions/checkout@v3
+
+   - name: Cache nimble
+     id: cache-nimble
+     uses: actions/cache@v3
+     with:
+       path: ~/.nimble
+-      key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
++      key: ${{ runner.os }}-nimble-v2-${{ hashFiles('*.nimble') }}
+       restore-keys: |
+-        ${{ runner.os }}-nimble-
++        ${{ runner.os }}-nimble-v2-
+     if: runner.os != 'Windows'
+
+-  - name: Cache choosenim
+-    id: cache-choosenim
+-    uses: actions/cache@v3
+-    with:
+-      path: ~/.choosenim
+-      key: ${{ runner.os }}-choosenim-${{ matrix.cache-key }}-${{ steps.get-date.outputs.date }}
+-      restore-keys: |
+-        ${{ runner.os }}-choosenim-${{ matrix.cache-key }}-
+
+-  - uses: jiro4989/setup-nim-action@v1
++  - uses: jiro4989/setup-nim-action@v2
+     with:
+       nim-version: '2.0.0' # default is 'stable'
+       repo-token: ${{ secrets.GITHUB_TOKEN }}
+-      yes: false
+-      no-color: yes
+   - run: nimble build -Y
+   - run: nimble test -Y
+```
+
+### Q&A
+
+#### getAppFilename failed
+
+Please clear cache if you get the following error.
+
+> getAppFilename failed. (Error was: Unable to read /home/runner/.choosenim/current. (Error was: No installation has been chosen. (File missing: /home/runner/.choosenim/current)))
+
+Cache is cleared if you change cache key.
+
+```diff
+     uses: actions/cache@v3
+     with:
+       path: ~/.nimble
+-      key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
++      key: ${{ runner.os }}-nimble-v2-${{ hashFiles('*.nimble') }}
+       restore-keys: |
+-        ${{ runner.os }}-nimble-
++        ${{ runner.os }}-nimble-v2-
+     if: runner.os != 'Windows'
+```
+
+Or please remove actions/cache.
+
+```diff
+-    uses: actions/cache@v3
+-    with:
+-      path: ~/.nimble
+-      key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
+-      restore-keys: |
+-        ${{ runner.os }}-nimble-
+-    if: runner.os != 'Windows'
+```
 
 ## :mag_right:Usage
 
@@ -28,7 +125,7 @@ See [action.yml](action.yml)
 ```yaml
 steps:
   - uses: actions/checkout@v3
-  - uses: jiro4989/setup-nim-action@v1
+  - uses: jiro4989/setup-nim-action@v2
     with:
       nim-version: '2.0.0' # default is 'stable'
       repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -39,7 +136,7 @@ steps:
 `repo-token` is using for [Rate limiting](https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting).
 It works without setting this parameter, but please set it if the following error message is returned.
 
-> Error: 403 - {"message":"API rate limit exceeded for nn.nn.nn.nnn. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)","documentation_url":"https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"}
+> Error: 403 - {"message":"API rate limit exceeded for nn.nn.nn.nnn. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)","documentation_url":"<https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"}>
 
 ### Setup a latest patch version Nim
 
@@ -48,7 +145,7 @@ Setup a latest patch version Nim when `nim-version` is `2.n.x` .
 ```yaml
 steps:
   - uses: actions/checkout@v3
-  - uses: jiro4989/setup-nim-action@v1
+  - uses: jiro4989/setup-nim-action@v2
     with:
       nim-version: '2.0.x' # ex: 1.0.x, 1.2.x, 1.4.x, 2.0.x ...
       repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -63,7 +160,7 @@ Setup a latest minor version Nim when `nim-version` is `2.x` .
 ```yaml
 steps:
   - uses: actions/checkout@v3
-  - uses: jiro4989/setup-nim-action@v1
+  - uses: jiro4989/setup-nim-action@v2
     with:
       nim-version: '2.x'
       repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -85,7 +182,7 @@ steps:
       restore-keys: |
         ${{ runner.os }}-nimble-
     if: runner.os != 'Windows'
-  - uses: jiro4989/setup-nim-action@v1
+  - uses: jiro4989/setup-nim-action@v2
     with:
       repo-token: ${{ secrets.GITHUB_TOKEN }}
   - run: nimble build -Y
@@ -116,7 +213,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup nim
-        uses: jiro4989/setup-nim-action@v1
+        uses: jiro4989/setup-nim-action@v2
         with:
           nim-version: ${{ matrix.nim }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -139,7 +236,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup nim
-        uses: jiro4989/setup-nim-action@v1
+        uses: jiro4989/setup-nim-action@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
       - run: nimble build -Y
@@ -170,7 +267,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Setup nim
-        uses: jiro4989/setup-nim-action@v1
+        uses: jiro4989/setup-nim-action@v2
         with:
           nim-version: ${{ matrix.nim }}
           repo-token: ${{ secrets.GITHUB_TOKEN }}
@@ -180,8 +277,8 @@ jobs:
 
 ### `devel` usage
 
-Use `date` cache-key for speed-up if you want to use `devel`.
-See [cache documents](https://github.com/actions/cache) for more information and how to use the cache.
+Use `devel` version if you want to use devel compiler of nim.
+setup-nim-action will fetch the devel source code and build the nim compiler every time.
 
 ```yaml
 jobs:
@@ -195,19 +292,6 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Get Date
-        id: get-date
-        run: echo "::set-output name=date::$(date "+%Y-%m-%d")"
-        shell: bash
-
-      - name: Cache choosenim
-        id: cache-choosenim
-        uses: actions/cache@v3
-        with:
-          path: ~/.choosenim
-          key: ${{ runner.os }}-choosenim-${{ matrix.cache-key }}-${{ steps.get-date.outputs.date }}
-          restore-keys: |
-            ${{ runner.os }}-choosenim-${{ matrix.cache-key }}-
       - name: Cache nimble
         id: cache-nimble
         uses: actions/cache@v3
@@ -216,9 +300,10 @@ jobs:
           key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
           restore-keys: |
             ${{ runner.os }}-nimble-
-      - uses: jiro4989/setup-nim-action@v1
+
+      - uses: jiro4989/setup-nim-action@v2
         with:
-          nim-version: "${{ matrix.nim-version }}"
+          nim-version: devel
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: nimble build
@@ -234,8 +319,8 @@ This project uses [TypeScript](https://www.typescriptlang.org/).
 Run `npm run build` when you edited source code.
 
 ```bash
-$ vim src/installer.ts
-$ npm run build
+vim src/installer.ts
+npm run build
 ```
 
 `npm run build` command will output a JavaScript file under the `lib` directory. Please commit this.
@@ -245,3 +330,4 @@ And please add [test code](https://github.com/jiro4989/setup-nim-action/tree/mas
 ## :page_facing_up:License
 
 MIT
+
