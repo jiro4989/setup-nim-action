@@ -315,19 +315,14 @@ See [.github/workflows/test.yml](.github/workflows/test.yml).
 
 ## :hammer:Development
 
-This project uses [TypeScript](https://www.typescriptlang.org/).
-Run `npm run build` when you edited source code.
+This project uses shell script only.
+Run `script/format.sh` when you edited source code.
 
 ```bash
-vim src/installer.ts
-npm run build
+vim install_nim.sh
+./script/format.sh
 ```
-
-`npm run build` command will output a JavaScript file under the `lib` directory. Please commit this.
-
-And please add [test code](https://github.com/jiro4989/setup-nim-action/tree/master/tests) if possible.
 
 ## :page_facing_up:License
 
 MIT
-
