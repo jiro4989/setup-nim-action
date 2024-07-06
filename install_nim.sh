@@ -57,7 +57,7 @@ while ((0 < $#)); do
   esac
 done
 
-# build nim compiler for deve branch
+# build nim compiler for devel branch
 if [[ "$nim_version" = "devel" ]]; then
   if [[ "$os" = Windows ]]; then
     err "'devel' version and windows runner are not supported yet"
