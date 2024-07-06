@@ -37,6 +37,9 @@ I changed setup-nim-action so that is does not use choosenim to solve this probl
 1. Change cache key to clear cache if you are using it.
    The key can be anything if the cache will be cleared.
    Nothing to do if you are not using `actions/cache`
+1. Remove caching `choosenim` if you are using it.
+   setup-nim-action does not use choosenim now.
+   Nothing to do if you are not these parameters
 1. Remove `yes` and `no-color` parameters if you are using it.
    These parameters are not used now.
    Nothing to do if you are not these parameters
@@ -56,6 +59,15 @@ I changed setup-nim-action so that is does not use choosenim to solve this probl
 -        ${{ runner.os }}-nimble-
 +        ${{ runner.os }}-nimble-v2-
      if: runner.os != 'Windows'
+
+-  - name: Cache choosenim
+-    id: cache-choosenim
+-    uses: actions/cache@v3
+-    with:
+-      path: ~/.choosenim
+-      key: ${{ runner.os }}-choosenim-${{ matrix.cache-key }}-${{ steps.get-date.outputs.date }}
+-      restore-keys: |
+-        ${{ runner.os }}-choosenim-${{ matrix.cache-key }}-
 
 -  - uses: jiro4989/setup-nim-action@v1
 +  - uses: jiro4989/setup-nim-action@v2
