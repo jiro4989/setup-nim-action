@@ -44,7 +44,7 @@ jobs:
         with:
           path: ~/.nimble
           key: ${{ runner.os }}-nimble
-      - uses: jiro4989/setup-nim-action@v1
+      - uses: jiro4989/setup-nim-action@v2
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
