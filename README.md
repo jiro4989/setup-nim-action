@@ -8,6 +8,8 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
 
 * [`v2` version was released :tada:](#v2-version-was-released-tada)
 * [Migration to v2 from v1](#migration-to-v2-from-v1)
+  * [Q&A](#qa)
+    * [getAppFilename failed](#getappfilename-failed)
 * [:mag_right:Usage](#mag_rightusage)
   * [Basic usage](#basic-usage)
   * [Setup a latest patch version Nim](#setup-a-latest-patch-version-nim)
@@ -78,6 +80,40 @@ I changed setup-nim-action so that is does not use choosenim to solve this probl
 -      no-color: yes
    - run: nimble build -Y
    - run: nimble test -Y
+```
+
+### Q&A
+
+#### getAppFilename failed
+
+Please clear cache if you get the following error.
+
+> getAppFilename failed. (Error was: Unable to read /home/runner/.choosenim/current. (Error was: No installation has been chosen. (File missing: /home/runner/.choosenim/current)))
+
+Cache is cleared if you change cache key.
+
+```diff
+     uses: actions/cache@v3
+     with:
+       path: ~/.nimble
+-      key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
++      key: ${{ runner.os }}-nimble-v2-${{ hashFiles('*.nimble') }}
+       restore-keys: |
+-        ${{ runner.os }}-nimble-
++        ${{ runner.os }}-nimble-v2-
+     if: runner.os != 'Windows'
+```
+
+Or please remove actions/cache.
+
+```diff
+-    uses: actions/cache@v3
+-    with:
+-      path: ~/.nimble
+-      key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
+-      restore-keys: |
+-        ${{ runner.os }}-nimble-
+-    if: runner.os != 'Windows'
 ```
 
 ## :mag_right:Usage
@@ -294,3 +330,4 @@ And please add [test code](https://github.com/jiro4989/setup-nim-action/tree/mas
 ## :page_facing_up:License
 
 MIT
+
