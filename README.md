@@ -35,13 +35,13 @@ I changed setup-nim-action so that is does not use choosenim to solve this probl
 
 ## Migration to v2 from v1
 
-1. Upgrade version of setup-nim-action to `v2` from `v1`
+1. Upgrade version of `setup-nim-action` to `v2` from `v1`
 1. Change cache key to clear cache if you are using it.
    The key can be anything if the cache will be cleared.
    Nothing to do if you are not using `actions/cache`
 1. Remove caching `choosenim` if you are using it.
-   setup-nim-action does not use choosenim now.
-   Nothing to do if you are not these parameters
+   `setup-nim-action` does not use choosenim now.
+   Nothing to do if you are not caching `choosenim`
 1. Remove `yes` and `no-color` parameters if you are using it.
    These parameters are not used now.
    Nothing to do if you are not these parameters
