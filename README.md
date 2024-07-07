@@ -52,7 +52,7 @@ I changed setup-nim-action so that is does not use choosenim to solve this probl
 
    - name: Cache nimble
      id: cache-nimble
-     uses: actions/cache@v3
+     uses: actions/cache@v4
      with:
        path: ~/.nimble
 -      key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
@@ -64,7 +64,7 @@ I changed setup-nim-action so that is does not use choosenim to solve this probl
 
 -  - name: Cache choosenim
 -    id: cache-choosenim
--    uses: actions/cache@v3
+-    uses: actions/cache@v4
 -    with:
 -      path: ~/.choosenim
 -      key: ${{ runner.os }}-choosenim-${{ matrix.cache-key }}-${{ steps.get-date.outputs.date }}
@@ -93,7 +93,7 @@ Please clear cache if you get the following error.
 Cache is cleared if you change cache key.
 
 ```diff
-     uses: actions/cache@v3
+     uses: actions/cache@v4
      with:
        path: ~/.nimble
 -      key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
@@ -107,7 +107,7 @@ Cache is cleared if you change cache key.
 Or please remove actions/cache.
 
 ```diff
--    uses: actions/cache@v3
+-    uses: actions/cache@v4
 -    with:
 -      path: ~/.nimble
 -      key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
@@ -175,7 +175,7 @@ steps:
   - uses: actions/checkout@v4
   - name: Cache nimble
     id: cache-nimble
-    uses: actions/cache@v3
+    uses: actions/cache@v4
     with:
       path: ~/.nimble
       key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
@@ -294,7 +294,7 @@ jobs:
 
       - name: Cache nimble
         id: cache-nimble
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: ~/.nimble
           key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
