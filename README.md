@@ -48,7 +48,7 @@ I changed setup-nim-action so that is does not use choosenim to solve this probl
 
 ```diff
  steps:
-   - uses: actions/checkout@v3
+   - uses: actions/checkout@v4
 
    - name: Cache nimble
      id: cache-nimble
@@ -124,7 +124,7 @@ See [action.yml](action.yml)
 
 ```yaml
 steps:
-  - uses: actions/checkout@v3
+  - uses: actions/checkout@v4
   - uses: jiro4989/setup-nim-action@v2
     with:
       nim-version: '2.0.0' # default is 'stable'
@@ -144,7 +144,7 @@ Setup a latest patch version Nim when `nim-version` is `2.n.x` .
 
 ```yaml
 steps:
-  - uses: actions/checkout@v3
+  - uses: actions/checkout@v4
   - uses: jiro4989/setup-nim-action@v2
     with:
       nim-version: '2.0.x' # ex: 1.0.x, 1.2.x, 1.4.x, 2.0.x ...
@@ -159,7 +159,7 @@ Setup a latest minor version Nim when `nim-version` is `2.x` .
 
 ```yaml
 steps:
-  - uses: actions/checkout@v3
+  - uses: actions/checkout@v4
   - uses: jiro4989/setup-nim-action@v2
     with:
       nim-version: '2.x'
@@ -172,7 +172,7 @@ steps:
 
 ```yaml
 steps:
-  - uses: actions/checkout@v3
+  - uses: actions/checkout@v4
   - name: Cache nimble
     id: cache-nimble
     uses: actions/cache@v3
@@ -211,7 +211,7 @@ jobs:
           - 'devel'
     name: Nim ${{ matrix.nim }} sample
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup nim
         uses: jiro4989/setup-nim-action@v2
         with:
@@ -234,7 +234,7 @@ jobs:
           - windows-latest
           - macOS-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup nim
         uses: jiro4989/setup-nim-action@v2
         with:
@@ -265,7 +265,7 @@ jobs:
           - macOS-latest
     name: Nim ${{ matrix.nim }} sample
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Setup nim
         uses: jiro4989/setup-nim-action@v2
         with:
@@ -290,7 +290,7 @@ jobs:
           - nim-version: 'devel'
             cache-key: 'devel'
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Cache nimble
         id: cache-nimble
