@@ -16,6 +16,9 @@ inputs:
   repo-token:
     description: 'The GITHUB_TOKEN secret'
     required: false
+
+  # NOTE: Unused parameters. These parameters were used in setup-nim-action@v1.
+  # setup-nim-action@v2 does not require these. These are left for backward compatibility.
   no-color:
     description: '[Deprecated] unused parameter'
     default: false
