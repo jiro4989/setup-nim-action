@@ -19,6 +19,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: reviewdog/action-shfmt@v1
+        with:
+          shfmt_flags: -i 2 -sr -ci -d
 
   shellcheck:
     name: runner / shellcheck
