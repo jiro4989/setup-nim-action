@@ -40,7 +40,7 @@ done
 
 # get exact version of stable
 if [[ "$nim_version" = "stable" ]]; then
-    nim_version=$(curl -sSL http://nim-lang.org/channels/stable)
+    nim_version=$(curl -sSL https://nim-lang.org/channels/stable)
 fi
 
 # build nim compiler for devel branch
