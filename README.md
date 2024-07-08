@@ -12,6 +12,7 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
     * [getAppFilename failed](#getappfilename-failed)
 * [:mag_right:Usage](#mag_rightusage)
   * [Basic usage](#basic-usage)
+  * [Change Nim installation directory](#change-nim-installation-directory)
   * [Setup a latest patch version Nim](#setup-a-latest-patch-version-nim)
   * [Setup a latest minor version Nim](#setup-a-latest-minor-version-nim)
   * [Cache usage](#cache-usage)
@@ -137,6 +138,33 @@ steps:
 It works without setting this parameter, but please set it if the following error message is returned.
 
 > Error: 403 - {"message":"API rate limit exceeded for nn.nn.nn.nnn. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)","documentation_url":"<https://docs.github.com/rest/overview/resources-in-the-rest-api#rate-limiting"}>
+
+### Change Nim installation directory
+
+`setup-nim-action` installs Nim to `.nim_runtime` directory of current directory.
+You can use `parent-nim-install-directory` and `nim-install-directory` parameters if you want to change it.
+
+Use `parent-nim-install-directory` if you want to install nim to temporary directory.
+This example installs nim to `/home/runner/work/_temp/.nim_runtime`.
+
+```yaml
+  - uses: jiro4989/setup-nim-action@v2
+    with:
+      nim-version: stable
+      repo-token: ${{ secrets.GITHUB_TOKEN }}
+      parent-nim-install-directory: ${{ runner.temp }}
+```
+
+Use `nim-install-directory` if you want to change base directory name.
+This example installs nim to `$PWD/nim_compiler`.
+
+```yaml
+  - uses: jiro4989/setup-nim-action@v2
+    with:
+      nim-version: stable
+      repo-token: ${{ secrets.GITHUB_TOKEN }}
+      nim-install-directory: nim_compiler
+```
 
 ### Setup a latest patch version Nim
 
