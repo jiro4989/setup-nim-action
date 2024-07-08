@@ -57,15 +57,6 @@ while ((0 < $#)); do
   esac
 done
 
-# get exact version of stable
-if [[ "$nim_version" = "stable" ]]; then
-    nim_version=$(curl -sSL https://nim-lang.org/channels/stable)
-fi
-
-if [[ "$nim_version" =~ ^[0-9]+\.[0-9]+\.x$ ]] || [[ "$nim_version" =~ ^[0-9]+\.x$ ]]; then
-  nim_version="$(fetch_tags | grep -E "$(tag_regexp "$nim_version")" | latest_version)"
-fi
-
 # build nim compiler for devel branch
 if [[ "$nim_version" = "devel" ]]; then
   if [[ "$os" = Windows ]]; then
@@ -81,6 +72,15 @@ if [[ "$nim_version" = "devel" ]]; then
   mv Nim "${nim_install_dir}"
 
   exit
+fi
+
+# get exact version of stable
+if [[ "$nim_version" = "stable" ]]; then
+    nim_version=$(curl -sSL https://nim-lang.org/channels/stable)
+fi
+
+if [[ "$nim_version" =~ ^[0-9]+\.[0-9]+\.x$ ]] || [[ "$nim_version" =~ ^[0-9]+\.x$ ]]; then
+  nim_version="$(fetch_tags | grep -E "$(tag_regexp "$nim_version")" | latest_version)"
 fi
 
 info "install nim $nim_version"
