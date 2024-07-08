@@ -2,31 +2,12 @@
 
 set -eu
 
-fetch_tags() {
-  # https://docs.github.com/ja/rest/git/refs?apiVersion=2022-11-28
-  curl \
-    -H "Accept: application/vnd.github+json" \
-    -H "Authorization: Bearer ${repo_token}" \
-    -H "X-GitHub-Api-Version: 2022-11-28" https://api.github.com/repos/nim-lang/nim/git/refs/tags |
-    jq -r '.[].ref' |
-    sed -E 's:^refs/tags/v::'
-}
-
 info() {
   echo "$(date) [INFO] $*"
 }
 
 err() {
   echo "$(date) [ERR] $*"
-}
-
-tag_regexp() {
-  version=$1
-  echo "$version" |
-    sed -E \
-      -e 's/\./\\./g' \
-      -e 's/^/^/' \
-      -e 's/x$//'
 }
 
 latest_version() {
@@ -79,13 +60,6 @@ if [[ "$nim_version" = "devel" ]]; then
   exit
 fi
 
-# fetch latest tag if 'nim_version' was 'stable'
-if [[ "$nim_version" = "stable" ]]; then
-  # NOTE: jq is pre-installed on github actions runner
-  nim_version="$(fetch_tags | latest_version)"
-elif [[ "$nim_version" =~ ^[0-9]+\.[0-9]+\.x$ ]] || [[ "$nim_version" =~ ^[0-9]+\.x$ ]]; then
-  nim_version="$(fetch_tags | grep -E "$(tag_regexp "$nim_version")" | latest_version)"
-fi
 info "install nim $nim_version"
 
 # download nim compiler
