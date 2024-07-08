@@ -76,7 +76,7 @@ I changed setup-nim-action so that is does not use choosenim to solve this probl
 +  - uses: jiro4989/setup-nim-action@v2
      with:
        nim-version: '2.0.0' # default is 'stable'
-       repo-token: ${{ secrets.GITHUB_TOKEN }}
++      repo-token: ${{ secrets.GITHUB_TOKEN }}
 -      yes: false
 -      no-color: yes
    - run: nimble build -Y
