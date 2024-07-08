@@ -38,6 +38,7 @@ nim_version="stable"
 nim_install_dir=".nim_runtime"
 os="Linux"
 repo_token=""
+parent_nim_install_dir=""
 while ((0 < $#)); do
   opt=$1
   shift
@@ -48,6 +49,9 @@ while ((0 < $#)); do
     --nim-install-directory)
       nim_install_dir=$1
       ;;
+    --parent-nim-install-directory)
+      parent_nim_install_dir=$1
+      ;;
     --os)
       os=$1
       ;;
@@ -56,6 +60,12 @@ while ((0 < $#)); do
       ;;
   esac
 done
+
+if [[ "$parent_nim_install_dir" = "" ]]; then
+  parent_nim_install_dir="$PWD"
+fi
+
+cd "$parent_nim_install_dir"
 
 # build nim compiler for devel branch
 if [[ "$nim_version" = "devel" ]]; then

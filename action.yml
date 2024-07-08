@@ -13,6 +13,11 @@ inputs:
     description: >-
       The Nim compiler installation directory.
     default: '.nim_runtime'
+  parent-nim-install-directory:
+    description: >-
+      The Nim compiler installation parent directory.
+      It will be placed in the current directory if this parameter is empty.
+    default: ''
   repo-token:
     description: 'The GITHUB_TOKEN secret'
     required: false
@@ -34,6 +39,7 @@ runs:
       run: |
         "${{ github.action_path }}/install_nim.sh" \
           --nim-version "${{ inputs.nim-version }}" \
+          --parent-nim-install-directory "${{ inputs.parent-nim-install-directory }}" \
           --nim-install-directory "${{ inputs.nim-install-directory }}" \
           --os "${{ runner.os }}" \
           --repo-token "${{ inputs.repo-token }}"
@@ -41,17 +47,30 @@ runs:
     - name: Set PATH for Unix
       shell: bash
       run: |
-        echo "$PWD/${{ inputs.nim-install-directory }}/bin" >> "$GITHUB_PATH"
+        parent="${{ inputs.parent-nim-install-directory }}"
+        if [[ "${parent}" = "" ]]; then
+          parent="$PWD"
+        fi
+        echo "$parent/${{ inputs.nim-install-directory }}/bin" >> "$GITHUB_PATH"
         echo "$HOME/.nimble/bin" >> "$GITHUB_PATH"
       if: runner.os != 'Windows'
 
     - name: Set PATH for Windows
       shell: pwsh
       run: |
-        echo "$Pwd\${{ inputs.nim-install-directory }}\bin" >> $Env:GITHUB_PATH
+        $parent = "${{ inputs.parent-nim-install-directory }}"
+        if ($parent -eq "") {
+          $parent = "$Pwd"
+        }
+        echo "$parent\${{ inputs.nim-install-directory }}\bin" >> $Env:GITHUB_PATH
         mkdir -Force ~\.nimble\bin
         (Resolve-Path ~\.nimble\bin).Path >> $Env:GITHUB_PATH
       if: runner.os == 'Windows'
+
+    - name: Print nim directory
+      shell: bash
+      run: |
+        echo "installed nim fullpath: $(which nim)"
 
     - name: Print nim version
       shell: bash
