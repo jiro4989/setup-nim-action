@@ -57,6 +57,11 @@ while ((0 < $#)); do
   esac
 done
 
+# get exact version of stable
+if [[ "$nim_version" = "stable" ]]; then
+    nim_version=$(curl -sSL http://nim-lang.org/channels/stable)
+fi
+
 # build nim compiler for devel branch
 if [[ "$nim_version" = "devel" ]]; then
   if [[ "$os" = Windows ]]; then
