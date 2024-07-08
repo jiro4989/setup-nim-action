@@ -91,3 +91,28 @@ jobs:
         run: nimble install -Y nimjson
       - name: Run command
         run: nimjson -h
+
+  test-parent-directory:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macOS-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          nim-version: stable
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          parent-nim-install-directory: ${{ runner.temp }}
+
+      - name: Print Nim version
+        run: nim -v
+      - name: Print Nimble version
+        run: nimble -v
+      - name: Run build test
+        run: nimble install -Y nimjson
+      - name: Run command
+        run: nimjson -h
