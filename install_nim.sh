@@ -74,13 +74,15 @@ if [[ "$nim_version" = "devel" ]]; then
   exit
 fi
 
-# fetch latest tag if 'nim_version' was 'stable'
+# get exact version of stable
 if [[ "$nim_version" = "stable" ]]; then
-  # NOTE: jq is pre-installed on github actions runner
-  nim_version="$(fetch_tags | latest_version)"
-elif [[ "$nim_version" =~ ^[0-9]+\.[0-9]+\.x$ ]] || [[ "$nim_version" =~ ^[0-9]+\.x$ ]]; then
+    nim_version=$(curl -sSL https://nim-lang.org/channels/stable)
+fi
+
+if [[ "$nim_version" =~ ^[0-9]+\.[0-9]+\.x$ ]] || [[ "$nim_version" =~ ^[0-9]+\.x$ ]]; then
   nim_version="$(fetch_tags | grep -E "$(tag_regexp "$nim_version")" | latest_version)"
 fi
+
 info "install nim $nim_version"
 
 # download nim compiler
