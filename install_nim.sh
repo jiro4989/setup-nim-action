@@ -76,10 +76,8 @@ fi
 
 # get exact version of stable
 if [[ "$nim_version" = "stable" ]]; then
-    nim_version=$(curl -sSL https://nim-lang.org/channels/stable)
-fi
-
-if [[ "$nim_version" =~ ^[0-9]+\.[0-9]+\.x$ ]] || [[ "$nim_version" =~ ^[0-9]+\.x$ ]]; then
+  nim_version=$(curl -sSL https://nim-lang.org/channels/stable)
+elif [[ "$nim_version" =~ ^[0-9]+\.[0-9]+\.x$ ]] || [[ "$nim_version" =~ ^[0-9]+\.x$ ]]; then
   nim_version="$(fetch_tags | grep -E "$(tag_regexp "$nim_version")" | latest_version)"
 fi
 
