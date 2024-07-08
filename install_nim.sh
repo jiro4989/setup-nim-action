@@ -76,7 +76,7 @@ fi
 
 # get exact version of stable
 if [[ "$nim_version" = "stable" ]]; then
-    nim_version=$(curl -sSL https://nim-lang.org/channels/stable)
+  nim_version=$(curl -sSL https://nim-lang.org/channels/stable)
 fi
 
 if [[ "$nim_version" =~ ^[0-9]+\.[0-9]+\.x$ ]] || [[ "$nim_version" =~ ^[0-9]+\.x$ ]]; then
