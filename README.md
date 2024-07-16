@@ -302,7 +302,7 @@ jobs:
           nim-version: devel
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
-      - run: nimble build
+      - run: nimble build -Y
 ```
 
 ### Change Nim installation directory
