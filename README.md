@@ -285,11 +285,6 @@ setup-nim-action will fetch the devel source code and build the nim compiler eve
 jobs:
   test_devel:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        include:
-          - nim-version: 'devel'
-            cache-key: 'devel'
     steps:
       - uses: actions/checkout@v4
 
