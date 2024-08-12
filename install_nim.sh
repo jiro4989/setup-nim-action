@@ -12,6 +12,23 @@ fetch_tags() {
     sed -E 's:^refs/tags/v::'
 }
 
+fetch_nightlies_releases() {
+  # https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28
+  curl -sSL \
+    -H "Accept: application/vnd.github+json" \
+    -H "Authorization: Bearer ${repo_token}" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    https://api.github.com/repos/nim-lang/nightlies/releases
+}
+
+filter_latest_devel_assets() {
+  jq -r '[.[] | select(.tag_name | test("[0-9]{4}-[0-9]{2}-[0-9]{2}-devel-"))][0] | .assets' "$1"
+}
+
+filter_os_asset() {
+  jq --arg target "$1" -r '.[] | select(.name | test("-" + $target))' "$2"
+}
+
 info() {
   echo "$(date) [INFO] $*"
 }
@@ -39,6 +56,7 @@ nim_install_dir=".nim_runtime"
 os="Linux"
 repo_token=""
 parent_nim_install_dir=""
+use_nightlies="false"
 while ((0 < $#)); do
   opt=$1
   shift
@@ -58,6 +76,9 @@ while ((0 < $#)); do
     --repo-token)
       repo_token=$1
       ;;
+    --use-nightlies)
+      use_nightlies=$1
+      ;;
   esac
 done
 
@@ -74,12 +95,39 @@ if [[ "$nim_version" = "devel" ]]; then
     exit 1
   fi
 
-  git clone -b devel --depth 1 https://github.com/nim-lang/Nim
-  cd Nim
-  info "build nim compiler (devel)"
-  ./build_all.sh
-  cd ..
-  mv Nim "${nim_install_dir}"
+  if [[ "$use_nightlies" = true ]]; then
+    target="linux_x64"
+    if [[ "$os" = macOS ]]; then
+      target="macosx_x64"
+    fi
+
+    work_dir="/tmp/setup_nim_action_work"
+    mkdir -p "$work_dir"
+    pushd "$work_dir"
+
+    fetch_nightlies_releases > releases.json
+    filter_latest_devel_assets releases.json > assets.json
+    filter_os_asset "$target" assets.json > os_asset.json
+    asset_name="$(jq -r '.name' os_asset.json)"
+    browser_download_url="$(jq -r '.browser_download_url' os_asset.json)"
+    info "download nightlies build: asset_name = $asset_name, browser_download_url = $browser_download_url"
+    # asset_name ex: nim-2.1.9-linux_x64.tar.xz
+    curl -sSL "$browser_download_url" > "$asset_name"
+    tar xf "$asset_name"
+    rm -f "$asset_name"
+    asset_prefix="$(echo "$asset_name" | grep -Eo '^nim-[0-9]+\.[0-9]+\.[0-9]+')"
+
+    popd
+    mv "${work_dir}/${asset_prefix}"* "${nim_install_dir}"
+    rm -rf "$work_dir"
+  else
+    git clone -b devel --depth 1 https://github.com/nim-lang/Nim
+    cd Nim
+    info "build nim compiler (devel)"
+    ./build_all.sh
+    cd ..
+    mv Nim "${nim_install_dir}"
+  fi
 
   exit
 fi

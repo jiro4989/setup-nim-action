@@ -18,6 +18,12 @@ inputs:
       The Nim compiler installation parent directory.
       It will be placed in the current directory if this parameter is empty.
     default: ''
+  use-nightlies:
+    description: >-
+      Using nightlies build (https://github.com/nim-lang/nightlies/releases) if `nim-version` is `devel`.
+      The installation will be fast if this parameter is `true`.
+      If `nim-version` is not `devel`, then this parameter has no effect.
+    default: false
   repo-token:
     description: 'The GITHUB_TOKEN secret'
     required: false
@@ -42,6 +48,7 @@ runs:
           --parent-nim-install-directory "${{ inputs.parent-nim-install-directory }}" \
           --nim-install-directory "${{ inputs.nim-install-directory }}" \
           --os "${{ runner.os }}" \
+          --use-nightlies "${{ inputs.use-nightlies }}" \
           --repo-token "${{ inputs.repo-token }}"
 
     - name: Set PATH for Unix
