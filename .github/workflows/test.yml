@@ -62,6 +62,30 @@ jobs:
       - name: Run command
         run: nimjson -h
 
+  test-devel:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - macOS-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./
+        with:
+          nim-version: devel
+          use-nightlies: true
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print Nim version
+        run: nim -v
+      - name: Print Nimble version
+        run: nimble -v
+      - name: Run build test
+        run: nimble install -Y nimjson
+      - name: Run command
+        run: nimjson -h
+
   test-multi-versions:
     runs-on: ${{ matrix.os }}
     strategy:
