@@ -278,7 +278,7 @@ jobs:
 
 ### `devel` usage
 
-Use `devel` version if you want to use devel compiler of nim.
+Use `devel` version if you want to use devel compiler of Nim.
 setup-nim-action will fetch the devel source code and build the nim compiler every time.
 
 ```yaml
@@ -300,6 +300,34 @@ jobs:
       - uses: jiro4989/setup-nim-action@v2
         with:
           nim-version: devel
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - run: nimble build -Y
+```
+
+But building the devel compiler takes a long time.
+If you don't want to build it every time, set `use-nightlies` to `true`.
+
+```yaml
+jobs:
+  test_devel:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Cache nimble
+        id: cache-nimble
+        uses: actions/cache@v4
+        with:
+          path: ~/.nimble
+          key: ${{ runner.os }}-nimble-${{ hashFiles('*.nimble') }}
+          restore-keys: |
+            ${{ runner.os }}-nimble-
+
+      - uses: jiro4989/setup-nim-action@v2
+        with:
+          nim-version: devel
+          use-nightlies: true
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: nimble build -Y
