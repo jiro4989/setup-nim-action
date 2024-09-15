@@ -22,11 +22,11 @@ fetch_nightlies_releases() {
 }
 
 filter_latest_devel_assets() {
-  jq -r '[.[] | select(.tag_name | test("[0-9]{4}-[0-9]{2}-[0-9]{2}-devel-"))][0] | .assets' "$1"
+  jq -r '.[] | select(.tag_name | test("latest-devel")) | .assets' "$1"
 }
 
 filter_os_asset() {
-  jq --arg target "$1" -r '.[] | select(.name | test("-" + $target))' "$2"
+  jq --arg target "$1" -r '.[] | select(.name | test($target))' "$2"
 }
 
 info() {
@@ -111,14 +111,14 @@ if [[ "$nim_version" = "devel" ]]; then
     asset_name="$(jq -r '.name' os_asset.json)"
     browser_download_url="$(jq -r '.browser_download_url' os_asset.json)"
     info "download nightlies build: asset_name = $asset_name, browser_download_url = $browser_download_url"
-    # asset_name ex: nim-2.1.9-linux_x64.tar.xz
+    # asset_name ex: linux_x64.tar.xz
     curl -sSL "$browser_download_url" > "$asset_name"
-    tar xf "$asset_name"
+    mkdir -p outfiles
+    tar xf "$asset_name" -C outfiles --strip-components=1
     rm -f "$asset_name"
-    asset_prefix="$(echo "$asset_name" | grep -Eo '^nim-[0-9]+\.[0-9]+\.[0-9]+')"
 
     popd
-    mv "${work_dir}/${asset_prefix}"* "${nim_install_dir}"
+    mv "${work_dir}/outfiles" "${nim_install_dir}"
     rm -rf "$work_dir"
   else
     git clone -b devel --depth 1 https://github.com/nim-lang/Nim
