@@ -2,6 +2,8 @@
 
 set -eu
 
+DATE_FORMAT="%Y-%m-%d %H:%M:%S"
+
 fetch_tags() {
   # https://docs.github.com/ja/rest/git/refs?apiVersion=2022-11-28
   curl \
@@ -30,11 +32,11 @@ filter_os_asset() {
 }
 
 info() {
-  echo "$(date) [INFO] $*"
+  echo "$(date +"$DATE_FORMAT") [INFO] $*"
 }
 
 err() {
-  echo "$(date) [ERR] $*"
+  echo "$(date +"$DATE_FORMAT") [ERR] $*"
 }
 
 tag_regexp() {
