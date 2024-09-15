@@ -50,12 +50,14 @@ latest_version() {
   sort -V | tail -n 1
 }
 
-remove_cached_directory() {
-  cached_dir="$1"
-  if [[ -d "$cached_dir" ]]; then
-    info "remove cached directory (path = $cached_dir)"
-    rm -rf "$cached_dir"
+move_nim_compiler() {
+  src_dir="$1"
+  dst_dir="$2"
+  if [[ -d "$dst_dir" ]]; then
+    info "remove cached directory (path = $dst_dir)"
+    rm -rf "$dst_dir"
   fi
+  mv "$src_dir" "$dst_dir"
 }
 
 # parse commandline args
@@ -126,8 +128,7 @@ if [[ "$nim_version" = "devel" ]]; then
     rm -f "$asset_name"
 
     popd
-    remove_cached_directory "${nim_install_dir}"
-    mv "${work_dir}/outfiles" "${nim_install_dir}"
+    move_nim_compiler "${work_dir}/outfiles" "${nim_install_dir}"
     rm -rf "$work_dir"
   else
     git clone -b devel --depth 1 https://github.com/nim-lang/Nim
@@ -135,8 +136,7 @@ if [[ "$nim_version" = "devel" ]]; then
     info "build nim compiler (devel)"
     ./build_all.sh
     cd ..
-    remove_cached_directory "${nim_install_dir}"
-    mv Nim "${nim_install_dir}"
+    move_nim_compiler Nim "${nim_install_dir}"
   fi
 
   exit
@@ -188,5 +188,4 @@ else
   tar xf nim.tar.xz
   rm -f nim.tar.xz
 fi
-remove_cached_directory "${nim_install_dir}"
-mv "nim-${nim_version}" "${nim_install_dir}"
+move_nim_compiler "nim-${nim_version}" "${nim_install_dir}"
