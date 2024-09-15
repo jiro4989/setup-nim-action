@@ -1,4 +1,4 @@
-linux_x64#!/bin/bash
+#!/bin/bash
 
 set -eu
 
@@ -22,7 +22,7 @@ fetch_nightlies_releases() {
 }
 
 filter_latest_devel_assets() {
-  jq -r '.[] | select(.tag_name | test("latest-devel-") | .assets' "$1"
+  jq -r '.[] | select(.tag_name | test("latest-devel-")) | .assets' "$1"
 }
 
 filter_os_asset() {
