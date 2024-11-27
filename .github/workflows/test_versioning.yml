@@ -17,11 +17,11 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.nimble
-          key: ${{ runner.os }}-nimble-v2
+          key: ${{ runner.os }}-nimble-v1
           restore-keys: |
-            ${{ runner.os }}-nimble-v2
+            ${{ runner.os }}-nimble-v1
 
-      - uses: jiro4989/setup-nim-action@v2
+      - uses: nim-lang/setup-nimble-action@v1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 

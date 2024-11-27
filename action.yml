@@ -1,87 +1,67 @@
 ---
-name: 'Setup Nim environment'
-description: 'Setup a Nim environment and add it to the PATH'
-author: 'jiro4989'
+name: 'Setup Nimble environment'
+description: 'Setup a Nimble environment and add it to the PATH'
+author: 'jmgomez'
 
 inputs:
-  nim-version:
+  nimble-version:
     description: >-
-      The Nim version to download (if necessary)
-      and use. Example 1.0.2
+      The Nimble version to download (if necessary)
+      and use. Examples: '0.16.3', 'stable'
     default: 'stable'
-  nim-install-directory:
+    required: false
+  nimble-install-directory:
     description: >-
-      The Nim compiler installation directory.
-    default: '.nim_runtime'
-  parent-nim-install-directory:
+      The Nimble installation directory.
+    default: '.nimble_runtime'
+    required: false
+  parent-nimble-install-directory:
     description: >-
-      The Nim compiler installation parent directory.
+      The Nimble installation parent directory.
       It will be placed in the current directory if this parameter is empty.
     default: ''
-  use-nightlies:
-    description: >-
-      Using nightlies build (https://github.com/nim-lang/nightlies/releases) if `nim-version` is `devel`.
-      The installation will be fast if this parameter is `true`.
-      If `nim-version` is not `devel`, then this parameter has no effect.
-    default: false
+    required: false
   repo-token:
     description: 'The GITHUB_TOKEN secret'
     required: false
 
-  # NOTE: Unused parameters. These parameters were used in setup-nim-action@v1.
-  # setup-nim-action@v2 does not require these. These are left for backward compatibility.
-  no-color:
-    description: '[Deprecated] unused parameter'
-    default: false
-  "yes":
-    description: '[Deprecated] unused parameter'
-    default: false
-
 runs:
   using: 'composite'
   steps:
-    - name: Install nim
+    - name: Install nimble
       shell: bash
       run: |
-        "${{ github.action_path }}/install_nim.sh" \
-          --nim-version "${{ inputs.nim-version }}" \
-          --parent-nim-install-directory "${{ inputs.parent-nim-install-directory }}" \
-          --nim-install-directory "${{ inputs.nim-install-directory }}" \
+        "${{ github.action_path }}/install_nimble.sh" \
+          --nimble-version "${{ inputs.nimble-version }}" \
+          --parent-nimble-install-directory "${{ inputs.parent-nimble-install-directory }}" \
+          --nimble-install-directory "${{ inputs.nimble-install-directory }}" \
           --os "${{ runner.os }}" \
-          --use-nightlies "${{ inputs.use-nightlies }}" \
           --repo-token "${{ inputs.repo-token }}"
 
     - name: Set PATH for Unix
       shell: bash
       run: |
-        parent="${{ inputs.parent-nim-install-directory }}"
+        parent="${{ inputs.parent-nimble-install-directory }}"
         if [[ "${parent}" = "" ]]; then
           parent="$PWD"
         fi
-        echo "$parent/${{ inputs.nim-install-directory }}/bin" >> "$GITHUB_PATH"
-        echo "$HOME/.nimble/bin" >> "$GITHUB_PATH"
+        echo "$parent/${{ inputs.nimble-install-directory }}/bin" >> "$GITHUB_PATH"
       if: runner.os != 'Windows'
 
     - name: Set PATH for Windows
       shell: pwsh
       run: |
-        $parent = "${{ inputs.parent-nim-install-directory }}"
+        $parent = "${{ inputs.parent-nimble-install-directory }}"
         if ($parent -eq "") {
           $parent = "$Pwd"
         }
-        echo "$parent\${{ inputs.nim-install-directory }}\bin" >> $Env:GITHUB_PATH
-        mkdir -Force ~\.nimble\bin
-        (Resolve-Path ~\.nimble\bin).Path >> $Env:GITHUB_PATH
+        echo "$parent\${{ inputs.nimble-install-directory }}\bin" >> $Env:GITHUB_PATH
       if: runner.os == 'Windows'
 
-    - name: Print nim directory
+    - name: Print nimble directory
       shell: bash
       run: |
-        echo "installed nim fullpath: $(which nim)"
-
-    - name: Print nim version
-      shell: bash
-      run: nim -v
+        echo "installed nimble fullpath: $(which nimble)"
 
     - name: Print nimble version
       shell: bash
