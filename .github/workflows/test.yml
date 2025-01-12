@@ -5,8 +5,6 @@ on:
     paths-ignore:
       - 'LICENSE'
       - '*.md'
-    branches:
-      - master
   pull_request:
     paths-ignore:
       - 'LICENSE'
@@ -131,6 +129,14 @@ jobs:
           nim-version: stable
           repo-token: ${{ secrets.GITHUB_TOKEN }}
           parent-nim-install-directory: ${{ runner.temp }}
+
+      - name: Print Nimble version
+        run: nimble -v
+
+      - uses: nim-lang/setup-nimble-action@v1
+        with:
+          nimble-version: '0.16.4'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Print Nim version
         run: nim -v
