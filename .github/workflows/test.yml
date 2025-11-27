@@ -17,7 +17,7 @@ jobs:
     name: runner / shfmt
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: reviewdog/action-shfmt@v1
         with:
           shfmt_flags: -i 2 -sr -ci -d
@@ -26,7 +26,7 @@ jobs:
     name: runner / shellcheck
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: reviewdog/action-shellcheck@v1
         with:
           github_token: ${{ secrets.github_token }}
@@ -47,7 +47,7 @@ jobs:
           - os: windows-latest
             version: devel
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./
         with:
           nim-version: ${{ matrix.version }}
@@ -70,7 +70,7 @@ jobs:
           - ubuntu-latest
           - macOS-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./
         with:
           nim-version: devel
@@ -101,7 +101,7 @@ jobs:
           - 2.x
           - stable
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./
         with:
           nim-version: ${{ matrix.version }}
@@ -125,7 +125,7 @@ jobs:
           - windows-latest
           - macOS-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - uses: ./
         with:
           nim-version: stable
