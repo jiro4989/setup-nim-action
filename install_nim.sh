@@ -160,7 +160,12 @@ if [[ "$os" = Windows ]]; then
   curl -sSL "${download_url}" > nim.zip
   unzip -q nim.zip
   rm -f nim.zip
-elif [[ "$os" = macOS ]]; then
+elif [[ "$os" = "Linux" && "$(uname -m)" = "$arch" ]]; then
+  download_url="https://nim-lang.org/download/nim-${nim_version}-linux_${arch}.tar.xz"
+  curl -sSL "${download_url}" > nim.tar.xz
+  tar xf nim.tar.xz
+  rm -f nim.tar.xz
+else
   # need to build compiler
   download_url="https://nim-lang.org/download/nim-${nim_version}.tar.xz"
   curl -sSL "${download_url}" > nim.tar.xz
@@ -183,21 +188,6 @@ elif [[ "$os" = macOS ]]; then
   info "koch tools"
   ./koch tools --skipUserCfg --skipParentCfg --hints:off
 
-  cd ..
-elif [[ "$os" = "Linux" && "$(uname -m)" = "$arch" ]]; then
-  download_url="https://nim-lang.org/download/nim-${nim_version}-linux_${arch}.tar.xz"
-  curl -sSL "${download_url}" > nim.tar.xz
-  tar xf nim.tar.xz
-  rm -f nim.tar.xz
-else
-  # need to build compiler
-  download_url="https://nim-lang.org/download/nim-${nim_version}.tar.xz"
-  curl -sSL "${download_url}" > nim.tar.xz
-  tar xf nim.tar.xz
-  rm -f nim.tar.xz
-  cd "nim-${nim_version}"
-  info "build nim compiler (${nim_version})"
-  ./build_all.sh
   cd ..
 fi
 move_nim_compiler "nim-${nim_version}" "${nim_install_dir}"
