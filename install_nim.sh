@@ -160,7 +160,7 @@ if [[ "$os" = Windows ]]; then
   curl -sSL "${download_url}" > nim.zip
   unzip -q nim.zip
   rm -f nim.zip
-elif [[ "$os" = "Linux" && "$(uname -m)" = "$arch" ]]; then
+elif [[ "$os" = "Linux" && "$HOSTTYPE" = "x86_64" ]]; then
   download_url="https://nim-lang.org/download/nim-${nim_version}-linux_${arch}.tar.xz"
   curl -sSL "${download_url}" > nim.tar.xz
   tar xf nim.tar.xz
