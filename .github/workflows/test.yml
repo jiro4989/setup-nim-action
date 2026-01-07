@@ -39,7 +39,6 @@ jobs:
           - ubuntu-latest
           - ubuntu-24.04-arm
           - windows-latest
-          - macOS-13
           - macOS-latest
         version:
           - 2.0.x
