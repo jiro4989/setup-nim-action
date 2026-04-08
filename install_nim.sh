@@ -155,6 +155,7 @@ info "install nim $nim_version"
 
 # download nim compiler
 arch="x64"
+brew_package_name="nim@${nim_version}"
 if [[ "$os" = Windows ]]; then
   download_url="https://nim-lang.org/download/nim-${nim_version}_${arch}.zip"
   curl -sSL "${download_url}" > nim.zip
@@ -165,16 +166,11 @@ elif [[ "$os" = "Linux" && "$HOSTTYPE" = "x86_64" ]]; then
   curl -sSL "${download_url}" > nim.tar.xz
   tar xf nim.tar.xz
   rm -f nim.tar.xz
-elif [[ "$os" = "macOS" ]] && command -v brew > /dev/null; then
-  brew_package_name="nim@${nim_version}"
-  if brew info "${brew_package_name}" > /dev/null 2>&1; then
-    info "install '${brew_package_name}' with homebrew"
-    brew install "${brew_package_name}"
-    brew link --force --overwrite "${brew_package_name}"
-  else
-    info "install 'nim' with homebrew"
-    brew install nim
-  fi
+elif [[ "$os" = "macOS" ]] && command -v brew > /dev/null && brew info "${brew_package_name}" > /dev/null 2>&1; then
+  # install the specified package via homebrew only if it exists
+  info "install '${brew_package_name}' with homebrew"
+  brew install "${brew_package_name}"
+  brew link --force --overwrite "${brew_package_name}"
 
   brew_prefix="$(brew --prefix)"
   cmd_nim="${brew_prefix}/bin/nim"
@@ -198,6 +194,8 @@ elif [[ "$os" = "macOS" ]] && command -v brew > /dev/null; then
 
   exit
 else
+  info "build '${nim_version}' from source code"
+
   # need to build compiler
   download_url="https://nim-lang.org/download/nim-${nim_version}.tar.xz"
   curl -sSL "${download_url}" > nim.tar.xz
