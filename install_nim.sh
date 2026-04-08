@@ -165,6 +165,38 @@ elif [[ "$os" = "Linux" && "$HOSTTYPE" = "x86_64" ]]; then
   curl -sSL "${download_url}" > nim.tar.xz
   tar xf nim.tar.xz
   rm -f nim.tar.xz
+elif [[ "$os" = "macOS" ]] && command -v brew > /dev/null; then
+  brew_package_name="nim@${nim_version}"
+  if brew info "${brew_package_name}" > /dev/null 2>&1; then
+    info "install '${brew_package_name}' with homebrew"
+    brew install "${brew_package_name}"
+    brew link --force --overwrite "${brew_package_name}"
+  else
+    info "install 'nim' with homebrew"
+    brew install nim
+  fi
+
+  brew_prefix="$(brew --prefix)"
+  cmd_nim="${brew_prefix}/bin/nim"
+  cmd_nimble="${brew_prefix}/bin/nimble"
+  cmd_nimgrep="${brew_prefix}/bin/nimgrep"
+
+  if [[ ! -x "${cmd_nim}" ]]; then
+    err "'${cmd_nim}' is not installed with homebrew"
+    exit 1
+  fi
+
+  mkdir -p "${nim_install_dir}/bin"
+  for cmd in "${cmd_nim}" "${cmd_nimble}" "${cmd_nimgrep}"; do
+    if [[ -x "${cmd}" ]]; then
+      cmd_base="$(basename "${cmd}")"
+      dst_path="${nim_install_dir}/bin/${cmd_base}"
+      ln -sfn "${cmd}" "${dst_path}"
+      info "'${dst_path}' symbolic link was created"
+    fi
+  done
+
+  exit
 else
   # need to build compiler
   download_url="https://nim-lang.org/download/nim-${nim_version}.tar.xz"
