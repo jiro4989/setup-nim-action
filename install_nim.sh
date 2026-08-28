@@ -24,7 +24,14 @@ fetch_nightlies_releases() {
 }
 
 filter_latest_devel_assets() {
-  jq -r '.[] | select(.tag_name | test("latest-devel")) | .assets' "$1"
+  # Prefer the rolling "latest-devel" release, but fall back to the newest
+  # dated devel release ("YYYY-MM-DD-devel-<sha>") when it is missing.
+  # The releases API returns newest first, so the first match is the latest.
+  jq -r '
+    [ .[] | select(.tag_name == "latest-devel") ] +
+    [ .[] | select(.tag_name | test("^[0-9]{4}-[0-9]{2}-[0-9]{2}-devel-")) ] |
+    .[0].assets // []
+  ' "$1"
 }
 
 filter_os_asset() {
@@ -122,6 +129,10 @@ if [[ "$nim_version" = "devel" ]]; then
     filter_os_asset "$target" assets.json > os_asset.json
     asset_name="$(jq -r '.name' os_asset.json)"
     browser_download_url="$(jq -r '.browser_download_url' os_asset.json)"
+    if [[ -z "$asset_name" ]] || [[ "$asset_name" = null ]]; then
+      err "no nightlies asset found (target = $target)"
+      exit 1
+    fi
     info "download nightlies build: asset_name = $asset_name, browser_download_url = $browser_download_url"
     # asset_name ex: linux_x64.tar.xz
     curl -sSL "$browser_download_url" > "$asset_name"
