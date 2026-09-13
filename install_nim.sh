@@ -3,6 +3,7 @@
 set -eu
 
 DATE_FORMAT="%Y-%m-%d %H:%M:%S"
+CURL_OPTION="-sSL --connect-timeout 10 --max-time 120 --retry 3"
 
 fetch_tags() {
   # https://docs.github.com/ja/rest/git/refs?apiVersion=2022-11-28
@@ -16,7 +17,7 @@ fetch_tags() {
 
 fetch_nightlies_releases() {
   # https://docs.github.com/en/rest/releases/releases?apiVersion=2022-11-28
-  curl -sSL \
+  curl ${CURL_OPTION} \
     -H "Accept: application/vnd.github+json" \
     -H "Authorization: Bearer ${repo_token}" \
     -H "X-GitHub-Api-Version: 2022-11-28" \
@@ -135,7 +136,7 @@ if [[ "$nim_version" = "devel" ]]; then
     fi
     info "download nightlies build: asset_name = $asset_name, browser_download_url = $browser_download_url"
     # asset_name ex: linux_x64.tar.xz
-    curl -sSL "$browser_download_url" > "$asset_name"
+    curl ${CURL_OPTION} "$browser_download_url" > "$asset_name"
     mkdir -p outfiles
     tar xf "$asset_name" -C outfiles --strip-components=1
     rm -f "$asset_name"
@@ -157,7 +158,7 @@ fi
 
 # get exact version of stable
 if [[ "$nim_version" = "stable" ]]; then
-  nim_version=$(curl -sSL https://nim-lang.org/channels/stable)
+  nim_version=$(curl ${CURL_OPTION} https://nim-lang.org/channels/stable)
 elif [[ "$nim_version" =~ ^[0-9]+\.[0-9]+\.x$ ]] || [[ "$nim_version" =~ ^[0-9]+\.x$ ]]; then
   nim_version="$(fetch_tags | grep -E "$(tag_regexp "$nim_version")" | latest_version)"
 fi
@@ -168,18 +169,18 @@ info "install nim $nim_version"
 arch="x64"
 if [[ "$os" = Windows ]]; then
   download_url="https://nim-lang.org/download/nim-${nim_version}_${arch}.zip"
-  curl -sSL "${download_url}" > nim.zip
+  curl ${CURL_OPTION} "${download_url}" > nim.zip
   unzip -q nim.zip
   rm -f nim.zip
 elif [[ "$os" = "Linux" && "$HOSTTYPE" = "x86_64" ]]; then
   download_url="https://nim-lang.org/download/nim-${nim_version}-linux_${arch}.tar.xz"
-  curl -sSL "${download_url}" > nim.tar.xz
+  curl ${CURL_OPTION} "${download_url}" > nim.tar.xz
   tar xf nim.tar.xz
   rm -f nim.tar.xz
 else
   # need to build compiler
   download_url="https://nim-lang.org/download/nim-${nim_version}.tar.xz"
-  curl -sSL "${download_url}" > nim.tar.xz
+  curl ${CURL_OPTION} "${download_url}" > nim.tar.xz
   tar xf nim.tar.xz
   rm -f nim.tar.xz
 
