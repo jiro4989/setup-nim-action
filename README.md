@@ -374,6 +374,21 @@ vim install_nim.sh
 ./script/format.sh
 ```
 
+### Update tags
+
+When a new tag is pushed, the corresponding major/minor tags are automatically overwritten and updated via GitHub Actions.
+
+``` bash
+$ git tag | sort -V | tail -n 1
+v2.3.1
+
+$ git tag v2.3.2
+
+$ git push origin v2.3.2
+
+# -> v2 and v2.3 will be overwritten
+```
+
 ## :page_facing_up:License
 
 MIT
