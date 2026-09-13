@@ -4,25 +4,28 @@
 
 This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
 
-<!-- vim-markdown-toc GFM -->
+<!-- markdown-toc start - Don't edit this section. Run M-x markdown-toc-refresh-toc -->
+**Table of Contents**
 
-* [`v2` version was released :tada:](#v2-version-was-released-tada)
-* [Migration to v2 from v1](#migration-to-v2-from-v1)
-  * [Q&A](#qa)
-    * [getAppFilename failed](#getappfilename-failed)
-* [:mag_right:Usage](#mag_rightusage)
-  * [Basic usage](#basic-usage)
-  * [Setup a latest patch version Nim](#setup-a-latest-patch-version-nim)
-  * [Setup a latest minor version Nim](#setup-a-latest-minor-version-nim)
-  * [Cache usage](#cache-usage)
-  * [Matrix testing usage](#matrix-testing-usage)
-  * [`devel` usage](#devel-usage)
-  * [Change Nim installation directory](#change-nim-installation-directory)
-  * [Full example](#full-example)
-* [:hammer:Development](#hammerdevelopment)
-* [:page_facing_up:License](#page_facing_uplicense)
+- [:crown:setup-nim-action](#crownsetup-nim-action)
+  - [`v2` version was released :tada:](#v2-version-was-released-tada)
+  - [Migration to v2 from v1](#migration-to-v2-from-v1)
+    - [Q&A](#qa)
+      - [getAppFilename failed](#getappfilename-failed)
+  - [:mag_right:Usage](#mag_rightusage)
+    - [Basic usage](#basic-usage)
+    - [Setup a latest patch version Nim](#setup-a-latest-patch-version-nim)
+    - [Setup a latest minor version Nim](#setup-a-latest-minor-version-nim)
+    - [Cache usage](#cache-usage)
+    - [Matrix testing usage](#matrix-testing-usage)
+    - [`devel` usage](#devel-usage)
+    - [Change Nim installation directory](#change-nim-installation-directory)
+    - [Full example](#full-example)
+  - [:hammer:Development](#hammerdevelopment)
+    - [Update tags](#update-tags)
+  - [:page_facing_up:License](#page_facing_uplicense)
 
-<!-- vim-markdown-toc -->
+<!-- markdown-toc end -->
 
 ## `v2` version was released :tada:
 
@@ -372,6 +375,21 @@ Run `script/format.sh` when you edited source code.
 ```bash
 vim install_nim.sh
 ./script/format.sh
+```
+
+### Update tags
+
+When a new tag is pushed, the corresponding major/minor tags are automatically overwritten and updated via GitHub Actions.
+
+``` bash
+$ git tag | sort -V | tail -n 1
+v2.3.1
+
+$ git tag v2.3.2
+
+$ git push origin v2.3.2
+
+# -> v2 and v2.3 will be overwritten
 ```
 
 ## :page_facing_up:License
