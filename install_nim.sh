@@ -132,10 +132,21 @@ if [[ "$nim_version" = "devel" ]]; then
       exit 1
     fi
     info "download nightlies build: asset_name = $asset_name, browser_download_url = $browser_download_url"
-    # asset_name ex: linux_x64.tar.xz
+    # asset_name ex: linux_x64.tar.xz / windows_x64.zip
     curl "${CURL_OPTION[@]}" "$browser_download_url" > "$asset_name"
     mkdir -p outfiles
-    tar xf "$asset_name" -C outfiles --strip-components=1
+    case "$asset_name" in
+      *.zip)
+        unzip -q "$asset_name" -d outfiles
+        # strip the single top-level directory (same as tar --strip-components=1)
+        top_dir="$(find outfiles -mindepth 1 -maxdepth 1 -type d)"
+        mv "$top_dir"/* outfiles/
+        rmdir "$top_dir"
+        ;;
+      *)
+        tar xf "$asset_name" -C outfiles --strip-components=1
+        ;;
+    esac
     rm -f "$asset_name"
 
     popd
