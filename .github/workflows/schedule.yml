@@ -16,7 +16,7 @@ jobs:
         version:
           - stable
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
       - uses: ./
         with:
           nim-version: ${{ matrix.version }}
@@ -34,8 +34,8 @@ jobs:
   test_v1:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: jiro4989/setup-nim-action@cb1fc1270b117457dd0d9f610ec981fad3369cec # v2.3.0
+      - uses: actions/checkout@v7.0.1
+      - uses: jiro4989/setup-nim-action@v2.3.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
