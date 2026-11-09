@@ -110,15 +110,12 @@ cd "$parent_nim_install_dir"
 
 # build nim compiler for devel branch
 if [[ "$nim_version" = "devel" ]]; then
-  if [[ "$os" = Windows ]]; then
-    err "'devel' version and windows runner are not supported yet"
-    exit 1
-  fi
-
   if [[ "$use_nightlies" = true ]]; then
     target="linux_x64"
     if [[ "$os" = macOS ]]; then
       target="macosx_x64"
+    elif [[ "$os" = Windows ]]; then
+      target="windows_x64"
     fi
 
     work_dir="/tmp/setup_nim_action_work"
