@@ -11,17 +11,17 @@ jobs:
   test_vX:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@v7.0.1
       - name: Cache nimble
         id: cache-nimble
-        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        uses: actions/cache@v6.1.0
         with:
           path: ~/.nimble
           key: ${{ runner.os }}-nimble-v2
           restore-keys: |
             ${{ runner.os }}-nimble-v2
 
-      - uses: jiro4989/setup-nim-action@cb1fc1270b117457dd0d9f610ec981fad3369cec # v2.3.0
+      - uses: jiro4989/setup-nim-action@v2.3.0
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
