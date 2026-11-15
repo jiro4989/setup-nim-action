@@ -114,6 +114,35 @@ jobs:
       - name: Run command
         run: nimjson -h
 
+  test-nimble-commit:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+          - macOS-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - uses: ./
+        with:
+          nim-version: stable
+          # nimble v0.26.2
+          nimble-commit: 5798d2385808f6593afe77e4c36250c6ec63e53c
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Print Nim version
+        run: nim -v
+      - name: Print Nimble version
+        run: nimble -v
+      - name: Check Nimble version
+        shell: bash
+        run: nimble -v | grep -F '0.26.2'
+      - name: Run build test
+        run: nimble install -Y nimjson
+      - name: Run command
+        run: nimjson -h
+
   test-parent-directory:
     runs-on: ${{ matrix.os }}
     strategy:

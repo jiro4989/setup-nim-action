@@ -19,6 +19,7 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
     - [Cache usage](#cache-usage)
     - [Matrix testing usage](#matrix-testing-usage)
     - [`devel` usage](#devel-usage)
+    - [Specify a Nimble commit](#specify-a-nimble-commit)
     - [Change Nim installation directory](#change-nim-installation-directory)
     - [Full example](#full-example)
   - [:hammer:Development](#hammerdevelopment)
@@ -334,6 +335,24 @@ jobs:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
       - run: nimble build -Y
+```
+
+### Specify a Nimble commit
+
+Use `nimble-commit` to build [Nimble](https://github.com/nim-lang/nimble) from a specific commit and replace the Nimble bundled with Nim.
+A commit hash, tag, or branch name is accepted.
+The bundled Nimble is kept when this parameter is empty.
+
+```yaml
+steps:
+  - uses: actions/checkout@v4
+  - uses: jiro4989/setup-nim-action@v2
+    with:
+      nim-version: stable
+      # nimble v0.26.2
+      nimble-commit: '5798d2385808f6593afe77e4c36250c6ec63e53c'
+      repo-token: ${{ secrets.GITHUB_TOKEN }}
+  - run: nimble -v
 ```
 
 ### Change Nim installation directory
