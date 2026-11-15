@@ -5,7 +5,6 @@ version: 'v0.0.3'
 workflows:
     '.github/workflows/release.yml':
         - 'actions/checkout@v7.0.1'
-        - 'actions/create-release@v1.1.4'
         - 'haya14busa/action-bumpr@v1.11.4'
         - 'haya14busa/action-cond@v1.2.1'
         - 'haya14busa/action-update-semver@v1.5.1'
@@ -30,11 +29,6 @@ dependencies:
         commit: 'sha1-3d3c42e5aac5ba805825da76410c181273ba90b1'
         owner_id: 44036562
         repo_id: 197814629
-    'actions/create-release@v1.1.4':
-        ref: 'v1.1.4'
-        commit: 'sha1-0cb9c9b65d5d1901c1f53e5e66eaf4afd303e70e'
-        owner_id: 44036562
-        repo_id: 208154123
     'cachix/install-nix-action@v31.11.5':
         ref: 'v31.11.5'
         commit: 'sha1-3dc140bfc76c49fbd4dd958429132e3746bcb086'
