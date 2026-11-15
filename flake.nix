@@ -15,6 +15,7 @@
       {
         devShells.default = pkgs.mkShell {
           packages = [
+            pkgs.bats
             pkgs.shfmt
             pkgs.shellcheck
           ];
