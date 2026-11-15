@@ -24,6 +24,11 @@ inputs:
       The installation will be fast if this parameter is `true`.
       If `nim-version` is not `devel`, then this parameter has no effect.
     default: false
+  nimble-commit:
+    description: >-
+      Git commit, tag, or branch of Nimble (https://github.com/nim-lang/nimble) to build and install.
+      The Nimble bundled with the selected Nim version is used when this parameter is empty.
+    default: ''
   repo-token:
     description: 'The GITHUB_TOKEN secret'
     required: false
@@ -49,6 +54,7 @@ runs:
           --nim-install-directory "${{ inputs.nim-install-directory }}" \
           --os "${{ runner.os }}" \
           --use-nightlies "${{ inputs.use-nightlies }}" \
+          --nimble-commit "${{ inputs.nimble-commit }}" \
           --repo-token "${{ inputs.repo-token }}"
 
     - name: Set PATH for Unix

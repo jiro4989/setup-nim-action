@@ -70,6 +70,53 @@ move_nim_compiler() {
   mv "$src_dir" "$dst_dir"
 }
 
+# Build Nimble from a specific commit and replace the bundled binary.
+# https://github.com/status-im/nimbus-build-system/blob/d82132fa4b47e1721657faee4737a1f92df0c994/scripts/build_nim.sh#L209-L242
+install_custom_nimble() {
+  if [[ -z "${nimble_commit}" ]]; then
+    return 0
+  fi
+
+  exe_suffix=""
+  if [[ "${os}" = Windows ]]; then
+    exe_suffix=".exe"
+  fi
+
+  nim_root="${PWD}/${nim_install_dir}"
+  nim_bin="${nim_root}/bin/nim${exe_suffix}"
+  nimble_bin="${nim_root}/bin/nimble${exe_suffix}"
+
+  info "build nimble (commit = ${nimble_commit})"
+  nimble_build_dir="$(mktemp -d)"
+  git clone -q https://github.com/nim-lang/nimble.git "${nimble_build_dir}"
+  pushd "${nimble_build_dir}"
+  if ! git checkout -q "${nimble_commit}"; then
+    err "wrong nimble commit specified: ${nimble_commit}"
+    exit 1
+  fi
+  git submodule update --init --recursive
+
+  info "compile nimble"
+  "${nim_bin}" c -d:release --skipUserCfg --skipParentCfg --noNimblePath -d:lto src/nimble
+
+  if [[ -f "src/nimble${exe_suffix}" ]]; then
+    info "replace nimble binary (path = ${nimble_bin})"
+    rm -f "${nimble_bin}"
+    cp "src/nimble${exe_suffix}" "${nimble_bin}"
+  else
+    err "nimble build failed"
+    exit 1
+  fi
+  popd
+  rm -rf "${nimble_build_dir}"
+
+  # Nimble needs a CA cert beside the binary.
+  if [[ ! -r "${nim_root}/bin/cacert.pem" ]]; then
+    curl "${CURL_OPTION[@]}" -o "${nim_root}/bin/cacert.pem" https://curl.se/ca/cacert.pem ||
+      info "failed to download a CA cert needed by nimble"
+  fi
+}
+
 # parse commandline args
 nim_version="stable"
 nim_install_dir=".nim_runtime"
@@ -77,6 +124,7 @@ os="Linux"
 repo_token=""
 parent_nim_install_dir=""
 use_nightlies="false"
+nimble_commit=""
 while ((0 < $#)); do
   opt=$1
   shift
@@ -98,6 +146,9 @@ while ((0 < $#)); do
       ;;
     --use-nightlies)
       use_nightlies=$1
+      ;;
+    --nimble-commit)
+      nimble_commit=$1
       ;;
   esac
 done
@@ -161,6 +212,7 @@ if [[ "$nim_version" = "devel" ]]; then
     move_nim_compiler Nim "${nim_install_dir}"
   fi
 
+  install_custom_nimble
   exit
 fi
 
@@ -211,3 +263,4 @@ else
   cd ..
 fi
 move_nim_compiler "nim-${nim_version}" "${nim_install_dir}"
+install_custom_nimble
