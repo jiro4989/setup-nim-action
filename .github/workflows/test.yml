@@ -13,23 +13,18 @@ on:
       - '*.md'
 
 jobs:
-  shfmt:
-    name: runner / shfmt
+  lint:
+    name: runner / lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: reviewdog/action-shfmt@v1.1.0
+      - uses: cachix/install-nix-action@v31.11.5
         with:
-          shfmt_flags: -i 2 -sr -ci -d
-
-  shellcheck:
-    name: runner / shellcheck
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: reviewdog/action-shellcheck@v1.32.1
-        with:
-          github_token: ${{ secrets.github_token }}
+          github_access_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: shfmt
+        run: nix develop --command shfmt -i 2 -sr -ci -d .
+      - name: shellcheck
+        run: nix develop --command shellcheck --external-sources install_nim.sh script/format.sh
 
   test-on-cross-platform:
     runs-on: ${{ matrix.os }}
