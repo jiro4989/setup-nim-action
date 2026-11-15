@@ -23,6 +23,7 @@ This action sets up a [Nim-lang](https://nim-lang.org/):crown: environment.
     - [Change Nim installation directory](#change-nim-installation-directory)
     - [Full example](#full-example)
   - [:hammer:Development](#hammerdevelopment)
+    - [Run tests](#run-tests)
     - [Update tags](#update-tags)
   - [:page_facing_up:License](#page_facing_uplicense)
 
@@ -394,6 +395,14 @@ Run `script/format.sh` when you edited source code.
 ```bash
 vim install_nim.sh
 ./script/format.sh
+```
+
+### Run tests
+
+Unit tests are [bats](https://github.com/bats-core/bats-core) tests under `test/`. `bats` and `jq` are provided by the Nix dev shell.
+
+```bash
+nix develop --command bats test
 ```
 
 ### Update tags

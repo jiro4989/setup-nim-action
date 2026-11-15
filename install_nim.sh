@@ -2,6 +2,9 @@
 
 set -eu
 
+# shellcheck source=lib/lib.sh
+source "$(dirname "${BASH_SOURCE[0]}")/lib/lib.sh"
+
 DATE_FORMAT="%Y-%m-%d %H:%M:%S"
 CURL_OPTION=(-sSL --connect-timeout 10 --max-time 120 --retry 3)
 
@@ -24,40 +27,12 @@ fetch_nightlies_releases() {
     https://api.github.com/repos/nim-lang/nightlies/releases
 }
 
-filter_latest_devel_assets() {
-  # Prefer the rolling "latest-devel" release, but fall back to the newest
-  # dated devel release ("YYYY-MM-DD-devel-<sha>") when it is missing.
-  # The releases API returns newest first, so the first match is the latest.
-  jq -r '
-    [ .[] | select(.tag_name == "latest-devel") ] +
-    [ .[] | select(.tag_name | test("^[0-9]{4}-[0-9]{2}-[0-9]{2}-devel-")) ] |
-    .[0].assets // []
-  ' "$1"
-}
-
-filter_os_asset() {
-  jq --arg target "$1" -r '.[] | select(.name | test($target))' "$2"
-}
-
 info() {
   echo "$(date +"$DATE_FORMAT") [INFO] $*"
 }
 
 err() {
   echo "$(date +"$DATE_FORMAT") [ERR] $*"
-}
-
-tag_regexp() {
-  version=$1
-  echo "$version" |
-    sed -E \
-      -e 's/\./\\./g' \
-      -e 's/^/^/' \
-      -e 's/x$//'
-}
-
-latest_version() {
-  sort -V | tail -n 1
 }
 
 move_nim_compiler() {

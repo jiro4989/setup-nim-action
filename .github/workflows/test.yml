@@ -24,7 +24,9 @@ jobs:
       - name: shfmt
         run: nix develop --command shfmt -i 2 -sr -ci -d .
       - name: shellcheck
-        run: nix develop --command shellcheck --external-sources install_nim.sh script/format.sh
+        run: nix develop --command shellcheck --external-sources install_nim.sh lib/lib.sh script/format.sh test/lib.bats
+      - name: bats
+        run: nix develop --command bats test
 
   test-on-cross-platform:
     runs-on: ${{ matrix.os }}
