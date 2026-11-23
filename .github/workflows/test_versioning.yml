@@ -21,7 +21,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nimble-v2
 
-      - uses: jiro4989/setup-nim-action@v2.3.0
+      - uses: jiro4989/setup-nim-action@v2.5.1
         with:
           repo-token: ${{ secrets.GITHUB_TOKEN }}
 
